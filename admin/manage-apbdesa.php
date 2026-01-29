@@ -40,11 +40,17 @@ if (isset($_GET['hapus'])) {
 
 // 4. HITUNG RINGKASAN ANGGARAN
 $q_total = mysqli_query($conn, "SELECT 
-    SUM(CASE WHEN jenis = 'Pendapatan' THEN realisasi ELSE 0 END) as total_pendapatan,
-    SUM(CASE WHEN jenis = 'Belanja' THEN realisasi ELSE 0 END) as total_belanja,
-    SUM(CASE WHEN jenis = 'Pembiayaan Desa' THEN realisasi ELSE 0 END) as total_pembiayaan
+    COALESCE(SUM(CASE WHEN jenis = 'Pendapatan' THEN realisasi ELSE 0 END), 0) as total_pendapatan,
+    COALESCE(SUM(CASE WHEN jenis = 'Belanja' THEN realisasi ELSE 0 END), 0) as total_belanja,
+    COALESCE(SUM(CASE WHEN jenis = 'Pembiayaan Desa' THEN realisasi ELSE 0 END), 0) as total_pembiayaan
     FROM apb_desa");
 $res_total = mysqli_fetch_assoc($q_total);
+if (!$res_total) {
+    $res_total = ['total_pendapatan' => 0, 'total_belanja' => 0, 'total_pembiayaan' => 0];
+}
+$res_total['total_pendapatan'] = floatval($res_total['total_pendapatan'] ?? 0);
+$res_total['total_belanja'] = floatval($res_total['total_belanja'] ?? 0);
+$res_total['total_pembiayaan'] = floatval($res_total['total_pembiayaan'] ?? 0);
 $sisa_anggaran = $res_total['total_pendapatan'] - $res_total['total_belanja'];
 
 $data_apb = mysqli_query($conn, "SELECT * FROM apb_desa ORDER BY tahun DESC, jenis ASC");
@@ -60,100 +66,84 @@ $data_apb = mysqli_query($conn, "SELECT * FROM apb_desa ORDER BY tahun DESC, jen
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
+    <?php include 'admin-styles.php'; ?>
+    
     <style>
-        :root { --sidebar-bg: #1a1d20; --active-blue: #10b981; --bs-primary: #10b981; --bs-primary-rgb: 16, 185, 129; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; margin: 0; }
-
-        .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            height: 100vh;
-            position: fixed;
-            padding: 25px 0;
-            display: flex;
-            flex-direction: column;
-            z-index: 1000;
+        .stat-card-apb {
+            border: none;
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
         }
-        .sidebar-brand { 
-            color: var(--active-blue); 
-            font-weight: 700; 
-            font-size: 1.25rem;
-            padding: 0 20px 25px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #2d3238;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        
+        .stat-card-apb:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
-
-        .sidebar-menu { 
-            flex-grow: 1; 
-            list-style: none; 
-            padding: 0 15px; 
-            padding-bottom: 80px;
+        
+        .stat-card-apb h6 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+        
+        .stat-card-apb h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
             margin: 0;
-            overflow-y: auto;
         }
-        .sidebar-menu li { margin-bottom: 6px; }
-        .sidebar-menu a {
-            color: #94a3b8;
-            padding: 14px 18px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: 0.2s;
-            font-weight: 500;
-            font-size: 0.95rem;
-            text-decoration: none;
-        }
-        .sidebar-menu a i { font-size: 1.2rem; }
-        .sidebar-menu a:hover, .sidebar-menu a.active { 
-            background: var(--active-blue); 
-            color: white; 
-        }
-
-        .logout-section { 
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 280px;
-            padding: 20px 15px;
-            border-top: 1px solid #2d3238;
-            background: var(--sidebar-bg);
-            flex-shrink: 0;
-        }
-        .logout-section a {
-            color: #ef4444;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: 0.2s;
-        }
-        .logout-section a i { font-size: 1.2rem; }
-        .logout-section a:hover { background: rgba(239, 68, 68, 0.1); }
         
-        .main-content { margin-left: 280px; padding: 40px; }
-        .mobile-header { display: none; background: #fff; padding: 15px 20px; border-bottom: 1px solid #dee2e6; }
-
+        .gradient-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            color: white !important;
+        }
+        
+        .gradient-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+            color: white !important;
+        }
+        
+        .gradient-info {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+            color: white !important;
+        }
+        
+        .gradient-primary {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+            color: white !important;
+        }
+        
+        .table-enhanced thead {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .table-enhanced thead th {
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            border: none;
+            padding: 15px;
+        }
+        
+        .table-enhanced tbody tr {
+            border-bottom: 1px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+        
+        .table-enhanced tbody tr:hover {
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
         @media (max-width: 991.98px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.active { transform: translateX(0); }
-            .main-content { margin-left: 0; padding: 20px; }
-            .mobile-header { display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 999; }
+            .mobile-nav { display: block; }
+            .stat-card-apb h3 { font-size: 1.3rem; }
         }
-
-        .card-premium { border: none; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); background: #fff; }
-        .form-control, .form-select { border-radius: 10px; padding: 10px 15px; border: 1px solid #e5e7eb; }
-        
-        .stat-card { border-radius: 15px; padding: 20px; border: none; }
-        .progress { height: 6px; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -182,8 +172,12 @@ $data_apb = mysqli_query($conn, "SELECT * FROM apb_desa ORDER BY tahun DESC, jen
     </nav>
 
     <main class="main-content w-100">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold">Manajemen Transparansi APB Desa</h3>
+        <div class="mb-4">
+            <h3 class="fw-bold mb-1">Manajemen Transparansi APB Desa</h3>
+            <p class="text-muted">Kelola dan publikasikan data anggaran desa untuk transparansi keuangan</p>
+        </div>
+
+        <div class="d-flex justify-content-end mb-4">
             <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalTambah">
                 <i class="bi bi-plus-circle me-2"></i> Tambah Data
             </button>
@@ -191,27 +185,27 @@ $data_apb = mysqli_query($conn, "SELECT * FROM apb_desa ORDER BY tahun DESC, jen
 
         <div class="row g-3 mb-4">
             <div class="col-md-3">
-                <div class="card stat-card bg-success text-white shadow-sm">
-                    <small class="opacity-75">Total Pendapatan Cair</small>
-                    <h4 class="fw-bold mb-0">Rp <?php echo number_format($res_total['total_pendapatan'], 0, ',', '.'); ?></h4>
+                <div class="card stat-card-apb gradient-success text-white">
+                    <h6 class="mb-2">Total Pendapatan Cair</h6>
+                    <h4>Rp <?php echo number_format($res_total['total_pendapatan'], 0, ',', '.'); ?></h4>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card stat-card bg-warning text-dark shadow-sm">
-                    <small class="opacity-75">Total Belanja Terpakai</small>
-                    <h4 class="fw-bold mb-0">Rp <?php echo number_format($res_total['total_belanja'], 0, ',', '.'); ?></h4>
+                <div class="card stat-card-apb gradient-warning text-white">
+                    <h6 class="mb-2">Total Belanja Terpakai</h6>
+                    <h4>Rp <?php echo number_format($res_total['total_belanja'], 0, ',', '.'); ?></h4>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card stat-card bg-info text-white shadow-sm">
-                    <small class="opacity-75">Total Pembiayaan Desa</small>
-                    <h4 class="fw-bold mb-0">Rp <?php echo number_format($res_total['total_pembiayaan'], 0, ',', '.'); ?></h4>
+                <div class="card stat-card-apb gradient-info text-white">
+                    <h6 class="mb-2">Total Pembiayaan Desa</h6>
+                    <h4>Rp <?php echo number_format($res_total['total_pembiayaan'], 0, ',', '.'); ?></h4>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card stat-card bg-primary text-white shadow-sm">
-                    <small class="opacity-75">Sisa Anggaran Desa</small>
-                    <h4 class="fw-bold mb-0">Rp <?php echo number_format($sisa_anggaran, 0, ',', '.'); ?></h4>
+                <div class="card stat-card-apb gradient-primary text-white">
+                    <h6 class="mb-2">Sisa Anggaran Desa</h6>
+                    <h4>Rp <?php echo number_format($sisa_anggaran, 0, ',', '.'); ?></h4>
                 </div>
             </div>
         </div>
@@ -220,9 +214,9 @@ $data_apb = mysqli_query($conn, "SELECT * FROM apb_desa ORDER BY tahun DESC, jen
 
         <div class="card card-premium p-4">
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                        <tr class="small text-secondary fw-bold">
+                <table class="table table-enhanced table-hover align-middle">
+                    <thead>
+                        <tr>
                             <th>RINCIAN & TAHUN</th>
                             <th>JENIS</th>
                             <th class="text-end" style="min-width: 200px;">ANGGARAN</th>

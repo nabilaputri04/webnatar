@@ -65,85 +65,8 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_berita ORDER BY nama_k
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 
+    <?php include 'admin-styles.php'; ?>
     <style>
-        :root { --sidebar-bg: #1a1d20; --active-blue: #10b981; --bs-primary: #10b981; --bs-primary-rgb: 16, 185, 129; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
-        
-        .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            height: 100vh;
-            position: fixed;
-            padding: 25px 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar-brand { 
-            color: var(--active-blue); 
-            font-weight: 700; 
-            font-size: 1.25rem;
-            padding: 0 20px 25px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #2d3238;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .sidebar-menu { 
-            list-style: none; 
-            padding: 0 15px; 
-            padding-bottom: 80px;
-            margin: 0; 
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-        .sidebar-menu li { margin-bottom: 6px; }
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #94a3b8;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .sidebar-menu a i { font-size: 1.2rem; }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: var(--active-blue);
-            color: white;
-        }
-        .logout-section {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 280px;
-            padding: 20px 15px;
-            border-top: 1px solid #2d3238;
-            background: var(--sidebar-bg);
-            flex-shrink: 0;
-        }
-        .logout-section a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #ef4444;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .logout-section a i { font-size: 1.2rem; }
-        .logout-section a:hover {
-            background: rgba(239, 68, 68, 0.1);
-        }
-        .main-content { margin-left: 280px; padding: 40px; }
-        
         /* FIX LINK & IMAGE POPUP DI MODAL */
         :root { --ck-z-modal: 1060 !important; }
         .ck-editor__editable { min-height: 400px; }
@@ -169,6 +92,11 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_berita ORDER BY nama_k
 </nav>
 
 <main class="main-content">
+    <div class="mb-5">
+        <h2 class="fw-bold mb-2" style="font-size: 2rem;">Kelola Berita</h2>
+        <p class="text-muted mb-0">Publikasikan berita dan informasi terbaru untuk masyarakat</p>
+    </div>
+
     <div class="mb-4 d-flex justify-content-between align-items-center">
         <h3 class="fw-bold mb-0">Manajemen Konten Berita</h3>
         <div class="d-flex gap-2">

@@ -47,13 +47,13 @@ CREATE TABLE IF NOT EXISTS rt (
 INSERT INTO bpd (nama, jabatan, foto, urutan) VALUES 
 ('BADRILLAH', 'Ketua BPD', 'bpd-ketua.jpeg', 1),
 ('BAKRI, S.Kom', 'Wakil Ketua', 'bpd-wakil.jpeg', 2),
-('ASRUL, ST', 'Sekretaris', 'bpd-sekretaris.jpeg', 3),
-('BANERJAN', 'Anggota', NULL, 4),
-('MUHAMMAD TAHIR', 'Anggota', NULL, 5),
+('ASRUDI, ST', 'Sekretaris', 'bpd-sekretaris.jpeg', 3),
+('BAHERAN', 'Anggota', NULL, 4),
+('MUHAMMAD YAMIN', 'Anggota', NULL, 5),
 ('YULIANA', 'Anggota', NULL, 6),
-('NURRAHIMAH', 'Anggota', NULL, 7),
+('NURHAMIDAH', 'Anggota', NULL, 7),
 ('SIDIK SUPRIADI', 'Anggota', NULL, 8),
-('YUWOHESHO', 'Anggota', NULL, 9);
+('YUDHESMO', 'Anggota', NULL, 9);
 
 -- =========================================================
 -- DATA DEFAULT LPMD
@@ -117,45 +117,45 @@ INSERT INTO rt (nomor_rt, nama_ketua, dusun) VALUES
 -- DUSUN VII
 INSERT INTO rt (nomor_rt, nama_ketua, dusun) VALUES 
 ('024', 'M. UNTUNG', 'VII'),
-('025', 'DJOKO YUGIANTO', 'VII'),
-('026', 'SUWARNO', 'VII'),
-('027', 'WALLIYO', 'VII'),
-('028', 'SUPRAPTO', 'VII'),
-('029', 'KASTARI', 'VII');
+('025', 'SUNARSO', 'VII'),
+('026', 'DENDI SETIADI', 'VII'),
+('027', 'WALUYO', 'VII'),
+('028', 'RIYADI', 'VII'),
+('029', 'AGUS SUHARTOKO', 'VII');
 
 -- DUSUN VIII
 INSERT INTO rt (nomor_rt, nama_ketua, dusun) VALUES 
-('030', 'SUWARNO', 'VIII'),
-('031', 'BUYONO', 'VIII'),
-('032', 'SUROSO', 'VIII'),
-('033', 'SUPRIADI', 'VIII'),
+('030', 'DJOKO YUDIANTO', 'VIII'),
+('031', 'SUPRAPTO', 'VIII'),
+('032', 'SUGIONO', 'VIII'),
+('033', 'KASYADI', 'VIII'),
 ('034', 'AGUS NURYANTO', 'VIII');
 
 -- DUSUN IX
 INSERT INTO rt (nomor_rt, nama_ketua, dusun) VALUES 
-('035', 'BUROSO', 'IX'),
-('036', 'SURIONO', 'IX'),
-('037', 'BUROSO', 'IX'),
+('035', 'SUMARNO', 'IX'),
+('036', 'SUYONO', 'IX'),
+('037', 'SUROSO', 'IX'),
 ('038', 'SUPRIYADI', 'IX'),
-('039', 'BUROSO', 'IX'),
+('039', 'SURONO', 'IX'),
 ('040', 'TONI JUNAIDI', 'IX');
 
 -- DUSUN X
 INSERT INTO rt (nomor_rt, nama_ketua, dusun) VALUES 
-('041', 'SAMSUDIN EFFENDI', 'X'),
-('042', 'TRIYONO', 'X'),
-('043', 'MARJATO', 'X'),
-('044', 'EDI ROHENDRA', 'X'),
-('045', 'HARIADI', 'X'),
-('046', 'JUNARYO', 'X'),
-('047', 'SUKIMAN', 'X'),
-('048', 'RUTAN SYAHRUL', 'X');
+('041', 'SYAMSUDIN EFFENDI', 'X'),
+('042', 'TRIONO', 'X'),
+('043', 'FATAHHILAH', 'X'),
+('044', 'IDA ROBAINI', 'X'),
+('045', 'ANTONI', 'X'),
+('046', 'PALUPI', 'X'),
+('047', 'SUTAN SYAHRIL', 'X'),
+('048', 'JOKO SUTANTO', 'X');
 
 -- DUSUN XI
 INSERT INTO rt (nomor_rt, nama_ketua, dusun) VALUES 
-('049', 'PAIJAN', 'XI'),
-('050', 'HASAN', 'XI'),
-('050-A', 'LAILI KUFRI', 'XI');
+('049', 'INDAH PRIHATIN', 'XI'),
+('050', 'MUHARTONO', 'XI'),
+('050-A', 'JUNTORO', 'XI');
 
 -- =========================================================
 -- SELESAI

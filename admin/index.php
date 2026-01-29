@@ -29,17 +29,29 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        :root { --sidebar-bg: #1a1d20; --active-blue: #10b981; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; margin: 0; }
+        :root { --sidebar-bg: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); --active-blue: #10b981; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%); margin: 0; }
+        
+        /* Animated Background Blobs */
+        @keyframes blob {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20px, -20px) scale(1.1); }
+            50% { transform: translate(-20px, 20px) scale(0.9); }
+            75% { transform: translate(20px, 20px) scale(1.05); }
+        }
+        .animate-blob { animation: blob 7s infinite; }
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
         
         .sidebar {
             width: 280px;
-            background: var(--sidebar-bg);
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
             height: 100vh;
             position: fixed;
             padding: 25px 0;
             display: flex;
             flex-direction: column;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
         }
         .sidebar-brand { 
             color: var(--active-blue); 
@@ -47,7 +59,7 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
             font-size: 1.25rem;
             padding: 0 20px 25px;
             margin-bottom: 20px;
-            border-bottom: 1px solid #2d3238;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             flex-shrink: 0;
             display: flex;
             align-items: center;
@@ -61,6 +73,8 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
             flex-grow: 1;
             overflow-y: auto;
         }
+        .sidebar-menu::-webkit-scrollbar { width: 6px; }
+        .sidebar-menu::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
         .sidebar-menu li { margin-bottom: 6px; }
         .sidebar-menu a {
             display: flex;
@@ -72,12 +86,14 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
             color: #94a3b8;
             font-size: 0.95rem;
             font-weight: 500;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .sidebar-menu a i { font-size: 1.2rem; }
         .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: var(--active-blue);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
         .logout-section {
             position: fixed;
@@ -85,8 +101,8 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
             left: 0;
             width: 280px;
             padding: 20px 15px;
-            border-top: 1px solid #2d3238;
-            background: var(--sidebar-bg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.2) 100%);
             flex-shrink: 0;
         }
         .logout-section a {
@@ -99,13 +115,77 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
             color: #ef4444;
             font-size: 0.95rem;
             font-weight: 500;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .logout-section a i { font-size: 1.2rem; }
         .logout-section a:hover {
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, 0.15);
+            transform: translateX(5px);
         }
-        .main-content { margin-left: 280px; padding: 40px; }
+        .main-content { 
+            margin-left: 280px; 
+            padding: 40px;
+            position: relative;
+            min-height: 100vh;
+        }
+        /* Animated Background Decorations */
+        .main-content::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: blob 10s infinite;
+            z-index: 0;
+        }
+        .main-content::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 280px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: blob 12s infinite;
+            animation-delay: 2s;
+            z-index: 0;
+        }
+        .card {
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
+        }
+        .display-4 {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .bg-gradient-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+        }
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+        }
+        .bg-gradient-info {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important;
+        }
+        .bg-gradient-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+        }
     </style>
 </head>
 <body>
@@ -128,59 +208,83 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
 </nav>
 
 <main class="main-content">
-    <div class="mb-4 d-flex justify-content-between align-items-center">
-        <div>
-            <h3 class="fw-bold mb-1">Dashboard Overview</h3>
-            <p class="text-muted mb-0">Selamat datang kembali, <strong style="color: #10b981;"><?= $_SESSION['nama_admin'] ?? 'Admin'; ?></strong>!</p>
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <div class="d-inline-block mb-3">
+                    <span class="badge rounded-pill px-4 py-2" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); font-size: 0.85rem; font-weight: 600;">
+                        <i class="bi bi-speedometer2 me-2"></i>Panel Administrator
+                    </span>
+                </div>
+                <h2 class="fw-bold mb-2" style="font-size: 2.5rem; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Dashboard Overview</h2>
+                <p class="text-muted mb-0 fs-5">Selamat datang kembali, <strong style="color: #10b981;"><?= $_SESSION['nama_admin'] ?? 'Administrator Desa!'; ?></strong></p>
+            </div>
+            <a href="../index.php" target="_blank" class="btn btn-outline-primary rounded-pill px-4 py-2 shadow-sm" style="font-weight: 600; transition: all 0.3s;">
+                <i class="bi bi-box-arrow-up-right me-2"></i>Lihat Website
+            </a>
         </div>
-        <a href="../index.php" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">Lihat Website <i class="bi bi-box-arrow-up-right ms-1"></i></a>
     </div>
 
-    <div class="row g-0">
+    <div class="row g-4 mb-4">
         <!-- Card 1 -->
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100 rounded-0">
+            <div class="card border-0 shadow-lg h-100 rounded-4 overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <p class="text-muted small text-uppercase mb-2">Total Berita</p>
+                            <p class="text-muted small text-uppercase mb-2 fw-semibold" style="letter-spacing: 1px;">Total Berita</p>
                             <h1 class="fw-bold mb-0 display-4"><?= $jml_berita; ?></h1>
                         </div>
-                        <div class="bg-success bg-opacity-10 p-4 rounded">
-                            <i class="bi bi-newspaper text-success fs-2"></i>
+                        <div class="p-4 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                            <i class="bi bi-newspaper text-white" style="font-size: 2rem;"></i>
                         </div>
+                    </div>
+                </div>
+                <div class="px-4 pb-4">
+                    <div class="progress" style="height: 6px; border-radius: 10px;">
+                        <div class="progress-bar" role="progressbar" style="width: 100%; background: linear-gradient(90deg, #10b981 0%, #059669 100%);" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Card 2 -->
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100 rounded-0">
+            <div class="card border-0 shadow-lg h-100 rounded-4 overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <p class="text-muted small text-uppercase mb-2">Perangkat Desa</p>
+                            <p class="text-muted small text-uppercase mb-2 fw-semibold" style="letter-spacing: 1px;">Perangkat Desa</p>
                             <h1 class="fw-bold mb-0 display-4"><?= $jml_perangkat; ?></h1>
                         </div>
-                        <div class="bg-success bg-opacity-10 p-4 rounded">
-                            <i class="bi bi-people text-success fs-2"></i>
+                        <div class="p-4 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                            <i class="bi bi-people text-white" style="font-size: 2rem;"></i>
                         </div>
+                    </div>
+                </div>
+                <div class="px-4 pb-4">
+                    <div class="progress" style="height: 6px; border-radius: 10px;">
+                        <div class="progress-bar" role="progressbar" style="width: 100%; background: linear-gradient(90deg, #10b981 0%, #059669 100%);" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Card 3 -->
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100 rounded-0">
+            <div class="card border-0 shadow-lg h-100 rounded-4 overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <p class="text-muted small text-uppercase mb-2">Potensi Desa</p>
+                            <p class="text-muted small text-uppercase mb-2 fw-semibold" style="letter-spacing: 1px;">Potensi Desa</p>
                             <h1 class="fw-bold mb-0 display-4"><?= $jml_potensi; ?></h1>
                         </div>
-                        <div class="bg-primary bg-opacity-10 p-4 rounded">
-                            <i class="bi bi-gem text-primary fs-2"></i>
+                        <div class="p-4 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                            <i class="bi bi-gem text-white" style="font-size: 2rem;"></i>
                         </div>
+                    </div>
+                </div>
+                <div class="px-4 pb-4">
+                    <div class="progress" style="height: 6px; border-radius: 10px;">
+                        <div class="progress-bar" role="progressbar" style="width: 100%; background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>
@@ -188,49 +292,51 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
     </div>
 
     <!-- Pengaduan Statistics -->
-    <div class="row g-0 mt-4">
+    <div class="row g-4 mt-2">
         <div class="col-md-6">
-            <div class="card border-0 shadow-sm h-100 rounded-0">
+            <div class="card border-0 shadow-lg h-100 rounded-4 overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <p class="text-muted small text-uppercase mb-2">Total Pengaduan</p>
+                            <p class="text-muted small text-uppercase mb-2 fw-semibold" style="letter-spacing: 1px;">Total Pengaduan</p>
                             <h1 class="fw-bold mb-0 display-4"><?= $jml_pengaduan; ?></h1>
                         </div>
-                        <div class="bg-info bg-opacity-10 p-4 rounded">
-                            <i class="bi bi-megaphone-fill text-info fs-2"></i>
+                        <div class="p-4 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
+                            <i class="bi bi-megaphone text-white" style="font-size: 2rem;"></i>
                         </div>
                     </div>
-                    <div class="mt-3">
-                        <a href="manage-pengaduan.php" class="btn btn-sm btn-outline-info">
-                            <i class="bi bi-arrow-right-circle me-1"></i>Kelola Pengaduan
-                        </a>
-                    </div>
+                </div>
+                <div class="px-4 pb-4">
+                    <a href="manage-pengaduan.php" class="btn btn-sm w-100 rounded-pill shadow-sm" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); color: white; font-weight: 600;">
+                        <i class="bi bi-arrow-right-circle me-2"></i>Kelola Pengaduan
+                    </a>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card border-0 shadow-sm h-100 rounded-0">
+            <div class="card border-0 shadow-lg h-100 rounded-4 overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <p class="text-muted small text-uppercase mb-2">Pengaduan Baru</p>
-                            <h1 class="fw-bold mb-0 display-4 text-warning"><?= $jml_pengaduan_baru; ?></h1>
+                            <p class="text-muted small text-uppercase mb-2 fw-semibold" style="letter-spacing: 1px;">Pengaduan Baru</p>
+                            <h1 class="fw-bold mb-0 display-4"><?= $jml_pengaduan_baru; ?></h1>
                         </div>
-                        <div class="bg-warning bg-opacity-10 p-4 rounded">
-                            <i class="bi bi-exclamation-circle-fill text-warning fs-2"></i>
+                        <div class="p-4 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                            <i class="bi bi-bell text-white" style="font-size: 2rem;"></i>
                         </div>
                     </div>
+                </div>
+                <div class="px-4 pb-4">
                     <?php if($jml_pengaduan_baru > 0): ?>
-                        <div class="mt-3">
-                            <a href="manage-pengaduan.php" class="btn btn-sm btn-warning text-dark">
-                                <i class="bi bi-bell-fill me-1"></i>Lihat Sekarang
-                            </a>
-                        </div>
+                    <div class="alert alert-warning mb-0 rounded-pill py-2 px-3 d-flex align-items-center" style="border: none; background: rgba(245, 158, 11, 0.1);">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <small class="fw-semibold">Tidak ada pengaduan baru</small>
+                    </div>
                     <?php else: ?>
-                        <div class="mt-3">
-                            <span class="badge bg-success">Tidak ada pengaduan baru</span>
-                        </div>
+                    <div class="alert alert-success mb-0 rounded-pill py-2 px-3 d-flex align-items-center" style="border: none; background: rgba(16, 185, 129, 0.1);">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <small class="fw-semibold">Semua pengaduan sudah ditangani</small>
+                    </div>
                     <?php endif; ?>
                 </div>
             </div>

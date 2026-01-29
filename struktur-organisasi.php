@@ -64,6 +64,9 @@ if ($result_perangkat) {
     position: absolute;
     background: #1f2937;
 }
+.dark .connector-line {
+    background: #64748b !important;
+}
 .vertical-line {
     width: 3px;
     left: 50%;
@@ -73,6 +76,25 @@ if ($result_perangkat) {
     height: 3px;
     top: 50%;
     transform: translateY(-50%);
+}
+
+/* Dark mode fixes for org chart */
+.dark #line-bpd,
+.dark #line-lpmd,
+.dark .bg-gray-800[style*="height: 3px"] {
+    background: #64748b !important;
+}
+
+.dark .modal-content {
+    background-color: #1e293b !important;
+    color: #e5e7eb !important;
+}
+
+.dark .close {
+    color: #94a3b8 !important;
+}
+.dark .close:hover {
+    color: #f1f5f9 !important;
 }
 
 /* Clickable cards */
@@ -161,20 +183,36 @@ if ($result_perangkat) {
 }
 </style>
 
-<div class="bg-gradient-to-b from-gray-50 to-white py-16">
-    <div class="container mx-auto px-4 max-w-7xl">
-        <div class="text-center mb-16">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Struktur Organisasi</h1>
-            <div class="w-24 h-1 bg-emerald-500 mx-auto mb-4"></div>
-            <p class="text-gray-600 max-w-2xl mx-auto">Pemerintahan Desa Natar yang siap melayani masyarakat dengan dedikasi dan profesionalitas</p>
+<div class="bg-gradient-to-br from-gray-50 via-indigo-50 to-purple-50 py-8 md:py-16 relative overflow-hidden">
+    <!-- Background Decorations -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+    <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+    
+    <div class="container mx-auto px-2 md:px-4 max-w-7xl relative z-10">
+        <div class="text-center mb-8 md:mb-16">
+            <div class="inline-block bg-gradient-to-r from-indigo-500 to-purple-600 px-8 py-3 rounded-full mb-6 shadow-lg transform hover:scale-105 transition-transform">
+                <span class="text-white font-bold text-sm tracking-wider uppercase flex items-center gap-2">
+                    <i class="bi bi-diagram-3-fill"></i> Pemerintahan Desa
+                </span>
+            </div>
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 mb-6">Struktur Organisasi</h1>
+            <div class="flex justify-center items-center gap-3 mb-6">
+                <div class="h-1 w-20 bg-gradient-to-r from-transparent to-indigo-500 rounded-full"></div>
+                <div class="h-2 w-2 bg-indigo-500 rounded-full"></div>
+                <div class="h-1 w-32 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full"></div>
+                <div class="h-2 w-2 bg-pink-500 rounded-full"></div>
+                <div class="h-1 w-20 bg-gradient-to-l from-transparent to-pink-500 rounded-full"></div>
+            </div>
+            <p class="text-sm md:text-lg text-gray-600 max-w-3xl mx-auto px-4">Pemerintahan Desa Natar yang siap melayani masyarakat dengan dedikasi dan profesionalitas</p>
         </div>
 
-        <div class="bg-white rounded-3xl shadow-2xl p-8 org-structure mb-12 relative">
+        <div class="bg-white rounded-xl md:rounded-3xl shadow-2xl hover:shadow-indigo-200/50 transition-all duration-500 border-2 border-indigo-100 p-3 md:p-8 org-structure mb-8 md:mb-12 relative overflow-x-auto">
 
             <!-- Garis penghubung atas ke BPD dan LPMD -->
             <div id="top-connector" class="hidden lg:block" style="position: absolute; inset: 0; height: 0; pointer-events: none;">
-                <div id="line-bpd" class="absolute bg-gray-800" style="height: 1px;"></div>
-                <div id="line-lpmd" class="absolute bg-gray-800" style="height: 1px;"></div>
+                <div id="line-bpd" class="absolute connector-line" style="height: 3px;"></div>
+                <div id="line-lpmd" class="absolute connector-line" style="height: 3px;"></div>
             </div>
 
             <!-- Grid 3 Kolom: BPD (Kiri) | Struktur Pemerintah Desa (Tengah) | LPMD (Kanan) -->
@@ -182,9 +220,9 @@ if ($result_perangkat) {
                 
                 <!-- KOLOM KIRI: BPD -->
                 <div class="lg:col-span-2 mt-12 lg:mt-24">
-                    <div id="bpd-panel" class="border-4 border-indigo-400 rounded-xl p-3 bg-white shadow-lg">
+                    <div id="bpd-panel" class="border-4 border-indigo-400 rounded-xl p-3 bg-gradient-to-br from-white to-indigo-50 shadow-2xl hover:shadow-indigo-300/50 transition-all duration-500">
                         <div class="text-center mb-3">
-                            <div class="bg-indigo-600 text-white px-2 py-1 rounded text-xs font-bold">
+                            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-2 py-1 rounded-lg text-xs font-bold shadow-lg">
                                 KETUA BPD
                             </div>
                         </div>
@@ -246,8 +284,8 @@ if ($result_perangkat) {
             
             <!-- Level 1: Kepala Desa -->
             <div class="flex justify-center relative" style="margin-bottom: 0;">
-                <div id="kepala-desa-card" class="bg-gradient-to-br from-emerald-600 to-emerald-700 text-white px-12 py-8 rounded-2xl shadow-2xl border-4 border-emerald-400 text-center transform hover:scale-105 transition-all duration-300">
-                    <div class="w-32 h-32 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-emerald-300 shadow-lg">
+                <div id="kepala-desa-card" class="bg-gradient-to-br from-emerald-600 to-emerald-700 text-white px-6 md:px-12 py-6 md:py-8 rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl border-2 md:border-4 border-emerald-400 text-center transform hover:scale-105 transition-all duration-300">
+                    <div class="w-20 h-20 md:w-32 md:h-32 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-emerald-300 shadow-lg">
                         <?php 
                         $kepala_desa = $data_perangkat['kepala_desa'] ?? null;
                         
@@ -287,34 +325,34 @@ if ($result_perangkat) {
                         ?>
                         <img src="<?php echo $foto_kades; ?>" alt="Kepala Desa" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=10b981&color=fff&bold=true';">
                     </div>
-                    <h3 class="font-bold text-2xl mb-1"><?php echo strtoupper($nama_kades); ?></h3>
-                    <p class="text-emerald-100 text-base font-bold tracking-wide">KEPALA DESA</p>
+                    <h3 class="font-bold text-lg md:text-2xl mb-1"><?php echo strtoupper($nama_kades); ?></h3>
+                    <p class="text-emerald-100 text-sm md:text-base font-bold tracking-wide">KEPALA DESA</p>
                 </div>
             </div>
 
             <!-- Garis dari Kepala Desa -->
-            <div class="relative" style="height: 80px;">
+            <div class="relative hidden md:block" style="height: 80px;">
                 <!-- Garis vertikal turun dari kepala desa -->
-                <div class="absolute bg-gray-800" style="width: 2px; height: 40px; left: 50%; transform: translateX(-50%); top: 0;"></div>
+                <div class="absolute bg-gray-800" style="width: 3px; height: 40px; left: 50%; transform: translateX(-50%); top: 0;"></div>
                 
                 <!-- Garis horizontal -->
-                <div class="absolute bg-gray-800" style="height: 2px; width: 50%; left: 25%; top: 40px;"></div>
+                <div class="absolute bg-gray-800" style="height: 3px; width: 50%; left: 25%; top: 40px;"></div>
                 
                 <!-- Garis vertikal kiri ke 3 Kepala Seksi -->
-                <div class="absolute bg-gray-800" style="width: 2px; height: 65px; left: 25%; top: 40px;"></div>
+                <div class="absolute bg-gray-800" style="width: 3px; height: 65px; left: 25%; top: 40px;"></div>
                 
                 <!-- Garis vertikal kanan ke Sekretariat -->
-                <div class="absolute bg-gray-800" style="width: 2px; height: 50px; left: 75%; top: 40px;"></div>
+                <div class="absolute bg-gray-800" style="width: 3px; height: 50px; left: 75%; top: 40px;"></div>
             </div>
 
             <!-- Layout 2 kolom: Kepala Seksi (kiri) dan Sekretariat (kanan) -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-6xl mx-auto relative">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 max-w-6xl mx-auto relative">
                 
                 <!-- KOLOM KIRI: 3 Kepala Seksi -->
                 <div class="relative">
                     <div class="space-y-6 relative">
                         <!-- Garis vertikal utama untuk 3 Kasi di sebelah KANAN -->
-                        <div class="absolute bg-gray-800" style="width: 2px; height: 128%; right: 0; top: 0;"></div>
+                        <div class="absolute bg-gray-800" style="width: 3px; height: 128%; right: 0; top: 0;"></div>
                         
                         <!-- Kepala Seksi Pemerintahan -->
                         <div class="relative">
@@ -325,13 +363,13 @@ if ($result_perangkat) {
                             $nama_url = urlencode(str_replace(' ', '+', $nama_kasi_pem));
                             ?>
                             <!-- Garis horizontal dari kotak ke garis vertikal kanan -->
-                            <div class="absolute bg-gray-800" style="height: 2px; width: 50px; right: 0; top: 50%; transform: translateY(-50%);"></div>
-                            <div class="bg-gradient-to-br from-blue-100 to-blue-200 border-4 border-blue-400 p-9 rounded-2xl shadow-xl text-center hover:shadow-2xl transition-shadow duration-300" style="margin-right: 50px;">
-                        <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-blue-500 shadow-md">
+                            <div class="absolute bg-gray-800" style="height: 3px; width: 50px; right: 0; top: 50%; transform: translateY(-50%);"></div>
+                            <div class="bg-gradient-to-br from-blue-100 to-blue-200 border-2 md:border-4 border-blue-400 p-4 md:p-9 rounded-xl md:rounded-2xl shadow-2xl hover:shadow-blue-300/60 transition-all duration-300 transform hover:-translate-y-1" style="margin-right: 50px;">
+                        <div class="w-16 h-16 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-blue-500 shadow-md">
                             <img src="<?= htmlspecialchars($foto_kasi_pem) ?>" alt="Kasi Pemerintahan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=3b82f6&color=fff&bold=true'">
                         </div>
-                                <h4 class="font-bold text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kasi_pem) ?></h4>
-                                <p class="text-blue-700 text-sm font-bold uppercase tracking-wide">Kepala Seksi<br>Pemerintahan</p>
+                                <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kasi_pem) ?></h4>
+                                <p class="text-blue-700 text-xs md:text-sm font-bold uppercase tracking-wide">Kepala Seksi<br>Pemerintahan</p>
                             </div>
                         </div>
 
@@ -344,13 +382,13 @@ if ($result_perangkat) {
                             $nama_url = urlencode(str_replace(' ', '+', $nama_kasi_kes));
                             ?>
                             <!-- Garis horizontal dari kotak ke garis vertikal kanan -->
-                            <div class="absolute bg-gray-800" style="height: 2px; width: 50px; right: 0; top: 50%; transform: translateY(-50%);"></div>
-                            <div class="bg-gradient-to-br from-purple-100 to-purple-200 border-4 border-purple-400 p-9 rounded-2xl shadow-xl text-center hover:shadow-2xl transition-shadow duration-300" style="margin-right: 50px;">
-                        <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-purple-500 shadow-md">
+                            <div class="absolute bg-gray-800" style="height: 3px; width: 50px; right: 0; top: 50%; transform: translateY(-50%);"></div>
+                            <div class="bg-gradient-to-br from-purple-100 to-purple-200 border-2 md:border-4 border-purple-400 p-4 md:p-9 rounded-xl md:rounded-2xl shadow-2xl hover:shadow-purple-300/60 transition-all duration-300 transform hover:-translate-y-1" style="margin-right: 50px;">
+                        <div class="w-16 h-16 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-purple-500 shadow-md">
                             <img src="<?= htmlspecialchars($foto_kasi_kes) ?>" alt="Kasi Kesejahteraan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=a855f7&color=fff&bold=true'">
                         </div>
-                                <h4 class="font-bold text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kasi_kes) ?></h4>
-                                <p class="text-purple-700 text-sm font-bold uppercase tracking-wide">Kepala Seksi<br>Kesejahteraan</p>
+                                <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kasi_kes) ?></h4>
+                                <p class="text-purple-700 text-xs md:text-sm font-bold uppercase tracking-wide">Kepala Seksi<br>Kesejahteraan</p>
                             </div>
                         </div>
 
@@ -363,13 +401,13 @@ if ($result_perangkat) {
                             $nama_url = urlencode(str_replace(' ', '+', $nama_kasi_pel));
                             ?>
                             <!-- Garis horizontal dari kotak ke garis vertikal kanan -->
-                            <div class="absolute bg-gray-800" style="height: 2px; width: 50px; right: 0; top: 50%; transform: translateY(-50%);"></div>
-                            <div class="bg-gradient-to-br from-pink-100 to-pink-200 border-4 border-pink-400 p-9 rounded-2xl shadow-xl text-center hover:shadow-2xl transition-shadow duration-300" style="margin-right: 50px;">
-                        <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-pink-500 shadow-md">
+                            <div class="absolute bg-gray-800" style="height: 3px; width: 50px; right: 0; top: 50%; transform: translateY(-50%);"></div>
+                            <div class="bg-gradient-to-br from-pink-100 to-pink-200 border-2 md:border-4 border-pink-400 p-4 md:p-9 rounded-xl md:rounded-2xl shadow-2xl hover:shadow-pink-300/60 transition-all duration-300 transform hover:-translate-y-1" style="margin-right: 50px;">
+                        <div class="w-16 h-16 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-pink-500 shadow-md">
                             <img src="<?= htmlspecialchars($foto_kasi_pel) ?>" alt="Kasi Pelayanan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=ec4899&color=fff&bold=true'">
                         </div>
-                                <h4 class="font-bold text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kasi_pel) ?></h4>
-                                <p class="text-pink-700 text-sm font-bold uppercase tracking-wide">Kepala Seksi<br>Pelayanan</p>
+                                <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kasi_pel) ?></h4>
+                                <p class="text-pink-700 text-xs md:text-sm font-bold uppercase tracking-wide">Kepala Seksi<br>Pelayanan</p>
                             </div>
                         </div>
                     </div>
@@ -385,31 +423,31 @@ if ($result_perangkat) {
                         $foto_sekretaris = $sekretaris && $sekretaris['foto'] ? 'assets/img/perangkat/' . $sekretaris['foto'] : 'assets/img/perangkat/sekretaris.jpeg';
                         $nama_url = urlencode(str_replace(' ', '+', $nama_sekretaris));
                         ?>
-                        <div class="bg-gradient-to-br from-orange-100 to-orange-200 border-4 border-orange-400 p-9 rounded-2xl shadow-xl text-center hover:shadow-2xl transition-shadow duration-300">
-                            <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-orange-500 shadow-md">
+                        <div class="bg-gradient-to-br from-orange-100 to-orange-200 border-2 md:border-4 border-orange-400 p-4 md:p-9 rounded-xl md:rounded-2xl shadow-2xl hover:shadow-orange-300/60 transition-all duration-300 transform hover:-translate-y-1">
+                            <div class="w-16 h-16 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-orange-500 shadow-md">
                                 <img src="<?= htmlspecialchars($foto_sekretaris) ?>" alt="Sekretaris Desa" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=f97316&color=fff&bold=true'">
                             </div>
-                            <h4 class="font-bold text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_sekretaris) ?></h4>
-                            <p class="text-orange-700 text-sm font-bold uppercase tracking-wide">Sekretariat Desa</p>
+                            <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_sekretaris) ?></h4>
+                            <p class="text-orange-700 text-xs md:text-sm font-bold uppercase tracking-wide">Sekretariat Desa</p>
                         </div>
                     </div>
 
                     <!-- Garis vertikal dari Sekretariat ke bawah dan horizontal ke garis vertikal Kaur -->
-                    <div class="relative" style="height: 40px;">
+                    <div class="relative hidden lg:block" style="height: 40px;">
                         <!-- Garis vertikal dari Sekretariat -->
-                        <div class="absolute bg-gray-800" style="width: 2px; height: 40px; left: 50%; transform: translateX(-50%); top: 0;"></div>
+                        <div class="absolute bg-gray-800" style="width: 3px; height: 40px; left: 50%; transform: translateX(-50%); top: 0;"></div>
                         
                         <!-- Garis horizontal ke kiri menuju garis vertikal Kaur -->
-                        <div class="absolute bg-gray-800" style="height: 2px; width: 50%; left: 0; top: 20px;"></div>
+                        <div class="absolute bg-gray-800" style="height: 3px; width: 50%; left: 0; top: 20px;"></div>
                         
                         <!-- Garis vertikal turun ke garis vertikal Kaur -->
-                        <div class="absolute bg-gray-800" style="width: 2px; height: 50px; left: 0; top: 20px;"></div>
+                        <div class="absolute bg-gray-800" style="width: 3px; height: 50px; left: 0; top: 20px;"></div>
                     </div>
 
                     <!-- 3 Kaur dengan garis vertikal -->
                     <div class="relative">
                         <!-- Garis vertikal utama untuk 3 kaur di sebelah KIRI -->
-                        <div class="absolute bg-gray-800" style="width: 2px; height: 100%; left: 0; top: 0;"></div>
+                        <div class="absolute bg-gray-800" style="width: 3px; height: 100%; left: 0; top: 0;"></div>
                         
                         <div class="space-y-6 relative">
                             <!-- Kaur TU -->
@@ -421,13 +459,13 @@ if ($result_perangkat) {
                                 $nama_url = urlencode(str_replace(' ', '+', $nama_kaur_tu));
                                 ?>
                                 <!-- Garis horizontal dari garis vertikal kiri ke kotak -->
-                                <div class="absolute bg-gray-800" style="height: 2px; width: 50px; left: 0; top: 50%; transform: translateY(-50%);"></div>
-                                <div class="bg-white border-4 border-orange-300 p-9 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow duration-300" style="margin-left: 50px;">
-                                    <div class="w-24 h-24 bg-orange-50 rounded-full mx-auto mb-4 overflow-hidden border-3 border-orange-400">
+                                <div class="absolute bg-gray-800" style="height: 3px; width: 50px; left: 0; top: 50%; transform: translateY(-50%);"></div>
+                                <div class="bg-white border-2 md:border-4 border-orange-300 p-4 md:p-9 rounded-lg md:rounded-xl shadow-md md:shadow-lg text-center hover:shadow-xl transition-shadow duration-300" style="margin-left: 50px;">
+                                    <div class="w-16 h-16 md:w-24 md:h-24 bg-orange-50 rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-3 border-orange-400">
                                         <img src="<?= htmlspecialchars($foto_kaur_tu) ?>" alt="Kaur TU" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=fed7aa&color=000'">
                                     </div>
-                                    <h5 class="font-bold text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kaur_tu) ?></h5>
-                                    <p class="text-sm text-orange-600 font-semibold uppercase">Kaur Umum & Tata Usaha</p>
+                                    <h5 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kaur_tu) ?></h5>
+                                    <p class="text-xs md:text-sm text-orange-600 font-semibold uppercase">Kaur Umum & Tata Usaha</p>
                                 </div>
                             </div>
 
@@ -440,13 +478,13 @@ if ($result_perangkat) {
                                 $nama_url = urlencode(str_replace(' ', '+', $nama_kaur_ren));
                                 ?>
                                 <!-- Garis horizontal dari garis vertikal kiri ke kotak -->
-                                <div class="absolute bg-gray-800" style="height: 2px; width: 50px; left: 0; top: 50%; transform: translateY(-50%);"></div>
-                                <div class="bg-white border-4 border-orange-300 p-9 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow duration-300" style="margin-left: 50px;">
-                                    <div class="w-24 h-24 bg-orange-50 rounded-full mx-auto mb-4 overflow-hidden border-3 border-orange-400">
+                                <div class="absolute bg-gray-800" style="height: 3px; width: 50px; left: 0; top: 50%; transform: translateY(-50%);"></div>
+                                <div class="bg-white border-2 md:border-4 border-orange-300 p-4 md:p-9 rounded-lg md:rounded-xl shadow-md md:shadow-lg text-center hover:shadow-xl transition-shadow duration-300" style="margin-left: 50px;">
+                                    <div class="w-16 h-16 md:w-24 md:h-24 bg-orange-50 rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-3 border-orange-400">
                                         <img src="<?= htmlspecialchars($foto_kaur_ren) ?>" alt="Kaur Perencanaan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=fed7aa&color=000'">
                                     </div>
-                                    <h5 class="font-bold text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kaur_ren) ?></h5>
-                                    <p class="text-sm text-orange-600 font-semibold uppercase">Kaur Perencanaan</p>
+                                    <h5 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kaur_ren) ?></h5>
+                                    <p class="text-xs md:text-sm text-orange-600 font-semibold uppercase">Kaur Perencanaan</p>
                                 </div>
                             </div>
 
@@ -459,13 +497,13 @@ if ($result_perangkat) {
                                 $nama_url = urlencode(str_replace(' ', '+', $nama_kaur_keu));
                                 ?>
                                 <!-- Garis horizontal dari garis vertikal kiri ke kotak -->
-                                <div class="absolute bg-gray-800" style="height: 2px; width: 50px; left: 0; top: 50%; transform: translateY(-50%);"></div>
-                                <div class="bg-white border-4 border-orange-300 p-9 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow duration-300" style="margin-left: 50px;">
-                                    <div class="w-24 h-24 bg-orange-50 rounded-full mx-auto mb-4 overflow-hidden border-3 border-orange-400">
+                                <div class="absolute bg-gray-800" style="height: 3px; width: 50px; left: 0; top: 50%; transform: translateY(-50%);"></div>
+                                <div class="bg-white border-2 md:border-4 border-orange-300 p-4 md:p-9 rounded-lg md:rounded-xl shadow-md md:shadow-lg text-center hover:shadow-xl transition-shadow duration-300" style="margin-left: 50px;">
+                                    <div class="w-16 h-16 md:w-24 md:h-24 bg-orange-50 rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-3 border-orange-400">
                                         <img src="<?= htmlspecialchars($foto_kaur_keu) ?>" alt="Kaur Keuangan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=fed7aa&color=000'">
                                     </div>
-                                    <h5 class="font-bold text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kaur_keu) ?></h5>
-                                    <p class="text-sm text-orange-600 font-semibold uppercase">Kaur Keuangan</p>
+                                    <h5 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kaur_keu) ?></h5>
+                                    <p class="text-xs md:text-sm text-orange-600 font-semibold uppercase">Kaur Keuangan</p>
                                 </div>
                             </div>
                         </div>
@@ -474,43 +512,43 @@ if ($result_perangkat) {
             </div>
 
             <!-- Garis penghubung dari kedua kolom ke Operator & Bendahara -->
-            <div class="relative" style="height: 80px;">
+            <div class="relative hidden lg:block" style="height: 80px;">
                 <div class="max-w-6xl mx-auto relative" style="height: 100%;">
                     <!-- Garis horizontal menghubungkan kedua kolom -->
-                    <div class="absolute bg-gray-800" style="height: 2px; width: calc(5% + 3px); left: calc(48% - 3px); top: 0;"></div>
+                    <div class="absolute bg-gray-800" style="height: 3px; width: calc(5% + 3px); left: calc(48% - 3px); top: 0;"></div>
                     
                     <!-- Garis vertikal dari tengah turun -->
-                    <div class="absolute bg-gray-800" style="width: 2px; height: 40px; left: 50%; transform: translateX(-50%); top: 0;"></div>
+                    <div class="absolute bg-gray-800" style="width: 3px; height: 40px; left: 50%; transform: translateX(-50%); top: 0;"></div>
                     
                     <!-- Garis horizontal untuk cabang 2 kotak -->
-                    <div class="absolute bg-gray-800" style="height: 2px; width: 180px; left: 50%; transform: translateX(-50%); top: 40px;"></div>
+                    <div class="absolute bg-gray-800" style="height: 3px; width: 180px; left: 50%; transform: translateX(-50%); top: 40px;"></div>
                     
                     <!-- Garis vertikal ke Operator (kiri) -->
-                    <div class="absolute bg-gray-800" style="width: 2px; height: 40px; left: calc(50% - 90px); top: 40px;"></div>
+                    <div class="absolute bg-gray-800" style="width: 3px; height: 40px; left: calc(50% - 90px); top: 40px;"></div>
                     
                     <!-- Garis vertikal ke Bendahara (kanan) -->
-                    <div class="absolute bg-gray-800" style="width: 2px; height: 40px; left: calc(50% + 90px); top: 40px;"></div>
+                    <div class="absolute bg-gray-800" style="width: 3px; height: 40px; left: calc(50% + 90px); top: 40px;"></div>
                 </div>
             </div>
 
             <!-- Operator & Bendahara -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 max-w-5xl mx-auto">
                 <!-- Operator -->
-                <div class="bg-gradient-to-br from-gray-50 to-gray-100 border-4 border-gray-400 px-8 py-6 rounded-2xl shadow-xl text-center hover:shadow-2xl transition-shadow duration-300">
-                    <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-gray-500 shadow-md">
+                <div class="bg-gradient-to-br from-gray-50 to-gray-100 border-2 md:border-4 border-gray-400 px-4 md:px-8 py-4 md:py-6 rounded-xl md:rounded-2xl shadow-lg md:shadow-xl text-center hover:shadow-2xl transition-shadow duration-300">
+                    <div class="w-16 h-16 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-gray-500 shadow-md">
                         <img src="assets/img/perangkat/operator.jpeg" alt="Operator" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=DESMIATI&size=200&background=6b7280&color=fff&bold=true'">
                     </div>
-                    <h4 class="font-bold text-lg text-gray-800 mb-1">DESMIATI ARIANTINI</h4>
-                    <p class="text-gray-600 text-sm font-bold uppercase tracking-wide">Operator</p>
+                    <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1">DESMIATI ARIANTINI</h4>
+                    <p class="text-gray-600 text-xs md:text-sm font-bold uppercase tracking-wide">Operator</p>
                 </div>
 
                 <!-- Bendahara -->
-                <div class="bg-gradient-to-br from-gray-50 to-gray-100 border-4 border-gray-400 px-8 py-6 rounded-2xl shadow-xl text-center hover:shadow-2xl transition-shadow duration-300">
-                    <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-gray-500 shadow-md">
+                <div class="bg-gradient-to-br from-gray-50 to-gray-100 border-2 md:border-4 border-gray-400 px-4 md:px-8 py-4 md:py-6 rounded-xl md:rounded-2xl shadow-lg md:shadow-xl text-center hover:shadow-2xl transition-shadow duration-300">
+                    <div class="w-16 h-16 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-gray-500 shadow-md">
                         <img src="assets/img/perangkat/bendahara.jpeg" alt="Bendahara" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=EKA+NOVIYANTI&size=200&background=6b7280&color=fff&bold=true'">
                     </div>
-                    <h4 class="font-bold text-lg text-gray-800 mb-1">ERA NOVIYANTI</h4>
-                    <p class="text-gray-600 text-sm font-bold uppercase tracking-wide">Bendahara Barang</p>
+                    <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1">ERA NOVIYANTI</h4>
+                    <p class="text-gray-600 text-xs md:text-sm font-bold uppercase tracking-wide">Bendahara Barang</p>
                 </div>
             </div>
             
@@ -519,9 +557,9 @@ if ($result_perangkat) {
 
             <!-- KOLOM KANAN: LPMD -->
             <div class="lg:col-span-2 mt-12 lg:mt-24">
-                <div id="lpmd-panel" class="border-4 border-teal-400 rounded-xl p-3 bg-white shadow-lg">
+                <div id="lpmd-panel" class="border-4 border-teal-400 rounded-xl p-3 bg-gradient-to-br from-white to-teal-50 shadow-2xl hover:shadow-teal-300/50 transition-all duration-500">
                     <div class="text-center mb-3">
-                        <div class="bg-teal-600 text-white px-2 py-1 rounded text-xs font-bold">
+                        <div class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-2 py-1 rounded-lg text-xs font-bold shadow-lg">
                             KETUA LPMD
                         </div>
                     </div>
@@ -602,7 +640,7 @@ if ($result_perangkat) {
                             $foto_kadus = $kadus && $kadus['foto'] ? 'assets/img/perangkat/'.$kadus['foto'] : 'assets/img/perangkat/kadus-'.($idx+1).'.jpeg';
                             $nama_avatar = urlencode($nama_kadus);
                         ?>
-                        <div class="clickable-card bg-gradient-to-br from-emerald-50 to-emerald-100 border-4 border-emerald-500 p-6 rounded-2xl shadow-xl text-center hover:shadow-2xl transition-shadow duration-300" onclick="toggleDetails('rt-kadus-<?php echo $idx+1; ?>', '<?php echo $dusun; ?>', this, 'emerald')">
+                        <div class="clickable-card bg-gradient-to-br from-emerald-50 to-emerald-100 border-4 border-emerald-500 p-6 rounded-2xl shadow-2xl hover:shadow-emerald-300/60 transition-all duration-300 transform hover:-translate-y-2" onclick="toggleDetails('rt-kadus-<?php echo $idx+1; ?>', '<?php echo $dusun; ?>', this, 'emerald')">
                             <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-emerald-600 shadow-md">
                                 <img src="<?php echo $foto_kadus; ?>" alt="Kepala Dusun <?php echo $dusun; ?>" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=10b981&color=fff&bold=true';">
                             </div>
@@ -628,7 +666,7 @@ if ($result_perangkat) {
                             $foto_kadus = $kadus && $kadus['foto'] ? 'assets/img/perangkat/'.$kadus['foto'] : 'assets/img/perangkat/kadus-'.($idx+4).'.jpeg';
                             $nama_avatar = urlencode($nama_kadus);
                         ?>
-                        <div class="clickable-card bg-gradient-to-br from-blue-50 to-blue-100 border-4 border-blue-500 p-6 rounded-2xl shadow-xl text-center hover:shadow-2xl transition-shadow duration-300" onclick="toggleDetails('rt-kadus-<?php echo $idx+4; ?>', '<?php echo $dusun; ?>', this, 'blue')">
+                        <div class="clickable-card bg-gradient-to-br from-blue-50 to-blue-100 border-4 border-blue-500 p-6 rounded-2xl shadow-2xl hover:shadow-blue-300/60 transition-all duration-300 transform hover:-translate-y-2" onclick="toggleDetails('rt-kadus-<?php echo $idx+4; ?>', '<?php echo $dusun; ?>', this, 'blue')">
                             <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-blue-600 shadow-md">
                                 <img src="<?php echo $foto_kadus; ?>" alt="Kepala Dusun <?php echo $dusun; ?>" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=3b82f6&color=fff&bold=true';">
                             </div>
@@ -654,7 +692,7 @@ if ($result_perangkat) {
                             $foto_kadus = $kadus && $kadus['foto'] ? 'assets/img/perangkat/'.$kadus['foto'] : 'assets/img/perangkat/kadus-'.($idx+7).'.jpeg';
                             $nama_avatar = urlencode($nama_kadus);
                         ?>
-                        <div class="clickable-card bg-gradient-to-br from-purple-50 to-purple-100 border-4 border-purple-500 p-6 rounded-2xl shadow-xl text-center hover:shadow-2xl transition-shadow duration-300" onclick="toggleDetails('rt-kadus-<?php echo $idx+7; ?>', '<?php echo $dusun; ?>', this, 'purple')">
+                        <div class="clickable-card bg-gradient-to-br from-purple-50 to-purple-100 border-4 border-purple-500 p-6 rounded-2xl shadow-2xl hover:shadow-purple-300/60 transition-all duration-300 transform hover:-translate-y-2" onclick="toggleDetails('rt-kadus-<?php echo $idx+7; ?>', '<?php echo $dusun; ?>', this, 'purple')">
                             <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-purple-600 shadow-md">
                                 <img src="<?php echo $foto_kadus; ?>" alt="Kepala Dusun <?php echo $dusun; ?>" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=a855f7&color=fff&bold=true';">
                             </div>
@@ -680,7 +718,7 @@ if ($result_perangkat) {
                             $foto_kadus = $kadus && $kadus['foto'] ? 'assets/img/perangkat/'.$kadus['foto'] : 'assets/img/perangkat/kadus-'.($idx+10).'.jpeg';
                             $nama_avatar = urlencode($nama_kadus);
                         ?>
-                        <div class="clickable-card bg-gradient-to-br from-orange-50 to-orange-100 border-4 border-orange-500 p-6 rounded-2xl shadow-xl text-center hover:shadow-2xl transition-shadow duration-300" onclick="toggleDetails('rt-kadus-<?php echo $idx+10; ?>', '<?php echo $dusun; ?>', this, 'orange')">
+                        <div class="clickable-card bg-gradient-to-br from-orange-50 to-orange-100 border-4 border-orange-500 p-6 rounded-2xl shadow-2xl hover:shadow-orange-300/60 transition-all duration-300 transform hover:-translate-y-2" onclick="toggleDetails('rt-kadus-<?php echo $idx+10; ?>', '<?php echo $dusun; ?>', this, 'orange')">
                             <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-orange-600 shadow-md">
                                 <img src="<?php echo $foto_kadus; ?>" alt="Kepala Dusun <?php echo $dusun; ?>" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=f97316&color=fff&bold=true';">
                             </div>

@@ -41,8 +41,13 @@ if ($conn) {
 </section>
 
 <!-- Berita Terkini -->
-<section class="py-20 bg-gray-50">
-    <div class="container mx-auto px-4">
+<section class="py-20 bg-gradient-to-br from-gray-50 via-emerald-50 to-teal-50 relative overflow-hidden">
+    <!-- Background Decorations -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-emerald-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+    <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+    
+    <div class="container mx-auto px-4 relative z-10">
         <div class="flex justify-between items-end mb-12">
             <div>
                 <h2 class="text-3xl font-bold text-gray-800 mb-2 border-l-4 border-emerald-500 pl-4">Kabar Desa Terkini</h2>

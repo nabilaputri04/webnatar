@@ -3,31 +3,55 @@ $page_title = "Sarana dan Prasarana";
 require 'includes/header.php';
 ?>
 
-<div class="bg-gray-50 py-16">
-    <div class="container mx-auto px-4">
+<div class="bg-gradient-to-br from-gray-50 via-emerald-50 to-blue-50 py-16 relative overflow-hidden">
+    <!-- Background Decorations -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-emerald-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+    <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+    
+    <div class="container mx-auto px-4 relative z-10">
         <!-- Header -->
         <div class="text-center mb-16">
-            <div class="inline-block bg-emerald-100 px-6 py-2 rounded-full mb-4">
-                <span class="text-emerald-700 font-semibold text-sm tracking-wider uppercase">Infrastruktur Desa</span>
+            <div class="inline-block bg-gradient-to-r from-emerald-500 to-teal-600 px-8 py-3 rounded-full mb-6 shadow-lg transform hover:scale-105 transition-transform">
+                <span class="text-white font-bold text-sm tracking-wider uppercase flex items-center gap-2">
+                    <i class="bi bi-building"></i> Infrastruktur Desa
+                </span>
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 mb-6 leading-tight">
                 Sarana dan Prasarana
             </h1>
-            <div class="w-24 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 mx-auto rounded-full mb-4"></div>
-            <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+            <div class="flex justify-center items-center gap-3 mb-6">
+                <div class="h-1 w-20 bg-gradient-to-r from-transparent to-emerald-500 rounded-full"></div>
+                <div class="h-2 w-2 bg-emerald-500 rounded-full"></div>
+                <div class="h-1 w-32 bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500 rounded-full"></div>
+                <div class="h-2 w-2 bg-blue-500 rounded-full"></div>
+                <div class="h-1 w-20 bg-gradient-to-l from-transparent to-blue-500 rounded-full"></div>
+            </div>
+            <p class="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
                 Data lengkap fasilitas kesehatan, pendidikan, dan sarana umum lainnya di Desa Natar
             </p>
         </div>
 
         <!-- Sarana Kesehatan -->
-        <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-12 border border-gray-100 hover:shadow-2xl transition-all duration-300">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg transform hover:rotate-12 transition-transform duration-300">
-                    <i class="bi bi-heart-pulse-fill text-3xl text-white"></i>
-                </div>
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-800">Sarana dan Prasarana Kesehatan</h2>
-                    <p class="text-gray-500 text-sm mt-1">Fasilitas pelayanan kesehatan masyarakat</p>
+        <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 mb-12 border-2 border-red-100 hover:shadow-red-200/50 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 relative overflow-hidden">
+            <!-- Decorative elements -->
+            <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-100 to-pink-100 rounded-full -mr-20 -mt-20 opacity-50"></div>
+            <div class="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-red-50 to-pink-50 rounded-full -ml-16 -mb-16 opacity-50"></div>
+            
+            <div class="relative z-10">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl blur-lg opacity-50 animate-pulse"></div>
+                        <div class="relative w-20 h-20 bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-xl transform hover:rotate-12 hover:scale-110 transition-all duration-300">
+                            <i class="bi bi-heart-pulse-fill text-4xl text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-1">Sarana dan Prasarana Kesehatan</h2>
+                        <p class="text-red-600 text-sm font-semibold flex items-center gap-2">
+                            <i class="bi bi-check-circle-fill"></i> Fasilitas pelayanan kesehatan masyarakat
+                        </p>
+                    </div>
                 </div>
             </div>
             
@@ -96,14 +120,25 @@ require 'includes/header.php';
         </div>
 
         <!-- Sarana Pendidikan -->
-        <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100 hover:shadow-2xl transition-all duration-300">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg transform hover:rotate-12 transition-transform duration-300">
-                    <i class="bi bi-book-fill text-3xl text-white"></i>
-                </div>
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-800">Sarana Prasarana Pendidikan</h2>
-                    <p class="text-gray-500 text-sm mt-1">Lembaga pendidikan formal di wilayah desa</p>
+        <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-2 border-blue-100 hover:shadow-blue-200/50 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 relative overflow-hidden">
+            <!-- Decorative elements -->
+            <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full -mr-20 -mt-20 opacity-50"></div>
+            <div class="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-blue-50 to-indigo-50 rounded-full -ml-16 -mb-16 opacity-50"></div>
+            
+            <div class="relative z-10">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl blur-lg opacity-50 animate-pulse"></div>
+                        <div class="relative w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl transform hover:rotate-12 hover:scale-110 transition-all duration-300">
+                            <i class="bi bi-book-fill text-4xl text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-1">Sarana Prasarana Pendidikan</h2>
+                        <p class="text-blue-600 text-sm font-semibold flex items-center gap-2">
+                            <i class="bi bi-mortarboard-fill"></i> Lembaga pendidikan formal di wilayah desa
+                        </p>
+                    </div>
                 </div>
             </div>
             

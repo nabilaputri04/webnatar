@@ -69,100 +69,24 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 
+    <?php include 'admin-styles.php'; ?>
     <style>
-        :root { --sidebar-bg: #1a1d20; --active-blue: #10b981; --bs-primary: #10b981; --bs-primary-rgb: 16, 185, 129; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
-
-        .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            height: 100vh;
-            position: fixed;
-            padding: 25px 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar-brand { 
-            color: var(--active-blue); 
-            font-weight: 700; 
-            font-size: 1.25rem;
-            padding: 0 20px 25px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #2d3238;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .sidebar-menu { 
-            list-style: none; 
-            padding: 0 15px; 
-            padding-bottom: 80px;
-            margin: 0; 
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-        .sidebar-menu li { margin-bottom: 6px; }
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #94a3b8;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .sidebar-menu a i { font-size: 1.2rem; }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: var(--active-blue);
-            color: white;
-        }
-        .logout-section {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 280px;
-            padding: 20px 15px;
-            border-top: 1px solid #2d3238;
-            background: var(--sidebar-bg);
-            flex-shrink: 0;
-        }
-        .logout-section a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #ef4444;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .logout-section a i { font-size: 1.2rem; }
-        .logout-section a:hover {
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .main-content { margin-left: 280px; padding: 40px; }
-        .mobile-header { display: none; background: #fff; padding: 15px 20px; border-bottom: 1px solid #dee2e6; }
-
-        @media (max-width: 991.98px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.active { transform: translateX(0); }
-            .main-content { margin-left: 0; padding: 20px; }
-            .mobile-header { display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 999; }
-        }
-
-        .card-premium { border: none; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); background: #fff; }
-
-        /* Fix Editor Z-Index untuk Link & Image */
+        /* Fix CKEditor Z-Index untuk Link & Image modal */
         :root { --ck-z-modal: 1060 !important; }
-        .ck-editor__editable { min-height: 350px; border-radius: 0 0 12px 12px !important; }
-        .potensi-img { width: 70px; height: 70px; object-fit: cover; border-radius: 12px; }
+        .ck-editor__editable { 
+            min-height: 300px; 
+            border-radius: 0 0 12px 12px !important; 
+        }
+        .potensi-img { 
+            width: 70px; 
+            height: 70px; 
+            object-fit: cover; 
+            border-radius: 12px; 
+        }
+        
+        @media (max-width: 991.98px) {
+            .mobile-nav { display: block; }
+        }
     </style>
 </head>
 <body>
@@ -191,8 +115,13 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
     </nav>
 
     <main class="main-content w-100">
+        <div class="mb-4">
+            <h3 class="fw-bold mb-1">Potensi Desa</h3>
+            <p class="text-muted">Kelola informasi potensi wisata, ekonomi, dan budaya desa</p>
+        </div>
+
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold">Peta Potensi Desa</h3>
+            <h3 class="fw-bold">Data Potensi Desa</h3>
             <div class="d-flex gap-2">
                 <button class="btn btn-outline-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalKategori">Kategori</button>
                 <button class="btn btn-primary rounded-pill px-4 shadow" data-bs-toggle="modal" data-bs-target="#modalPotensi">Tambah Potensi</button>

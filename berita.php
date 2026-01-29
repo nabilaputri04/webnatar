@@ -22,7 +22,7 @@ if (isset($_GET['id'])) {
                         </div>
                         <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8 leading-tight"><?= htmlspecialchars($berita['judul']); ?></h1>
                         
-                        <div class="prose prose-lg prose-blue max-w-none text-gray-600">
+                        <div class="prose prose-lg prose-blue max-w-none text-gray-600 text-justify">
                             <?= $berita['isi_berita']; ?>
                         </div>
 
@@ -43,11 +43,27 @@ if (isset($_GET['id'])) {
     // LIST BERITA
     $q_berita = mysqli_query($conn, "SELECT b.*, k.nama_kategori FROM berita b LEFT JOIN kategori_berita k ON b.id_kategori = k.id ORDER BY b.tgl_posting DESC");
     ?>
-    <div class="bg-gray-50 py-12">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Kabar Desa</h1>
-                <p class="text-gray-500 max-w-2xl mx-auto">Ikuti perkembangan terbaru dan informasi penting dari Desa Natar.</p>
+    <div class="bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 py-16 relative overflow-hidden">
+        <!-- Background Decorations -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block bg-gradient-to-r from-blue-500 to-indigo-600 px-8 py-3 rounded-full mb-6 shadow-lg transform hover:scale-105 transition-transform">
+                    <span class="text-white font-bold text-sm tracking-wider uppercase flex items-center gap-2">
+                        <i class="bi bi-newspaper"></i> Berita Terkini
+                    </span>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 mb-6">Kabar Desa</h1>
+                <div class="flex justify-center items-center gap-3 mb-6">
+                    <div class="h-1 w-20 bg-gradient-to-r from-transparent to-blue-500 rounded-full"></div>
+                    <div class="h-2 w-2 bg-blue-500 rounded-full"></div>
+                    <div class="h-1 w-32 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-full"></div>
+                    <div class="h-2 w-2 bg-purple-500 rounded-full"></div>
+                    <div class="h-1 w-20 bg-gradient-to-l from-transparent to-purple-500 rounded-full"></div>
+                </div>
+                <p class="text-gray-600 text-lg max-w-3xl mx-auto">Ikuti perkembangan terbaru dan informasi penting dari Desa Natar.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

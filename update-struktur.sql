@@ -32,23 +32,23 @@ INSERT INTO perangkat_desa (nama, jabatan, foto, urutan, level, parent_id, color
 
 -- Level 5: Kepala Dusun
 INSERT INTO perangkat_desa (nama, jabatan, foto, urutan, level, parent_id, color_scheme) VALUES
-('KOSIR', 'Kepala Dusun I', 'kadus1.jpg', 11, 5, 1, 'teal'),
-('NURMANSYAH', 'Kepala Dusun II', 'kadus2.jpg', 12, 5, 1, 'blue'),
-('SUKARDI', 'Kepala Dusun III', 'kadus3.jpg', 13, 5, 1, 'teal');
+('KOSIR', 'Kepala Dusun I', 'kadus-1.jpeg', 11, 5, 1, 'teal'),
+('NURMANSYAH', 'Kepala Dusun II', 'kadus-2.jpeg', 12, 5, 1, 'blue'),
+('SUKARDI', 'Kepala Dusun III', 'kadus-3.jpeg', 13, 5, 1, 'teal');
 
 -- Level 6: RT (Dusun IV, V, VI, IX, X)
 INSERT INTO perangkat_desa (nama, jabatan, foto, urutan, level, parent_id, color_scheme) VALUES
-('TUKMINI', 'Kepala Dusun IV', 'kadus4.jpg', 14, 6, 1, 'blue'),
-('NURSYADI', 'Kepala Dusun V', 'kadus5.jpg', 15, 6, 1, 'blue'),
-('GEDEN HANDOKO', 'Kepala Dusun VI', 'kadus6.jpg', 16, 6, 1, 'blue');
+('TUKMINI', 'Kepala Dusun IV', 'kadus-4.jpeg', 14, 6, 1, 'blue'),
+('NURSYADI', 'Kepala Dusun V', 'kadus-5.jpeg', 15, 6, 1, 'blue'),
+('DEDEN HANDOKO', 'Kepala Dusun VI', 'kadus-6.jpeg', 16, 6, 1, 'blue');
 
 -- Level 7: RT (Dusun VII, IX, X)
 INSERT INTO perangkat_desa (nama, jabatan, foto, urutan, level, parent_id, color_scheme) VALUES
-('EKO SESWANTO', 'Kepala Dusun VII', 'kadus7.jpg', 17, 7, 1, 'purple'),
-('KOKO WAHDHO', 'Kepala Dusun IX', 'kadus9.jpg', 18, 7, 1, 'purple'),
-('SUMARSONO', 'Kepala Dusun X', 'kadus10.jpg', 19, 7, 1, 'purple');
+('EKO SESWANTO', 'Kepala Dusun VII', 'kadus-7.jpeg', 17, 7, 1, 'purple'),
+('KOKO WAHOHO', 'Kepala Dusun VII', 'kadus-8.jpg', 18, 7, 1, 'purple'),
+('SUMARSONO', 'Kepala Dusun IX', 'kadus-9.jpeg', 19, 7, 1, 'purple');
 
 -- Level 8: RT (Dusun X, XI)
 INSERT INTO perangkat_desa (nama, jabatan, foto, urutan, level, parent_id, color_scheme) VALUES
-('EDI SUHENORA', 'Kepala Dusun X', 'kadus10-2.jpg', 20, 8, 1, 'orange'),
-('SUSITO', 'Kepala Dusun XI', 'kadus11.jpg', 21, 8, 1, 'orange');
+('EDI SUHENORA', 'Kepala Dusun X', 'kadus-10.jpeg', 20, 8, 1, 'orange'),
+('SUGITO', 'Kepala Dusun XI', 'kadus-11.jpeg', 21, 8, 1, 'orange');

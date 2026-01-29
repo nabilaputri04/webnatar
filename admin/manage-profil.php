@@ -40,99 +40,53 @@ if (isset($_POST['update'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
+    <?php include 'admin-styles.php'; ?>
     <style>
-        :root { --sidebar-bg: #1a1d20; --active-blue: #10b981; --bs-primary: #10b981; --bs-primary-rgb: 16, 185, 129; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
-
-        .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            height: 100vh;
-            position: fixed;
-            padding: 25px 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar-brand { 
-            color: var(--active-blue); 
-            font-weight: 700; 
-            font-size: 1.25rem;
-            padding: 0 20px 25px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #2d3238;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .sidebar-menu { 
-            list-style: none; 
-            padding: 0 15px; 
-            padding-bottom: 80px;
-            margin: 0; 
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-        .sidebar-menu li { margin-bottom: 6px; }
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #94a3b8;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .sidebar-menu a i { font-size: 1.2rem; }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: var(--active-blue);
-            color: white;
-        }
-        .logout-section {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 280px;
-            padding: 20px 15px;
-            border-top: 1px solid #2d3238;
-            background: var(--sidebar-bg);
-            flex-shrink: 0;
-        }
-        .logout-section a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #ef4444;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .logout-section a i { font-size: 1.2rem; }
-        .logout-section a:hover {
-            background: rgba(239, 68, 68, 0.1);
-        }
-
         /* Content Styling */
-        .main-content { margin-left: 280px; padding: 40px; transition: 0.3s; }
-        .form-card { background: #fff; border-radius: 20px; border: none; box-shadow: var(--card-shadow); padding: 40px; }
-        .section-title { font-size: 1.1rem; font-weight: 700; color: #343a40; margin-bottom: 20px; display: flex; align-items: center; }
-        .section-title i { color: var(--primary-blue); margin-right: 10px; }
+        .form-card { 
+            background: rgba(255, 255, 255, 0.95); 
+            border-radius: 20px; 
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        .form-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        .section-title { 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            color: #1e293b; 
+            margin-bottom: 20px; 
+            display: flex; 
+            align-items: center;
+        }
+        .section-title i { 
+            color: #10b981; 
+            margin-right: 10px; 
+            font-size: 1.3rem;
+        }
         
-        .form-label { font-weight: 600; font-size: 0.85rem; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-control { border-radius: 10px; padding: 12px; border: 1px solid #dee2e6; background-color: #fdfdfd; }
-        .form-control:focus { box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1); border-color: var(--primary-blue); }
-
-        .btn-save { background: var(--primary-blue); border: none; padding: 15px 40px; border-radius: 12px; font-weight: 700; transition: 0.3s; }
-        .btn-save:hover { background: #0b5ed7; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3); }
+        .form-label { 
+            font-weight: 600; 
+            font-size: 0.85rem; 
+            color: #64748b; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
 
         /* Responsive */
-        .mobile-nav { display: none; background: #fff; padding: 15px 20px; border-bottom: 1px solid #dee2e6; position: sticky; top: 0; z-index: 999; }
+        .mobile-nav { 
+            display: none; 
+            background: #fff; 
+            padding: 15px 20px; 
+            border-bottom: 1px solid #dee2e6; 
+            position: sticky; 
+            top: 0; 
+            z-index: 999; 
+        }
         @media (max-width: 991.98px) {
             .sidebar { transform: translateX(-100%); }
             .sidebar.active { transform: translateX(0); }
@@ -165,12 +119,9 @@ if (isset($_POST['update'])) {
     </nav>
 
     <main class="main-content w-100">
-        <div class="mb-4 d-flex justify-content-between align-items-end">
-            <div>
-                <h3 class="fw-bold mb-1">Pengaturan Profil Desa</h3>
-                <p class="text-muted mb-0">Perbarui informasi identitas dan statistik kependudukan desa.</p>
-            </div>
-            <a href="../index.php" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">Lihat Website <i class="bi bi-box-arrow-up-right ms-1"></i></a>
+        <div class="mb-5">
+            <h2 class="fw-bold mb-2" style="font-size: 2rem;">Profil Desa</h2>
+            <p class="text-muted mb-0">Perbarui informasi identitas dan statistik kependudukan desa</p>
         </div>
 
         <?php if ($sukses) : ?>

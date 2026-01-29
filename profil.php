@@ -6,19 +6,44 @@ $q_profil = mysqli_query($conn, "SELECT * FROM profil LIMIT 1");
 $profil = mysqli_fetch_assoc($q_profil);
 ?>
 
-<div class="bg-gray-50 py-12">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Profil Desa Natar</h1>
-            <div class="w-20 h-1 bg-emerald-600 mx-auto rounded-full"></div>
+<div class="bg-gradient-to-br from-gray-50 via-emerald-50 to-teal-50 py-16 relative overflow-hidden">
+    <!-- Background Decorations -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-emerald-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center mb-16">
+            <div class="inline-block bg-gradient-to-r from-emerald-500 to-teal-600 px-8 py-3 rounded-full mb-6 shadow-lg transform hover:scale-105 transition-transform">
+                <span class="text-white font-bold text-sm tracking-wider uppercase flex items-center gap-2">
+                    <i class="bi bi-info-circle-fill"></i> Profil Desa
+                </span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 mb-6">Profil Desa Natar</h1>
+            <div class="flex justify-center items-center gap-3 mb-6">
+                <div class="h-1 w-20 bg-gradient-to-r from-transparent to-emerald-500 rounded-full"></div>
+                <div class="h-2 w-2 bg-emerald-500 rounded-full"></div>
+                <div class="h-1 w-32 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"></div>
+                <div class="h-2 w-2 bg-teal-500 rounded-full"></div>
+                <div class="h-1 w-20 bg-gradient-to-l from-transparent to-teal-500 rounded-full"></div>
+            </div>
         </div>
 
         <!-- Sejarah & Visi Misi -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12">
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center"><i class="bi bi-clock-history text-xl"></i></div>
-                    <h2 class="text-2xl font-bold text-gray-800">Sejarah Desa</h2>
+            <div class="bg-white p-8 rounded-3xl shadow-2xl border-2 border-emerald-100 hover:shadow-emerald-200/50 transition-all duration-500 transform hover:-translate-y-1 relative overflow-hidden">
+                <!-- Decorative elements -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full -mr-16 -mt-16 opacity-50"></div>
+                
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl blur-lg opacity-50 animate-pulse"></div>
+                            <div class="relative w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-xl transform hover:rotate-12 transition-all">
+                                <i class="bi bi-clock-history text-2xl text-white"></i>
+                            </div>
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Sejarah Desa</h2>
+                    </div>
                 </div>
                 <div class="text-gray-600 leading-relaxed">
                     <div id="sejarah-preview" class="space-y-4">
@@ -56,8 +81,8 @@ $profil = mysqli_fetch_assoc($q_profil);
                         <p class="text-justify mt-4">
                             Kelimanya membuat suatu kesepakatan dan sekaligus menyimpulkan Pantun Tiyuh Adat yaitu:
                         </p>
-                        <div class="bg-emerald-50 border-l-4 border-emerald-600 p-4 rounded-lg mt-3">
-                            <p class="text-emerald-900 font-semibold italic text-center">
+                        <div class="bg-emerald-50 border-l-4 border-emerald-600 p-4 rounded-lg mt-3 dark-quote-box">
+                            <p class="text-emerald-900 font-semibold italic text-center dark-quote-text">
                                 "DELOM BANGSA KUMALA, LAIN SAI TALI NANGGAI<br>
                                 JEJAMA BINTANG LIMA SEPAKAI DI JAKNI PESAI"
                             </p>
@@ -68,6 +93,14 @@ $profil = mysqli_fetch_assoc($q_profil);
                         <span id="btn-text">Baca Selengkapnya</span>
                         <i id="btn-icon" class="bi bi-chevron-down"></i>
                     </button>
+                </div>
+                
+                <!-- Peta Desa -->
+                <div class="mt-6">
+                    <div class="bg-white p-4 rounded-2xl shadow-xl border-2 border-emerald-100 overflow-hidden hover:shadow-emerald-200/50 transition-all duration-500">
+                        <img src="assets/img/peta.jpeg" alt="Peta Desa Natar" class="w-full h-auto rounded-xl shadow-lg" onerror="this.onerror=null; this.src='https://via.placeholder.com/800x600/10b981/ffffff?text=Peta+Desa+Natar';">
+                        <p class="text-center text-gray-600 font-semibold mt-4 text-sm">Peta Wilayah Desa Natar</p>
+                    </div>
                 </div>
             </div>
 
