@@ -98,7 +98,7 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_berita ORDER BY nama_k
     </div>
 
     <div class="mb-4 d-flex justify-content-between align-items-center">
-        <h3 class="fw-bold mb-0">Manajemen Konten Berita</h3>
+        <h3 class="fw-bold mb-0 section-heading">Manajemen Konten Berita</h3>
         <div class="d-flex gap-2">
             <button onclick="openModal('modalKategori')" class="btn btn-outline-primary rounded-pill px-4">
                 <i class="bi bi-tags me-2"></i>Kategori

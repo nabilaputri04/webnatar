@@ -98,9 +98,34 @@
     }
     .main-content { 
         margin-left: 280px; 
-        padding: 40px;
+        padding: 25px 40px;
         position: relative;
         min-height: 100vh;
+    }
+    /* Konsistensi heading utama di halaman admin */
+    .main-content > .mb-4:first-child,
+    .main-content > .mb-5:first-child {
+        margin-top: 0;
+    }
+    .main-content > .mb-4.page-header-lift {
+        margin-top: -32px;
+    }
+    .main-content > .mb-4:first-child h1.fw-bold,
+    .main-content > .mb-4:first-child h2.fw-bold,
+    .main-content > .mb-4:first-child h3.fw-bold,
+    .main-content > .mb-5:first-child h1.fw-bold,
+    .main-content > .mb-5:first-child h2.fw-bold,
+    .main-content > .mb-5:first-child h3.fw-bold {
+        font-size: 1.75rem;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        margin-bottom: 0.35rem;
+        line-height: 1.2;
+    }
+    .main-content > .mb-4:first-child p.text-muted,
+    .main-content > .mb-5:first-child p.text-muted {
+        margin-bottom: 0;
+        color: #4b5563;
     }
     /* Animated Background Decorations */
     .main-content::before {
@@ -181,11 +206,13 @@
     .table-hover tbody tr:hover {
         background-color: rgba(16, 185, 129, 0.05);
     }
-    .form-control, .form-select {
+    .form-control, .form-select, textarea {
         border: 2px solid #e5e7eb;
         border-radius: 12px;
         padding: 12px 16px;
         transition: all 0.3s;
+        font-family: 'Inter', sans-serif;
+        line-height: 1.5;
     }
     .form-control:focus, .form-select:focus {
         border-color: #10b981;
@@ -209,6 +236,12 @@
         padding: 6px 12px;
         border-radius: 8px;
         font-weight: 600;
+    }
+    .section-heading {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 0;
+        line-height: 1.3;
     }
     .page-header {
         position: relative;

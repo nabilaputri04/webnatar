@@ -115,13 +115,13 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
     </nav>
 
     <main class="main-content w-100">
-        <div class="mb-4">
+        <div class="mb-4 page-header-lift">
             <h3 class="fw-bold mb-1">Potensi Desa</h3>
             <p class="text-muted">Kelola informasi potensi wisata, ekonomi, dan budaya desa</p>
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold">Data Potensi Desa</h3>
+            <h3 class="fw-bold section-heading">Data Potensi Desa</h3>
             <div class="d-flex gap-2">
                 <button class="btn btn-outline-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalKategori">Kategori</button>
                 <button class="btn btn-primary rounded-pill px-4 shadow" data-bs-toggle="modal" data-bs-target="#modalPotensi">Tambah Potensi</button>

@@ -72,7 +72,7 @@ $data_apb = mysqli_query($conn, "SELECT * FROM apb_desa ORDER BY tahun DESC, jen
         .stat-card-apb {
             border: none;
             border-radius: 16px;
-            padding: 20px 24px;
+            padding: 24px 28px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
         }
@@ -172,7 +172,7 @@ $data_apb = mysqli_query($conn, "SELECT * FROM apb_desa ORDER BY tahun DESC, jen
     </nav>
 
     <main class="main-content w-100">
-        <div class="mb-4">
+        <div class="mb-4 page-header-lift">
             <h3 class="fw-bold mb-1">Manajemen Transparansi APB Desa</h3>
             <p class="text-muted">Kelola dan publikasikan data anggaran desa untuk transparansi keuangan</p>
         </div>
