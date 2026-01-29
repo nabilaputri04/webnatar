@@ -136,7 +136,7 @@ CREATE TABLE apb_desa (
     tahun YEAR NOT NULL,
     jenis ENUM('Pendapatan','Belanja','Pembiayaan') NOT NULL,
     rincian VARCHAR(255),
-    anggaran BIGINT NOT NULL,
+    anggaran DECIMAL NOT NULL,
     realisasi BIGINT NOT NULL
 );
 

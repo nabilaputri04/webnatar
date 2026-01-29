@@ -29,11 +29,11 @@ $q_potensi = mysqli_query($conn, "SELECT p.*, k.nama_kategori FROM potensi_desa 
                     </div>
                     
                     <?php if(!empty($row['lokasi_maps'])): ?>
-                    <a href="<?= $row['lokasi_maps']; ?>" target="_blank" class="w-full block text-center bg-gray-50 hover:bg-emerald-50 text-gray-700 hover:text-emerald-600 font-semibold py-3 rounded-xl border border-gray-200 transition flex items-center justify-center gap-2">
+                    <button onclick="bukaGoogleMaps('<?= addslashes($row['lokasi_maps']); ?>')" class="w-full block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2 border-0 cursor-pointer">
                         <i class="bi bi-geo-alt-fill"></i> Lihat di Google Maps
-                    </a>
+                    </button>
                     <?php else: ?>
-                    <button disabled class="w-full block text-center bg-gray-50 text-gray-400 font-semibold py-3 rounded-xl border border-gray-200 cursor-not-allowed">
+                    <button disabled class="w-full block text-center bg-gray-100 text-gray-400 font-semibold py-3 rounded-xl border border-gray-200 cursor-not-allowed">
                         <i class="bi bi-geo-alt-fill"></i> Lokasi Belum Tersedia
                     </button>
                     <?php endif; ?>
@@ -43,5 +43,16 @@ $q_potensi = mysqli_query($conn, "SELECT p.*, k.nama_kategori FROM potensi_desa 
         </div>
     </div>
 </div>
+
+<script>
+function bukaGoogleMaps(lokasi) {
+    if (lokasi.startsWith('http://') || lokasi.startsWith('https://')) {
+        window.open(lokasi, '_blank');
+    } else {
+        const searchUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(lokasi);
+        window.open(searchUrl, '_blank');
+    }
+}
+</script>
 
 <?php require 'includes/footer.php'; ?>

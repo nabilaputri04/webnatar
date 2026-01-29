@@ -43,16 +43,82 @@ $data = mysqli_fetch_assoc($res);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
     <style>
-        :root { --sidebar-bg: #111827; --active-blue: #10b981; --bs-primary: #10b981; --bs-primary-rgb: 16, 185, 129; }
-        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
-        .sidebar { width: 280px; background: var(--sidebar-bg); height: 100vh; position: fixed; display: flex; flex-direction: column; padding: 25px 0; z-index: 1000; transition: 0.3s; }
-        .sidebar-brand { color: var(--active-blue); font-weight: 800; font-size: 1.5rem; padding: 0 25px 25px; border-bottom: 1px solid #1f2937; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-        .sidebar-menu { flex-grow: 1; list-style: none; padding: 0 15px; overflow-y: auto; }
-        .nav-link { color: #9ca3af; padding: 12px 18px; border-radius: 12px; display: flex; align-items: center; transition: 0.3s; font-weight: 500; text-decoration: none; margin-bottom: 5px; }
-        .nav-link i { font-size: 1.3rem; margin-right: 15px; }
-        .nav-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
-        .nav-link.active { background: var(--active-blue); color: #fff !important; }
-        .logout-section { margin-top: auto; padding: 20px 15px; border-top: 1px solid #1f2937; }
+        :root { --sidebar-bg: #1a1d20; --active-blue: #10b981; --bs-primary: #10b981; --bs-primary-rgb: 16, 185, 129; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            height: 100vh;
+            position: fixed;
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-brand { 
+            color: var(--active-blue); 
+            font-weight: 700; 
+            font-size: 1.25rem;
+            padding: 0 20px 25px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #2d3238;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar-menu { 
+            list-style: none; 
+            padding: 0 15px; 
+            padding-bottom: 80px;
+            margin: 0; 
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .sidebar-menu li { margin-bottom: 6px; }
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .sidebar-menu a i { font-size: 1.2rem; }
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: var(--active-blue);
+            color: white;
+        }
+        .logout-section { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 280px; 
+            padding: 20px 15px; 
+            border-top: 1px solid #2d3238;
+            background: var(--sidebar-bg);
+            flex-shrink: 0;
+        }
+        .logout-section a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #ef4444;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .logout-section a i { font-size: 1.2rem; }
+        .logout-section a:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
         .main-content { margin-left: 280px; padding: 40px; }
         .card-premium { border: none; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); background: #fff; }
     </style>
@@ -61,17 +127,18 @@ $data = mysqli_fetch_assoc($res);
 
 <div class="d-flex">
     <nav class="sidebar">
-        <div class="sidebar-brand"><i class="bi bi-geo-alt-fill"></i><span>Desa Natar</span></div>
-        <div class="sidebar-menu">
-            <a href="index.php" class="nav-link"><i class="bi bi-grid-1x2"></i> Dashboard</a>
-            <a href="manage-profil.php" class="nav-link"><i class="bi bi-house"></i> Profil Desa</a>
-            <a href="manage-struktur.php" class="nav-link"><i class="bi bi-people"></i> Perangkat Desa</a>
-            <a href="manage-berita.php" class="nav-link"><i class="bi bi-journal-text"></i> Kelola Berita</a>
-            <a href="manage-apbdesa.php" class="nav-link"><i class="bi bi-wallet2"></i> APB Desa</a>
-            <a href="manage-potensi.php" class="nav-link"><i class="bi bi-map"></i> Potensi Desa</a>
-            <a href="manage-kontak.php" class="nav-link active"><i class="bi bi-telephone"></i> Kontak</a>
+        <div class="sidebar-brand"><i class="bi bi-geo-alt-fill"></i> Desa Natar</div>
+        <ul class="sidebar-menu">
+            <li><a href="index.php"><i class="bi bi-grid-1x2"></i> Dashboard</a></li>
+            <li><a href="manage-profil.php"><i class="bi bi-house-door"></i> Profil Desa</a></li>
+            <li><a href="manage-struktur.php"><i class="bi bi-people"></i> Perangkat Desa</a></li>
+            <li><a href="manage-berita.php"><i class="bi bi-journal-text"></i> Kelola Berita</a></li>
+            <li><a href="manage-apbdesa.php"><i class="bi bi-cash-stack"></i> APB Desa</a></li>
+            <li><a href="manage-potensi.php"><i class="bi bi-map"></i> Potensi Desa</a></li>        <li><a href="manage-pengaduan.php"><i class="bi bi-megaphone-fill"></i> Pengaduan</a></li>            <li><a href="manage-kontak.php" class="active"><i class="bi bi-telephone"></i> Kontak</a></li>
+        </ul>
+        <div class="logout-section">
+            <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Keluar</a>
         </div>
-        <div class="logout-section"><a href="logout.php" class="nav-link text-danger"><i class="bi bi-box-arrow-right"></i> Keluar</a></div>
     </nav>
 
     <main class="main-content w-100">

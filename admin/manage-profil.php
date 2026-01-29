@@ -41,19 +41,82 @@ if (isset($_POST['update'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
     <style>
-        :root { --sidebar-bg: #1a1d20; --primary-blue: #10b981; --card-shadow: 0 10px 30px rgba(0,0,0,0.04); --bs-primary: #10b981; --bs-primary-rgb: 16, 185, 129; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; margin: 0; }
+        :root { --sidebar-bg: #1a1d20; --active-blue: #10b981; --bs-primary: #10b981; --bs-primary-rgb: 16, 185, 129; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
 
-        /* Sidebar Styling (Sama dengan Index) */
-        .sidebar { width: 280px; background: var(--sidebar-bg); height: 100vh; position: fixed; display: flex; flex-direction: column; padding: 25px 15px; z-index: 1000; }
-        .sidebar-brand { color: var(--primary-blue); font-weight: 700; font-size: 1.4rem; padding-bottom: 30px; border-bottom: 1px solid #2d3238; margin-bottom: 20px; }
-        .sidebar-menu { flex-grow: 1; list-style: none; padding: 0; margin: 0; overflow-y: auto; scrollbar-width: thin; }
-        .nav-link { color: #adb5bd; padding: 12px 18px; border-radius: 12px; display: flex; align-items: center; transition: 0.3s; font-weight: 500; margin-bottom: 4px; text-decoration: none; }
-        .nav-link i { font-size: 1.2rem; margin-right: 12px; }
-        .nav-link:hover, .nav-link.active { background: rgba(13, 110, 253, 0.15); color: var(--primary-blue); }
-        .nav-link.active { background: var(--primary-blue); color: #fff; }
-        .logout-section { margin-top: auto; padding-top: 20px; border-top: 1px solid #2d3238; }
-        .logout-link { color: #ea868f !important; }
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            height: 100vh;
+            position: fixed;
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-brand { 
+            color: var(--active-blue); 
+            font-weight: 700; 
+            font-size: 1.25rem;
+            padding: 0 20px 25px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #2d3238;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar-menu { 
+            list-style: none; 
+            padding: 0 15px; 
+            padding-bottom: 80px;
+            margin: 0; 
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .sidebar-menu li { margin-bottom: 6px; }
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .sidebar-menu a i { font-size: 1.2rem; }
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: var(--active-blue);
+            color: white;
+        }
+        .logout-section {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 280px;
+            padding: 20px 15px;
+            border-top: 1px solid #2d3238;
+            background: var(--sidebar-bg);
+            flex-shrink: 0;
+        }
+        .logout-section a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #ef4444;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .logout-section a i { font-size: 1.2rem; }
+        .logout-section a:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
 
         /* Content Styling */
         .main-content { margin-left: 280px; padding: 40px; transition: 0.3s; }
@@ -87,18 +150,17 @@ if (isset($_POST['update'])) {
 
 <div class="d-flex">
     <nav class="sidebar" id="sidebar">
-        <div class="sidebar-brand"><i class="bi bi-geo-alt-fill text-primary"></i> Desa Natar</div>
+        <div class="sidebar-brand"><i class="bi bi-geo-alt-fill"></i> Desa Natar</div>
         <ul class="sidebar-menu">
-            <li><a href="index.php" class="nav-link"><i class="bi bi-grid-1x2"></i> Dashboard</a></li>
-            <li><a href="manage-profil.php" class="nav-link active"><i class="bi bi-house-door"></i> Profil Desa</a></li>
-            <li><a href="manage-struktur.php" class="nav-link"><i class="bi bi-people"></i> Perangkat Desa</a></li>
-            <li><a href="manage-berita.php" class="nav-link"><i class="bi bi-journal-text"></i> Kelola Berita</a></li>
-            <li><a href="manage-apbdesa.php" class="nav-link"><i class="bi bi-cash-stack"></i> APB Desa</a></li>
-            <li><a href="manage-potensi.php" class="nav-link"><i class="bi bi-map"></i> Potensi Desa</a></li>
-            <li><a href="manage-kontak.php" class="nav-link"><i class="bi bi-telephone"></i> Kontak</a></li>
+            <li><a href="index.php"><i class="bi bi-grid-1x2"></i> Dashboard</a></li>
+            <li><a href="manage-profil.php" class="active"><i class="bi bi-house-door"></i> Profil Desa</a></li>
+            <li><a href="manage-struktur.php"><i class="bi bi-people"></i> Perangkat Desa</a></li>
+            <li><a href="manage-berita.php"><i class="bi bi-journal-text"></i> Kelola Berita</a></li>
+            <li><a href="manage-apbdesa.php"><i class="bi bi-cash-stack"></i> APB Desa</a></li>
+            <li><a href="manage-potensi.php"><i class="bi bi-map"></i> Potensi Desa</a></li>        <li><a href="manage-pengaduan.php"><i class="bi bi-megaphone-fill"></i> Pengaduan</a></li>            <li><a href="manage-kontak.php"><i class="bi bi-telephone"></i> Kontak</a></li>
         </ul>
         <div class="logout-section">
-            <a href="logout.php" class="nav-link logout-link"><i class="bi bi-box-arrow-right"></i> Keluar</a>
+            <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Keluar</a>
         </div>
     </nav>
 

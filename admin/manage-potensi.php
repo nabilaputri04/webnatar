@@ -71,78 +71,81 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
 
     <style>
         :root { --sidebar-bg: #1a1d20; --active-blue: #10b981; --bs-primary: #10b981; --bs-primary-rgb: 16, 185, 129; }
-        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; margin: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
 
-        /* SIDEBAR SAMA SEPERTI INDEX.PHP */
         .sidebar {
             width: 280px;
             background: var(--sidebar-bg);
             height: 100vh;
             position: fixed;
+            padding: 25px 0;
             display: flex;
             flex-direction: column;
-            padding: 25px 15px;
-            transition: all 0.3s;
-            z-index: 1000;
-            overflow: hidden;
         }
-
         .sidebar-brand { 
             color: var(--active-blue); 
             font-weight: 700; 
-            font-size: 1.4rem; 
-            padding-bottom: 30px; 
-            border-bottom: 1px solid #2d3238; 
+            font-size: 1.25rem;
+            padding: 0 20px 25px;
             margin-bottom: 20px;
+            border-bottom: 1px solid #2d3238;
             flex-shrink: 0;
-        }
-
-        .sidebar-menu { 
-            flex-grow: 1; 
-            list-style: none; 
-            padding: 0; 
-            margin: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-        }
-        
-        .sidebar-menu::-webkit-scrollbar { width: 6px; }
-        .sidebar-menu::-webkit-scrollbar-track { background: transparent; }
-        .sidebar-menu::-webkit-scrollbar-thumb { 
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-        }
-        .sidebar-menu::-webkit-scrollbar-thumb:hover { 
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .nav-link {
-            color: #adb5bd;
-            padding: 12px 18px;
-            border-radius: 12px;
             display: flex;
             align-items: center;
-            transition: 0.3s;
-            font-weight: 500;
-            margin-bottom: 4px;
-            white-space: nowrap;
+            gap: 10px;
+        }
+        .sidebar-menu { 
+            list-style: none; 
+            padding: 0 15px; 
+            padding-bottom: 80px;
+            margin: 0; 
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .sidebar-menu li { margin-bottom: 6px; }
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            border-radius: 12px;
             text-decoration: none;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
         }
-        .nav-link i { font-size: 1.2rem; margin-right: 12px; }
-        .nav-link:hover, .nav-link.active { background: rgba(13, 110, 253, 0.15); color: var(--active-blue); }
-        .nav-link.active { background: var(--active-blue); color: #fff; }
-
-        .logout-section { 
-            margin-top: auto; 
-            padding-top: 20px; 
+        .sidebar-menu a i { font-size: 1.2rem; }
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: var(--active-blue);
+            color: white;
+        }
+        .logout-section {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 280px;
+            padding: 20px 15px;
             border-top: 1px solid #2d3238;
-            flex-shrink: 0;
             background: var(--sidebar-bg);
+            flex-shrink: 0;
         }
-        .logout-link { color: #ea868f !important; }
-        .logout-link:hover { background: rgba(234, 134, 143, 0.1); }
+        .logout-section a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #ef4444;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .logout-section a i { font-size: 1.2rem; }
+        .logout-section a:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
 
         .main-content { margin-left: 280px; padding: 40px; }
         .mobile-header { display: none; background: #fff; padding: 15px 20px; border-bottom: 1px solid #dee2e6; }
@@ -174,17 +177,16 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
         <div class="sidebar-brand"><i class="bi bi-geo-alt-fill"></i> Desa Natar</div>
         
         <ul class="sidebar-menu">
-            <li><a href="index.php" class="nav-link"><i class="bi bi-house-door"></i> Dashboard</a></li>
-            <li><a href="manage-profil.php" class="nav-link"><i class="bi bi-house"></i> Profil Desa</a></li>
-            <li><a href="manage-struktur.php" class="nav-link"><i class="bi bi-people"></i> Perangkat Desa</a></li>
-            <li><a href="manage-berita.php" class="nav-link"><i class="bi bi-journal-text"></i> Kelola Berita</a></li>
-            <li><a href="manage-apbdesa.php" class="nav-link"><i class="bi bi-cash-stack"></i> APB Desa</a></li>
-            <li><a href="manage-potensi.php" class="nav-link active"><i class="bi bi-map"></i> Potensi Desa</a></li>
-            <li><a href="manage-kontak.php" class="nav-link"><i class="bi bi-telephone"></i> Kontak</a></li>
+            <li><a href="index.php"><i class="bi bi-grid-1x2"></i> Dashboard</a></li>
+            <li><a href="manage-profil.php"><i class="bi bi-house-door"></i> Profil Desa</a></li>
+            <li><a href="manage-struktur.php"><i class="bi bi-people"></i> Perangkat Desa</a></li>
+            <li><a href="manage-berita.php"><i class="bi bi-journal-text"></i> Kelola Berita</a></li>
+            <li><a href="manage-apbdesa.php"><i class="bi bi-cash-stack"></i> APB Desa</a></li>
+            <li><a href="manage-potensi.php" class="active"><i class="bi bi-map"></i> Potensi Desa</a></li>        <li><a href="manage-pengaduan.php"><i class="bi bi-megaphone-fill"></i> Pengaduan</a></li>            <li><a href="manage-kontak.php"><i class="bi bi-telephone"></i> Kontak</a></li>
         </ul>
 
         <div class="logout-section">
-            <a href="logout.php" class="nav-link logout-link"><i class="bi bi-box-arrow-right"></i> Keluar</a>
+            <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Keluar</a>
         </div>
     </nav>
 
@@ -283,9 +285,23 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
                                 <div id="foto_current"></div>
                             </div>
                             <div class="p-3 bg-light rounded-4">
-                                <label class="form-label small fw-bold"><i class="bi bi-geo-alt-fill text-primary"></i> LINK GOOGLE MAPS</label>
-                                <input type="text" name="lokasi_maps" id="lokasi_maps" class="form-control border-0" placeholder="Tempel link share maps di sini">
-                                <small class="text-muted mt-2 d-block">Membantu warga/wisatawan menemukan lokasi ini.</small>
+                                <label class="form-label small fw-bold"><i class="bi bi-geo-alt-fill text-primary"></i> LOKASI (Link Google Maps atau Alamat)</label>
+                                <input type="text" name="lokasi_maps" id="lokasi_maps" class="form-control border-0" placeholder="Tempel link atau ketik alamat">
+                                <div class="alert alert-info mt-2 mb-0 p-2 small">
+                                    <strong>2 Cara Input:</strong>
+                                    <div class="mt-1">
+                                        <strong>1. Link Google Maps (Rekomendasi):</strong>
+                                        <ul class="mb-2 ps-3 mt-1">
+                                            <li>Buka Google Maps</li>
+                                            <li>Cari lokasi → Klik <strong>Share</strong></li>
+                                            <li><strong>Copy link</strong> → Paste di sini</li>
+                                        </ul>
+                                        <strong>2. Atau ketik alamat biasa:</strong>
+                                        <ul class="mb-0 ps-3 mt-1">
+                                            <li>Contoh: Jl. Raya Natar No.123, Lampung</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

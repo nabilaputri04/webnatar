@@ -2,9 +2,17 @@
 require 'auth_check.php';
 require '../config/db.php';
 
+// Set autocommit ON untuk memastikan perubahan langsung tersimpan
+mysqli_autocommit($conn, TRUE);
+
 $sukses = "";
 $error = "";
 $active_tab = $_GET['tab'] ?? 'perangkat';
+
+// Tampilkan pesan sukses dari URL parameter
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    $sukses = "✅ Data berhasil tersimpan ke database!";
+}
 
 // === PERANGKAT DESA ===
 // Get edit data
@@ -18,11 +26,13 @@ if (isset($_GET['edit_perangkat'])) {
 
 if (isset($_POST['tambah_perangkat'])) {
     $id = isset($_POST['id']) && $_POST['id'] ? (int)$_POST['id'] : 0;
-    $nama = mysqli_real_escape_string($conn, $_POST['nama']);
-    $jabatan = mysqli_real_escape_string($conn, $_POST['jabatan']);
+    $nama = mysqli_real_escape_string($conn, trim($_POST['nama']));
+    $jabatan = mysqli_real_escape_string($conn, trim($_POST['jabatan']));
     $urutan = (int)$_POST['urutan'];
     
     $foto = $_POST['foto_lama'] ?? "";
+    
+    // Handle upload foto
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
         $target_dir = "../assets/img/perangkat/";
         if (!file_exists($target_dir)) mkdir($target_dir, 0777, true);
@@ -31,7 +41,7 @@ if (isset($_POST['tambah_perangkat'])) {
         $new_filename = uniqid() . '.' . $file_extension;
         $target_file = $target_dir . $new_filename;
         
-        if (in_array($file_extension, ['jpg', 'jpeg', 'png'])) {
+        if (in_array($file_extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
             if (move_uploaded_file($_FILES['foto']['tmp_name'], $target_file)) {
                 if (!empty($foto) && file_exists($target_dir . $foto)) {
                     unlink($target_dir . $foto);
@@ -41,21 +51,20 @@ if (isset($_POST['tambah_perangkat'])) {
         }
     }
     
+    // Eksekusi query
     if ($id > 0) {
+        // UPDATE
         $query = "UPDATE perangkat_desa SET nama='$nama', jabatan='$jabatan', foto='$foto', urutan=$urutan WHERE id=$id";
-        $pesan = "Perangkat desa berhasil diupdate!";
     } else {
+        // INSERT
         $query = "INSERT INTO perangkat_desa (nama, jabatan, foto, urutan) VALUES ('$nama', '$jabatan', '$foto', $urutan)";
-        $pesan = "Perangkat desa berhasil ditambahkan!";
     }
     
     if (mysqli_query($conn, $query)) {
-        $sukses = $pesan;
-        $active_tab = 'perangkat';
-        header("Location: manage-struktur.php?tab=perangkat");
+        header("Location: manage-struktur.php?tab=perangkat&success=1");
         exit;
     } else {
-        $error = "Gagal menyimpan data.";
+        $error = "Gagal menyimpan data: " . mysqli_error($conn);
     }
 }
 
@@ -219,32 +228,73 @@ $data_rt = mysqli_query($conn, "SELECT * FROM rt ORDER BY dusun ASC, nomor_rt AS
             background: var(--sidebar-bg);
             height: 100vh;
             position: fixed;
-            padding: 25px 15px;
-            overflow-y: auto;
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
         }
         .sidebar-brand { 
             color: var(--active-blue); 
             font-weight: 700; 
-            font-size: 1.4rem; 
-            padding-bottom: 20px; 
+            font-size: 1.25rem;
+            padding: 0 20px 25px;
             margin-bottom: 20px;
             border-bottom: 1px solid #2d3238;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .sidebar-menu { list-style: none; padding: 0; margin: 0; }
-        .sidebar-menu li { margin-bottom: 8px; }
+        .sidebar-menu { 
+            list-style: none; 
+            padding: 0 15px; 
+            padding-bottom: 80px;
+            margin: 0; 
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .sidebar-menu li { margin-bottom: 6px; }
         .sidebar-menu a {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 10px;
+            gap: 15px;
+            padding: 14px 18px;
+            border-radius: 12px;
             text-decoration: none;
             color: #94a3b8;
+            font-size: 0.95rem;
+            font-weight: 500;
             transition: all 0.2s;
         }
+        .sidebar-menu a i { font-size: 1.2rem; }
         .sidebar-menu a:hover, .sidebar-menu a.active {
             background: var(--active-blue);
             color: white;
+        }
+        .logout-section {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 280px;
+            padding: 20px 15px;
+            border-top: 1px solid #2d3238;
+            background: var(--sidebar-bg);
+            flex-shrink: 0;
+        }
+        .logout-section a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #ef4444;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .logout-section a i { font-size: 1.2rem; }
+        .logout-section a:hover {
+            background: rgba(239, 68, 68, 0.1);
         }
         .main-content {
             margin-left: 280px;
@@ -263,6 +313,101 @@ $data_rt = mysqli_query($conn, "SELECT * FROM rt ORDER BY dusun ASC, nomor_rt AS
         .card { border: none; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .btn-primary { background: var(--active-blue); border-color: var(--active-blue); }
         .btn-primary:hover { background: #059669; border-color: #059669; }
+        
+        /* Animation untuk alert */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Toast Notification Style */
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-left: 5px solid #10b981;
+        }
+        .toast-notification.error {
+            border-left-color: #ef4444;
+        }
+        .toast-notification .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            flex-shrink: 0;
+        }
+        .toast-notification.error .toast-icon {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        .toast-notification .toast-content {
+            flex: 1;
+        }
+        .toast-notification .toast-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+        .toast-notification .toast-message {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+        .toast-notification .toast-close {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background: #f3f4f6;
+            color: #6b7280;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .toast-notification .toast-close:hover {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+        
+        .alert-success {
+            display: none; /* Sembunyikan alert lama */
+        }
+        
         @media (max-width: 768px) {
             .sidebar { transform: translateX(-100%); }
             .main-content { margin-left: 0; }
@@ -280,10 +425,11 @@ $data_rt = mysqli_query($conn, "SELECT * FROM rt ORDER BY dusun ASC, nomor_rt AS
         <li><a href="manage-berita.php"><i class="bi bi-journal-text"></i> Kelola Berita</a></li>
         <li><a href="manage-apbdesa.php"><i class="bi bi-cash-stack"></i> APB Desa</a></li>
         <li><a href="manage-potensi.php"><i class="bi bi-map"></i> Potensi Desa</a></li>
+        <li><a href="manage-pengaduan.php"><i class="bi bi-megaphone-fill"></i> Pengaduan</a></li>
         <li><a href="manage-kontak.php"><i class="bi bi-telephone"></i> Kontak</a></li>
     </ul>
-    <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid #2d3238;">
-        <a href="logout.php" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; text-decoration: none; color: #ef4444; transition: all 0.2s;"><i class="bi bi-box-arrow-right"></i> Keluar</a>
+    <div class="logout-section">
+        <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Keluar</a>
     </div>
 </nav>
 
@@ -294,17 +440,56 @@ $data_rt = mysqli_query($conn, "SELECT * FROM rt ORDER BY dusun ASC, nomor_rt AS
     </div>
 
     <?php if($sukses): ?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i><?php echo $sukses; ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div id="toastNotification" class="toast-notification">
+            <div class="toast-icon">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">Berhasil!</div>
+                <div class="toast-message"><?php echo $sukses; ?></div>
+            </div>
+            <button class="toast-close" onclick="closeToast()">
+                <i class="bi bi-x"></i>
+            </button>
         </div>
+        <script>
+            function closeToast() {
+                const toast = document.getElementById('toastNotification');
+                if (toast) {
+                    toast.style.animation = 'slideInRight 0.3s reverse';
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }
+            
+            // Auto close setelah 5 detik
+            setTimeout(() => {
+                closeToast();
+            }, 5000);
+        </script>
     <?php endif; ?>
 
     <?php if($error): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-circle-fill me-2"></i><?php echo $error; ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div id="toastNotification" class="toast-notification error">
+            <div class="toast-icon">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">Error!</div>
+                <div class="toast-message"><?php echo $error; ?></div>
+            </div>
+            <button class="toast-close" onclick="closeToast()">
+                <i class="bi bi-x"></i>
+            </button>
         </div>
+        <script>
+            function closeToast() {
+                const toast = document.getElementById('toastNotification');
+                if (toast) {
+                    toast.style.animation = 'slideInRight 0.3s reverse';
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }
+        </script>
     <?php endif; ?>
 
     <!-- Tab Navigation -->
@@ -356,24 +541,69 @@ $data_rt = mysqli_query($conn, "SELECT * FROM rt ORDER BY dusun ASC, nomor_rt AS
                         <div class="mb-3">
                             <label class="form-label">Foto</label>
                             <?php if($edit_perangkat && $edit_perangkat['foto']): ?>
-                                <div class="mb-2">
-                                    <img src="../assets/img/perangkat/<?php echo $edit_perangkat['foto']; ?>" alt="Current" style="max-width: 100px; height: auto;">
+                                <div class="mb-2" id="currentPhotoContainer">
+                                    <img id="currentPhoto" src="../assets/img/perangkat/<?php echo $edit_perangkat['foto']; ?>?v=<?php echo time(); ?>" alt="Current" style="max-width: 150px; height: auto; border-radius: 8px; border: 2px solid #10b981; display: block;">
+                                    <p id="currentPhotoInfo" class="text-muted small mt-1 mb-0">📷 Foto saat ini: <strong><?php echo $edit_perangkat['foto']; ?></strong></p>
+                                </div>
+                            <?php else: ?>
+                                <div class="mb-2" id="currentPhotoContainer" style="display: none;">
+                                    <img id="currentPhoto" src="" alt="Preview" style="max-width: 150px; height: auto; border-radius: 8px; border: 2px solid #10b981; display: block;">
+                                    <p id="currentPhotoInfo" class="text-muted small mt-1 mb-0"></p>
                                 </div>
                             <?php endif; ?>
-                            <input type="file" name="foto" class="form-control" accept="image/*" <?php echo $edit_perangkat ? '' : ''; ?>>
+                            <input type="file" name="foto" id="fotoInput" class="form-control" accept="image/*" onchange="previewPhoto(this)">
                             <?php if($edit_perangkat): ?>
-                                <small class="text-muted">Kosongkan jika tidak ingin mengubah foto</small>
+                                <small class="text-muted d-block mt-1"><i class="bi bi-info-circle"></i> Kosongkan jika tidak ingin mengubah foto. Upload foto baru akan menghapus foto lama.</small>
                             <?php endif; ?>
                         </div>
+                        <script>
+                        function previewPhoto(input) {
+                            const currentPhotoContainer = document.getElementById('currentPhotoContainer');
+                            const currentPhoto = document.getElementById('currentPhoto');
+                            const currentPhotoInfo = document.getElementById('currentPhotoInfo');
+                            
+                            if (input.files && input.files[0]) {
+                                const file = input.files[0];
+                                const reader = new FileReader();
+                                
+                                // Validasi ukuran file (max 5MB)
+                                if (file.size > 5 * 1024 * 1024) {
+                                    alert('⚠️ Ukuran file terlalu besar! Maksimal 5MB');
+                                    input.value = '';
+                                    return;
+                                }
+                                
+                                // Validasi tipe file
+                                const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                                if (!validTypes.includes(file.type)) {
+                                    alert('⚠️ Format file tidak didukung! Gunakan JPG, PNG, GIF, atau WEBP');
+                                    input.value = '';
+                                    return;
+                                }
+                                
+                                reader.onload = function(e) {
+                                    // Langsung update foto current dengan foto baru
+                                    currentPhoto.src = e.target.result;
+                                    currentPhotoContainer.style.display = 'block';
+                                    
+                                    // Update info file
+                                    const sizeInKB = (file.size / 1024).toFixed(2);
+                                    currentPhotoInfo.innerHTML = `📁 Foto baru dipilih: <strong>${file.name}</strong> (${sizeInKB} KB)`;
+                                };
+                                
+                                reader.readAsDataURL(file);
+                            }
+                        }
+                        </script>
                         <div class="mb-3">
                             <label class="form-label">Urutan</label>
                             <input type="number" name="urutan" class="form-control" value="<?php echo $edit_perangkat['urutan'] ?? '0'; ?>" required>
                         </div>
                         <button type="submit" name="tambah_perangkat" class="btn btn-primary w-100">
-                            <i class="bi bi-<?php echo $edit_perangkat ? 'check' : 'plus'; ?>-circle me-2"></i><?php echo $edit_perangkat ? 'Update' : 'Tambah'; ?>
+                            <i class="bi bi-<?php echo $edit_perangkat ? 'check' : 'plus'; ?>-circle me-2"></i><?php echo $edit_perangkat ? 'Update Data' : 'Tambah Data'; ?>
                         </button>
                         <?php if($edit_perangkat): ?>
-                            <a href="?tab=perangkat" class="btn btn-secondary w-100 mt-2">Batal</a>
+                            <a href="?tab=perangkat" class="btn btn-secondary w-100 mt-2"><i class="bi bi-x-circle me-2"></i>Batal</a>
                         <?php endif; ?>
                     </form>
                 </div>
@@ -399,7 +629,7 @@ $data_rt = mysqli_query($conn, "SELECT * FROM rt ORDER BY dusun ASC, nomor_rt AS
                                     <td><?php echo $no++; ?></td>
                                     <td>
                                         <?php if ($row['foto']): ?>
-                                            <img src="../assets/img/perangkat/<?php echo $row['foto']; ?>" width="40" height="40" class="rounded-circle" style="object-fit:cover;">
+                                            <img src="../assets/img/perangkat/<?php echo $row['foto']; ?>?v=<?php echo time(); ?>" width="40" height="40" class="rounded-circle" style="object-fit:cover;">
                                         <?php else: ?>
                                             <div class="bg-secondary rounded-circle" style="width:40px;height:40px;"></div>
                                         <?php endif; ?>
@@ -412,6 +642,100 @@ $data_rt = mysqli_query($conn, "SELECT * FROM rt ORDER BY dusun ASC, nomor_rt AS
                                             <i class="bi bi-pencil"></i>
                                         </a>
                                         <a href="?hapus_perangkat=<?php echo $row['id']; ?>&tab=perangkat" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php endwhile; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <!-- KEPALA DUSUN TAB -->
+        <?php if ($active_tab == 'kadus'): ?>
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card p-4">
+                    <h5 class="fw-bold mb-3"><?php echo $edit_kadus ? 'Edit' : 'Tambah'; ?> Kepala Dusun</h5>
+                    <form method="POST" enctype="multipart/form-data">
+                        <?php if($edit_kadus): ?>
+                            <input type="hidden" name="id" value="<?php echo $edit_kadus['id']; ?>">
+                            <input type="hidden" name="foto_lama" value="<?php echo $edit_kadus['foto']; ?>">
+                        <?php endif; ?>
+                        <div class="mb-3">
+                            <label class="form-label">Nama Kepala Dusun</label>
+                            <input type="text" name="nama" class="form-control" value="<?php echo $edit_kadus['nama'] ?? ''; ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Dusun</label>
+                            <select name="dusun" class="form-select" required>
+                                <option value="">Pilih Dusun</option>
+                                <?php 
+                                $dusun_list = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'];
+                                foreach($dusun_list as $d): ?>
+                                    <option value="<?php echo $d; ?>" <?php echo (isset($edit_kadus) && $edit_kadus['dusun'] == $d) ? 'selected' : ''; ?>>
+                                        Dusun <?php echo $d; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Foto</label>
+                            <input type="file" name="foto" class="form-control" accept="image/*">
+                            <?php if(isset($edit_kadus) && !empty($edit_kadus['foto'])): ?>
+                                <small class="text-muted">Foto saat ini: <?php echo $edit_kadus['foto']; ?></small>
+                            <?php endif; ?>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Urutan</label>
+                            <input type="number" name="urutan" class="form-control" value="<?php echo $edit_kadus['urutan'] ?? 0; ?>" required>
+                        </div>
+                        <button type="submit" name="tambah_kadus" class="btn btn-success w-100">
+                            <i class="bi bi-save"></i> <?php echo $edit_kadus ? 'Update' : 'Simpan'; ?>
+                        </button>
+                        <?php if($edit_kadus): ?>
+                            <a href="?tab=kadus" class="btn btn-secondary w-100 mt-2">Batal</a>
+                        <?php endif; ?>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card p-4">
+                    <h5 class="fw-bold mb-3">Daftar Kepala Dusun</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Dusun</th>
+                                    <th>Foto</th>
+                                    <th>Urutan</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $no = 1;
+                                mysqli_data_seek($data_kadus, 0);
+                                while($row = mysqli_fetch_assoc($data_kadus)): 
+                                ?>
+                                <tr>
+                                    <td><?php echo $no++; ?></td>
+                                    <td><?php echo $row['nama']; ?></td>
+                                    <td>Dusun <?php echo $row['dusun']; ?></td>
+                                    <td><?php echo $row['foto'] ?: '-'; ?></td>
+                                    <td><?php echo $row['urutan']; ?></td>
+                                    <td>
+                                        <a href="?edit_kadus=<?php echo $row['id']; ?>&tab=kadus" class="btn btn-sm btn-warning me-1">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a href="?hapus_kadus=<?php echo $row['id']; ?>&tab=kadus" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus data Kepala Dusun ini?')">
                                             <i class="bi bi-trash"></i>
                                         </a>
                                     </td>

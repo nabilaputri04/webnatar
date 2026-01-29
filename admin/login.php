@@ -1,5 +1,12 @@
 <?php
+// Hapus session lama yang corrupt
+@session_start();
+if (session_status() === PHP_SESSION_ACTIVE) {
+    session_destroy();
+}
+// Mulai session baru
 session_start();
+
 require '../config/db.php';
 
 if (isset($_SESSION['status']) && $_SESSION['status'] == "login") {
