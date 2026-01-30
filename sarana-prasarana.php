@@ -1,6 +1,12 @@
 <?php
 $page_title = "Sarana dan Prasarana";
 require 'includes/header.php';
+
+// Ambil data dari database
+$kesehatan = mysqli_query($conn, "SELECT * FROM sarana_prasarana WHERE kategori='Kesehatan' ORDER BY urutan ASC, id ASC");
+$pendidikan = mysqli_query($conn, "SELECT * FROM sarana_prasarana WHERE kategori='Pendidikan' ORDER BY urutan ASC, id ASC");
+$umum = mysqli_query($conn, "SELECT * FROM sarana_prasarana WHERE kategori='Umum' ORDER BY urutan ASC, id ASC");
+$lainnya = mysqli_query($conn, "SELECT * FROM sarana_prasarana WHERE kategori='Lainnya' ORDER BY urutan ASC, id ASC");
 ?>
 
 <div class="bg-gradient-to-br from-gray-50 via-emerald-50 to-blue-50 py-16 relative overflow-hidden">
@@ -66,32 +72,27 @@ require 'includes/header.php';
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
+                        <?php 
+                        $no = 1;
+                        while($row = mysqli_fetch_assoc($kesehatan)): 
+                        ?>
                         <tr class="hover:bg-red-50/50 transition-colors duration-200">
-                            <td class="px-6 py-4 text-gray-800 font-semibold">1</td>
-                            <td class="px-6 py-4 text-gray-800 font-medium">Posyandu</td>
-                            <td class="px-6 py-4 text-gray-600">3 unit</td>
-                            <td class="px-6 py-4"><span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold">Diumah Kader</span></td>
+                            <td class="px-6 py-4 text-gray-800 font-semibold"><?= $no++ ?></td>
+                            <td class="px-6 py-4 text-gray-800 font-medium"><?= htmlspecialchars($row['nama']) ?></td>
+                            <td class="px-6 py-4 text-gray-600"><?= $row['jumlah'] ?> unit</td>
+                            <td class="px-6 py-4">
+                                <?php
+                                $kondisi_class = [
+                                    'Baik' => 'bg-blue-100 text-blue-700',
+                                    'Rusak Ringan' => 'bg-yellow-100 text-yellow-700',
+                                    'Rusak Berat' => 'bg-red-100 text-red-700'
+                                ];
+                                $class = $kondisi_class[$row['kondisi']] ?? 'bg-gray-100 text-gray-700';
+                                ?>
+                                <span class="px-3 py-1 <?= $class ?> rounded-full text-sm font-semibold"><?= htmlspecialchars($row['kondisi']) ?></span>
+                            </td>
                         </tr>
-                        <tr class="hover:bg-red-50/50 transition-colors duration-200">
-                            <td class="px-6 py-4 text-gray-800 font-semibold">2</td>
-                            <td class="px-6 py-4 text-gray-800 font-medium">Gedung Posyandu Permanen</td>
-                            <td class="px-6 py-4 text-gray-600">8 unit</td>
-                            <td class="px-6 py-4"><span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">Baik</span></td>
-                        </tr>
-                        <tr class="hover:bg-red-50/50 transition-colors duration-200">
-                            <td class="px-6 py-4 text-gray-800 font-semibold">3</td>
-                            <td class="px-6 py-4 text-gray-800 font-medium">Puskesmas</td>
-                            <td class="px-6 py-4 text-gray-600">1 unit</td>
-                            <td class="px-6 py-4"><span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">Baik</span></td>
-                        </tr>
-                        <tr class="hover:bg-red-50/50 transition-colors duration-200">
-                            <td class="px-6 py-4 text-gray-800 font-semibold">4</td>
-                            <td class="px-6 py-4 text-gray-800 font-medium">Poliklinik/balai pengobatan</td>
-                            <td class="px-6 py-4 text-gray-600">4 unit</td>
-                            <td class="px-6 py-4"><span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">Baik</span></td>
-                        </tr>
-                        <tr class="hover:bg-red-50/50 transition-colors duration-200">
-                            <td class="px-6 py-4 text-gray-800 font-semibold">5</td>
+                        <?php endwhile; ?>
                             <td class="px-6 py-4 text-gray-800 font-medium">Bidan desa</td>
                             <td class="px-6 py-4 text-gray-600">2 orang</td>
                             <td class="px-6 py-4"><span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold">Aktif</span></td>
@@ -152,35 +153,16 @@ require 'includes/header.php';
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        <?php
-                        $sekolah = [
-                            ['PAUD Bunda Pertiwi', 'Dusun VII (Sukajawa Rejo I)'],
-                            ['PAUD Flamboyan', 'Dusun X (Natar I)'],
-                            ['PAUD Anggrek', 'Dusun XI (Sukarame Pasar)'],
-                            ['TK Al-Munawaroh', 'Dusun VII (Sukarame)'],
-                            ['TK Seyang Ibu', 'Dusun IV (Sari Rejo)'],
-                            ['TK Bina Asih', 'Dusun IX (Tanjung Rejo II)'],
-                            ['TK Tunas Mulya', 'Dusun X (Natar I)'],
-                            ['SD N 1 Natar', 'Dusun IV (Sari Rejo)'],
-                            ['SD N 2 Natar', 'Dusun VII (Sukarame)'],
-                            ['SD N 3 Natar', 'Dusun V (Marga Jaya)'],
-                            ['SD N 4 Natar', 'Dusun VIII (Tanjung Rejo I)'],
-                            ['SLTP Muhammadiyah Natar', 'Dusun IV (Sari Rejo)'],
-                            ['SLTP Budi Karya Natar', 'Dusun VIII (Tanjung Rejo I)'],
-                            ['SMA N 1 Natar', 'Dusun I (Natar I)'],
-                            ['SMK Budi Karya Natar', 'Dusun VIII (Tanjung Rejo I)']
-                        ];
+                        <?php 
                         $no = 1;
-                        foreach ($sekolah as $s) {
-                            $bg = $no % 2 == 0 ? 'bg-blue-50/30' : '';
-                            echo "<tr class='hover:bg-blue-50 transition-colors duration-200 $bg'>";
-                            echo "<td class='px-6 py-4 text-gray-800 font-semibold'>$no</td>";
-                            echo "<td class='px-6 py-4 text-gray-800 font-medium'>{$s[0]}</td>";
-                            echo "<td class='px-6 py-4 text-gray-600'>{$s[1]}</td>";
-                            echo "</tr>";
-                            $no++;
-                        }
+                        while($row = mysqli_fetch_assoc($pendidikan)): 
                         ?>
+                        <tr class="hover:bg-blue-50 transition-colors duration-200">
+                            <td class="px-6 py-4 text-gray-800 font-semibold"><?= $no++ ?></td>
+                            <td class="px-6 py-4 text-gray-800 font-medium"><?= htmlspecialchars($row['nama']) ?></td>
+                            <td class="px-6 py-4 text-gray-600"><?= htmlspecialchars($row['keterangan']) ?></td>
+                        </tr>
+                        <?php endwhile; ?>
                     </tbody>
                 </table>
             </div>

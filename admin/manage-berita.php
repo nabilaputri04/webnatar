@@ -83,6 +83,7 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_berita ORDER BY nama_k
         <li><a href="manage-berita.php" class="active"><i class="bi bi-journal-text"></i> Kelola Berita</a></li>
         <li><a href="manage-apbdesa.php"><i class="bi bi-cash-stack"></i> APB Desa</a></li>
         <li><a href="manage-potensi.php"><i class="bi bi-map"></i> Potensi Desa</a></li>
+        <li><a href="manage-sarana.php"><i class="bi bi-building"></i> Sarana & Prasarana</a></li>
         <li><a href="manage-pengaduan.php"><i class="bi bi-megaphone-fill"></i> Pengaduan</a></li>
         <li><a href="manage-kontak.php"><i class="bi bi-telephone"></i> Kontak</a></li>
     </ul>

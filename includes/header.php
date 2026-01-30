@@ -373,6 +373,10 @@ if ($conn) {
                     <button onclick="toggleDarkMode()" id="darkModeToggle" class="ml-2 p-2.5 text-gray-600 hover:text-emerald-600 hover:bg-gray-100 rounded-full transition" title="Toggle Dark Mode">
                         <i class="bi bi-moon-fill text-lg"></i>
                     </button>
+                    <a href="cek-pengaduan.php" class="ml-2 px-4 py-2 text-sm font-semibold text-emerald-600 hover:text-emerald-800 transition border border-emerald-200 rounded-full hover:bg-emerald-50 flex items-center gap-1.5">
+                        <i class="bi bi-search"></i>
+                        Cek Pengaduan
+                    </a>
                     <a href="admin/login.php" class="ml-2 px-4 py-2 text-sm font-semibold text-emerald-600 hover:text-emerald-800 transition border border-emerald-200 rounded-full hover:bg-emerald-50">Login Admin</a>
                     <a href="kontak.php" class="ml-2 px-6 py-2.5 text-sm font-bold text-white bg-emerald-600 rounded-full hover:bg-emerald-700 shadow-lg shadow-emerald-600/30 transition transform hover:-translate-y-0.5">Kontak</a>
                 </div>
@@ -391,6 +395,9 @@ if ($conn) {
             <a href="potensi.php" class="block px-4 py-3 rounded-lg hover:bg-gray-50 font-semibold text-gray-700">Potensi Desa</a>
             <a href="sarana-prasarana.php" class="block px-4 py-3 rounded-lg hover:bg-gray-50 font-semibold text-gray-700">Sarana & Prasarana</a>
             <a href="apbdesa.php" class="block px-4 py-3 rounded-lg hover:bg-gray-50 font-semibold text-gray-700">Transparansi APBDes</a>
+            <a href="cek-pengaduan.php" class="block px-4 py-3 rounded-lg bg-emerald-50 text-emerald-600 font-bold flex items-center gap-2">
+                <i class="bi bi-search"></i> Cek Status Pengaduan
+            </a>
             <a href="admin/login.php" class="block px-4 py-3 rounded-lg hover:bg-gray-50 font-semibold text-gray-700">Login Admin</a>
             <button onclick="toggleDarkMode()" class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 font-semibold text-gray-700 flex items-center gap-2">
                 <i class="bi bi-moon-fill"></i> Mode Gelap

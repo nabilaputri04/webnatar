@@ -1,4 +1,9 @@
 <?php
+// Disable cache untuk memastikan data selalu fresh
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 $page_title = "Struktur Organisasi";
 require 'includes/header.php';
 require 'config/db.php';
@@ -42,6 +47,59 @@ if ($result_perangkat) {
     while ($row = mysqli_fetch_assoc($result_perangkat)) {
         $jabatan_key = strtolower(str_replace([' ', '/'], ['_', '_'], $row['jabatan']));
         $data_perangkat[$jabatan_key] = $row;
+        
+        // Juga simpan dengan pencarian kata kunci untuk lebih fleksibel
+        $jabatan_lower = strtolower($row['jabatan']);
+        
+        // Kepala Desa
+        if (stripos($jabatan_lower, 'kepala desa') !== false) {
+            $data_perangkat['kepala_desa'] = $row;
+        }
+        
+        // Sekretaris
+        if (stripos($jabatan_lower, 'sekretaris') !== false && stripos($jabatan_lower, 'desa') !== false) {
+            $data_perangkat['sekretaris_desa'] = $row;
+        }
+        
+        // Kepala Seksi Pemerintahan
+        if (stripos($jabatan_lower, 'pemerintahan') !== false && (stripos($jabatan_lower, 'kepala seksi') !== false || stripos($jabatan_lower, 'kasi') !== false)) {
+            $data_perangkat['kepala_seksi_pemerintahan'] = $row;
+        }
+        
+        // Kepala Seksi Kesejahteraan
+        if (stripos($jabatan_lower, 'kesejahteraan') !== false && (stripos($jabatan_lower, 'kepala seksi') !== false || stripos($jabatan_lower, 'kasi') !== false)) {
+            $data_perangkat['kepala_seksi_kesejahteraan'] = $row;
+        }
+        
+        // Kepala Seksi Pelayanan
+        if (stripos($jabatan_lower, 'pelayanan') !== false && (stripos($jabatan_lower, 'kepala seksi') !== false || stripos($jabatan_lower, 'kasi') !== false)) {
+            $data_perangkat['kepala_seksi_pelayanan'] = $row;
+        }
+        
+        // Kaur Umum dan Tata Usaha
+        if ((stripos($jabatan_lower, 'umum') !== false || stripos($jabatan_lower, 'tata usaha') !== false) && (stripos($jabatan_lower, 'kepala urusan') !== false || stripos($jabatan_lower, 'kaur') !== false)) {
+            $data_perangkat['kepala_urusan_umum_dan_tata_usaha'] = $row;
+        }
+        
+        // Kaur Perencanaan
+        if (stripos($jabatan_lower, 'perencanaan') !== false && (stripos($jabatan_lower, 'kepala urusan') !== false || stripos($jabatan_lower, 'kaur') !== false)) {
+            $data_perangkat['kepala_urusan_perencanaan'] = $row;
+        }
+        
+        // Kaur Keuangan
+        if (stripos($jabatan_lower, 'keuangan') !== false && (stripos($jabatan_lower, 'kepala urusan') !== false || stripos($jabatan_lower, 'kaur') !== false)) {
+            $data_perangkat['kepala_urusan_keuangan'] = $row;
+        }
+        
+        // Operator
+        if (stripos($jabatan_lower, 'operator') !== false) {
+            $data_perangkat['operator'] = $row;
+        }
+        
+        // Bendahara
+        if (stripos($jabatan_lower, 'bendahara') !== false) {
+            $data_perangkat['bendahara'] = $row;
+        }
         
         // Jika jabatan adalah Kepala Dusun, simpan ke array kadus
         if (stripos($row['jabatan'], 'Kepala Dusun') !== false) {
@@ -254,7 +312,7 @@ if ($result_perangkat) {
                         <div class="bg-indigo-50 border-2 border-indigo-300 p-2 rounded-lg mb-2">
                             <div class="w-16 h-16 bg-white rounded-full overflow-hidden border-2 border-indigo-500 mx-auto mb-1">
                                 <?php if (!empty($wakil_bpd['foto'])): ?>
-                                    <img src="assets/img/perangkat/<?php echo $wakil_bpd['foto']; ?>" alt="<?php echo $wakil_bpd['nama']; ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?php echo urlencode($wakil_bpd['nama']); ?>&size=200&background=6366f1&color=fff&bold=true'">
+                                    <img src="assets/img/perangkat/<?php echo $wakil_bpd['foto']; ?>?v=<?php echo time(); ?>" alt="<?php echo $wakil_bpd['nama']; ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?php echo urlencode($wakil_bpd['nama']); ?>&size=200&background=6366f1&color=fff&bold=true'">
                                 <?php else: ?>
                                     <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($wakil_bpd['nama']); ?>&size=200&background=6366f1&color=fff&bold=true" alt="<?php echo $wakil_bpd['nama']; ?>" class="w-full h-full object-cover">
                                 <?php endif; ?>
@@ -320,10 +378,14 @@ if ($result_perangkat) {
                             }
                         }
                         
-                        $nama_kades = $kepala_desa ? $kepala_desa['nama'] : 'M. ARIF, S.Pd.';
+                        // Debug: tampilkan data yang tersedia (dinonaktifkan)
+                        // echo '<!-- DEBUG Kepala Desa: '; 
+                        // echo 'Array Keys: ' . implode(', ', array_keys($data_perangkat)); 
+                        // echo ' -->';
+                        $nama_kades = $kepala_desa ? $kepala_desa['nama'] : 'DATA TIDAK DITEMUKAN';
                         $nama_avatar = urlencode($nama_kades);
                         ?>
-                        <img src="<?php echo $foto_kades; ?>" alt="Kepala Desa" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=10b981&color=fff&bold=true';">
+                        <img src="<?php echo $foto_kades; ?>?v=<?php echo time(); ?>" alt="Kepala Desa" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=10b981&color=fff&bold=true';">
                     </div>
                     <h3 class="font-bold text-lg md:text-2xl mb-1"><?php echo strtoupper($nama_kades); ?></h3>
                     <p class="text-emerald-100 text-sm md:text-base font-bold tracking-wide">KEPALA DESA</p>
@@ -358,15 +420,15 @@ if ($result_perangkat) {
                         <div class="relative">
                             <?php 
                             $kasi_pem = $data_perangkat['kepala_seksi_pemerintahan'] ?? null;
-                            $nama_kasi_pem = $kasi_pem ? $kasi_pem['nama'] : 'VIKI REZA PURNAMA';
+                            $nama_kasi_pem = $kasi_pem ? $kasi_pem['nama'] : 'DATA TIDAK DITEMUKAN';
                             $foto_kasi_pem = $kasi_pem && $kasi_pem['foto'] ? 'assets/img/perangkat/' . $kasi_pem['foto'] : 'assets/img/perangkat/kasi-pemerintahan.jpeg';
                             $nama_url = urlencode(str_replace(' ', '+', $nama_kasi_pem));
                             ?>
                             <!-- Garis horizontal dari kotak ke garis vertikal kanan -->
                             <div class="absolute bg-gray-800" style="height: 3px; width: 50px; right: 0; top: 50%; transform: translateY(-50%);"></div>
-                            <div class="bg-gradient-to-br from-blue-100 to-blue-200 border-2 md:border-4 border-blue-400 p-4 md:p-9 rounded-xl md:rounded-2xl shadow-2xl hover:shadow-blue-300/60 transition-all duration-300 transform hover:-translate-y-1" style="margin-right: 50px;">
+                            <div class="bg-gradient-to-br from-blue-100 to-blue-200 border-2 md:border-4 border-blue-400 p-4 md:p-9 rounded-xl md:rounded-2xl shadow-2xl hover:shadow-blue-300/60 transition-all duration-300 transform hover:-translate-y-1 text-center" style="margin-right: 50px;">
                         <div class="w-16 h-16 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-blue-500 shadow-md">
-                            <img src="<?= htmlspecialchars($foto_kasi_pem) ?>" alt="Kasi Pemerintahan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=3b82f6&color=fff&bold=true'">
+                            <img src="<?= htmlspecialchars($foto_kasi_pem) ?>?v=<?php echo time(); ?>" alt="Kasi Pemerintahan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=3b82f6&color=fff&bold=true'">
                         </div>
                                 <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kasi_pem) ?></h4>
                                 <p class="text-blue-700 text-xs md:text-sm font-bold uppercase tracking-wide">Kepala Seksi<br>Pemerintahan</p>
@@ -377,15 +439,15 @@ if ($result_perangkat) {
                         <div class="relative">
                             <?php 
                             $kasi_kes = $data_perangkat['kepala_seksi_kesejahteraan'] ?? null;
-                            $nama_kasi_kes = $kasi_kes ? $kasi_kes['nama'] : 'HERTATI';
+                            $nama_kasi_kes = $kasi_kes ? $kasi_kes['nama'] : 'DATA TIDAK DITEMUKAN';
                             $foto_kasi_kes = $kasi_kes && $kasi_kes['foto'] ? 'assets/img/perangkat/' . $kasi_kes['foto'] : 'assets/img/perangkat/kasi-kesejahteraan.jpeg';
                             $nama_url = urlencode(str_replace(' ', '+', $nama_kasi_kes));
                             ?>
                             <!-- Garis horizontal dari kotak ke garis vertikal kanan -->
                             <div class="absolute bg-gray-800" style="height: 3px; width: 50px; right: 0; top: 50%; transform: translateY(-50%);"></div>
-                            <div class="bg-gradient-to-br from-purple-100 to-purple-200 border-2 md:border-4 border-purple-400 p-4 md:p-9 rounded-xl md:rounded-2xl shadow-2xl hover:shadow-purple-300/60 transition-all duration-300 transform hover:-translate-y-1" style="margin-right: 50px;">
+                            <div class="bg-gradient-to-br from-purple-100 to-purple-200 border-2 md:border-4 border-purple-400 p-4 md:p-9 rounded-xl md:rounded-2xl shadow-2xl hover:shadow-purple-300/60 transition-all duration-300 transform hover:-translate-y-1 text-center" style="margin-right: 50px;">
                         <div class="w-16 h-16 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-purple-500 shadow-md">
-                            <img src="<?= htmlspecialchars($foto_kasi_kes) ?>" alt="Kasi Kesejahteraan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=a855f7&color=fff&bold=true'">
+                            <img src="<?= htmlspecialchars($foto_kasi_kes) ?>?v=<?php echo time(); ?>" alt="Kasi Kesejahteraan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=a855f7&color=fff&bold=true'">
                         </div>
                                 <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kasi_kes) ?></h4>
                                 <p class="text-purple-700 text-xs md:text-sm font-bold uppercase tracking-wide">Kepala Seksi<br>Kesejahteraan</p>
@@ -396,15 +458,15 @@ if ($result_perangkat) {
                         <div class="relative">
                             <?php 
                             $kasi_pel = $data_perangkat['kepala_seksi_pelayanan'] ?? null;
-                            $nama_kasi_pel = $kasi_pel ? $kasi_pel['nama'] : 'SUHARTATI';
+                            $nama_kasi_pel = $kasi_pel ? $kasi_pel['nama'] : 'DATA TIDAK DITEMUKAN';
                             $foto_kasi_pel = $kasi_pel && $kasi_pel['foto'] ? 'assets/img/perangkat/' . $kasi_pel['foto'] : 'assets/img/perangkat/kasi-pelayanan.jpeg';
                             $nama_url = urlencode(str_replace(' ', '+', $nama_kasi_pel));
                             ?>
                             <!-- Garis horizontal dari kotak ke garis vertikal kanan -->
                             <div class="absolute bg-gray-800" style="height: 3px; width: 50px; right: 0; top: 50%; transform: translateY(-50%);"></div>
-                            <div class="bg-gradient-to-br from-pink-100 to-pink-200 border-2 md:border-4 border-pink-400 p-4 md:p-9 rounded-xl md:rounded-2xl shadow-2xl hover:shadow-pink-300/60 transition-all duration-300 transform hover:-translate-y-1" style="margin-right: 50px;">
+                            <div class="bg-gradient-to-br from-pink-100 to-pink-200 border-2 md:border-4 border-pink-400 p-4 md:p-9 rounded-xl md:rounded-2xl shadow-2xl hover:shadow-pink-300/60 transition-all duration-300 transform hover:-translate-y-1 text-center" style="margin-right: 50px;">
                         <div class="w-16 h-16 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-pink-500 shadow-md">
-                            <img src="<?= htmlspecialchars($foto_kasi_pel) ?>" alt="Kasi Pelayanan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=ec4899&color=fff&bold=true'">
+                            <img src="<?= htmlspecialchars($foto_kasi_pel) ?>?v=<?php echo time(); ?>" alt="Kasi Pelayanan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=ec4899&color=fff&bold=true'">
                         </div>
                                 <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kasi_pel) ?></h4>
                                 <p class="text-pink-700 text-xs md:text-sm font-bold uppercase tracking-wide">Kepala Seksi<br>Pelayanan</p>
@@ -419,13 +481,13 @@ if ($result_perangkat) {
                     <div class="mb-8">
                         <?php 
                         $sekretaris = $data_perangkat['sekretaris_desa'] ?? null;
-                        $nama_sekretaris = $sekretaris ? $sekretaris['nama'] : 'EGI MEIRAWAN';
+                        $nama_sekretaris = $sekretaris ? $sekretaris['nama'] : 'DATA TIDAK DITEMUKAN';
                         $foto_sekretaris = $sekretaris && $sekretaris['foto'] ? 'assets/img/perangkat/' . $sekretaris['foto'] : 'assets/img/perangkat/sekretaris.jpeg';
                         $nama_url = urlencode(str_replace(' ', '+', $nama_sekretaris));
                         ?>
-                        <div class="bg-gradient-to-br from-orange-100 to-orange-200 border-2 md:border-4 border-orange-400 p-4 md:p-9 rounded-xl md:rounded-2xl shadow-2xl hover:shadow-orange-300/60 transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="bg-gradient-to-br from-orange-100 to-orange-200 border-2 md:border-4 border-orange-400 p-4 md:p-9 rounded-xl md:rounded-2xl shadow-2xl hover:shadow-orange-300/60 transition-all duration-300 transform hover:-translate-y-1 text-center">
                             <div class="w-16 h-16 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-orange-500 shadow-md">
-                                <img src="<?= htmlspecialchars($foto_sekretaris) ?>" alt="Sekretaris Desa" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=f97316&color=fff&bold=true'">
+                                <img src="<?= htmlspecialchars($foto_sekretaris) ?>?v=<?php echo time(); ?>" alt="Sekretaris Desa" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=f97316&color=fff&bold=true'">
                             </div>
                             <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_sekretaris) ?></h4>
                             <p class="text-orange-700 text-xs md:text-sm font-bold uppercase tracking-wide">Sekretariat Desa</p>
@@ -454,7 +516,7 @@ if ($result_perangkat) {
                             <div class="relative">
                                 <?php 
                                 $kaur_tu = $data_perangkat['kepala_urusan_umum_dan_tata_usaha'] ?? null;
-                                $nama_kaur_tu = $kaur_tu ? $kaur_tu['nama'] : 'YEKO BAGUS CAHYANI';
+                                $nama_kaur_tu = $kaur_tu ? $kaur_tu['nama'] : 'DATA TIDAK DITEMUKAN';
                                 $foto_kaur_tu = $kaur_tu && $kaur_tu['foto'] ? 'assets/img/perangkat/' . $kaur_tu['foto'] : 'assets/img/perangkat/kaur-tu.jpeg';
                                 $nama_url = urlencode(str_replace(' ', '+', $nama_kaur_tu));
                                 ?>
@@ -462,7 +524,7 @@ if ($result_perangkat) {
                                 <div class="absolute bg-gray-800" style="height: 3px; width: 50px; left: 0; top: 50%; transform: translateY(-50%);"></div>
                                 <div class="bg-white border-2 md:border-4 border-orange-300 p-4 md:p-9 rounded-lg md:rounded-xl shadow-md md:shadow-lg text-center hover:shadow-xl transition-shadow duration-300" style="margin-left: 50px;">
                                     <div class="w-16 h-16 md:w-24 md:h-24 bg-orange-50 rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-3 border-orange-400">
-                                        <img src="<?= htmlspecialchars($foto_kaur_tu) ?>" alt="Kaur TU" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=fed7aa&color=000'">
+                                        <img src="<?= htmlspecialchars($foto_kaur_tu) ?>?v=<?php echo time(); ?>" alt="Kaur TU" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=fed7aa&color=000'">
                                     </div>
                                     <h5 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kaur_tu) ?></h5>
                                     <p class="text-xs md:text-sm text-orange-600 font-semibold uppercase">Kaur Umum & Tata Usaha</p>
@@ -473,7 +535,7 @@ if ($result_perangkat) {
                             <div class="relative">
                                 <?php 
                                 $kaur_ren = $data_perangkat['kepala_urusan_perencanaan'] ?? null;
-                                $nama_kaur_ren = $kaur_ren ? $kaur_ren['nama'] : 'EKKI REYNALDI';
+                                $nama_kaur_ren = $kaur_ren ? $kaur_ren['nama'] : 'DATA TIDAK DITEMUKAN';
                                 $foto_kaur_ren = $kaur_ren && $kaur_ren['foto'] ? 'assets/img/perangkat/' . $kaur_ren['foto'] : 'assets/img/perangkat/kaur-perencanaan.jpeg';
                                 $nama_url = urlencode(str_replace(' ', '+', $nama_kaur_ren));
                                 ?>
@@ -481,7 +543,7 @@ if ($result_perangkat) {
                                 <div class="absolute bg-gray-800" style="height: 3px; width: 50px; left: 0; top: 50%; transform: translateY(-50%);"></div>
                                 <div class="bg-white border-2 md:border-4 border-orange-300 p-4 md:p-9 rounded-lg md:rounded-xl shadow-md md:shadow-lg text-center hover:shadow-xl transition-shadow duration-300" style="margin-left: 50px;">
                                     <div class="w-16 h-16 md:w-24 md:h-24 bg-orange-50 rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-3 border-orange-400">
-                                        <img src="<?= htmlspecialchars($foto_kaur_ren) ?>" alt="Kaur Perencanaan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=fed7aa&color=000'">
+                                        <img src="<?= htmlspecialchars($foto_kaur_ren) ?>?v=<?php echo time(); ?>" alt="Kaur Perencanaan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=fed7aa&color=000'">
                                     </div>
                                     <h5 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kaur_ren) ?></h5>
                                     <p class="text-xs md:text-sm text-orange-600 font-semibold uppercase">Kaur Perencanaan</p>
@@ -492,7 +554,7 @@ if ($result_perangkat) {
                             <div class="relative">
                                 <?php 
                                 $kaur_keu = $data_perangkat['kepala_urusan_keuangan'] ?? null;
-                                $nama_kaur_keu = $kaur_keu ? $kaur_keu['nama'] : 'SUCI RAHAYU';
+                                $nama_kaur_keu = $kaur_keu ? $kaur_keu['nama'] : 'DATA TIDAK DITEMUKAN';
                                 $foto_kaur_keu = $kaur_keu && $kaur_keu['foto'] ? 'assets/img/perangkat/' . $kaur_keu['foto'] : 'assets/img/perangkat/kaur-keuangan.jpeg';
                                 $nama_url = urlencode(str_replace(' ', '+', $nama_kaur_keu));
                                 ?>
@@ -500,7 +562,7 @@ if ($result_perangkat) {
                                 <div class="absolute bg-gray-800" style="height: 3px; width: 50px; left: 0; top: 50%; transform: translateY(-50%);"></div>
                                 <div class="bg-white border-2 md:border-4 border-orange-300 p-4 md:p-9 rounded-lg md:rounded-xl shadow-md md:shadow-lg text-center hover:shadow-xl transition-shadow duration-300" style="margin-left: 50px;">
                                     <div class="w-16 h-16 md:w-24 md:h-24 bg-orange-50 rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-3 border-orange-400">
-                                        <img src="<?= htmlspecialchars($foto_kaur_keu) ?>" alt="Kaur Keuangan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=fed7aa&color=000'">
+                                        <img src="<?= htmlspecialchars($foto_kaur_keu) ?>?v=<?php echo time(); ?>" alt="Kaur Keuangan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url ?>&size=200&background=fed7aa&color=000'">
                                     </div>
                                     <h5 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_kaur_keu) ?></h5>
                                     <p class="text-xs md:text-sm text-orange-600 font-semibold uppercase">Kaur Keuangan</p>
@@ -534,21 +596,33 @@ if ($result_perangkat) {
             <!-- Operator & Bendahara -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 max-w-5xl mx-auto">
                 <!-- Operator -->
+                <?php 
+                $operator = $data_perangkat['operator'] ?? null;
+                $nama_operator = $operator ? $operator['nama'] : 'DATA TIDAK DITEMUKAN';
+                $foto_operator = $operator && $operator['foto'] ? 'assets/img/perangkat/' . $operator['foto'] : 'assets/img/perangkat/operator.jpeg';
+                $nama_url_op = urlencode(str_replace(' ', '+', $nama_operator));
+                ?>
                 <div class="bg-gradient-to-br from-gray-50 to-gray-100 border-2 md:border-4 border-gray-400 px-4 md:px-8 py-4 md:py-6 rounded-xl md:rounded-2xl shadow-lg md:shadow-xl text-center hover:shadow-2xl transition-shadow duration-300">
                     <div class="w-16 h-16 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-gray-500 shadow-md">
-                        <img src="assets/img/perangkat/operator.jpeg" alt="Operator" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=DESMIATI&size=200&background=6b7280&color=fff&bold=true'">
+                        <img src="<?= htmlspecialchars($foto_operator) ?>?v=<?php echo time(); ?>" alt="Operator" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url_op ?>&size=200&background=6b7280&color=fff&bold=true'">
                     </div>
-                    <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1">DESMIATI ARIANTINI</h4>
+                    <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_operator) ?></h4>
                     <p class="text-gray-600 text-xs md:text-sm font-bold uppercase tracking-wide">Operator</p>
                 </div>
 
                 <!-- Bendahara -->
+                <?php 
+                $bendahara = $data_perangkat['bendahara'] ?? null;
+                $nama_bendahara = $bendahara ? $bendahara['nama'] : 'DATA TIDAK DITEMUKAN';
+                $foto_bendahara = $bendahara && $bendahara['foto'] ? 'assets/img/perangkat/' . $bendahara['foto'] : 'assets/img/perangkat/bendahara.jpeg';
+                $nama_url_ben = urlencode(str_replace(' ', '+', $nama_bendahara));
+                ?>
                 <div class="bg-gradient-to-br from-gray-50 to-gray-100 border-2 md:border-4 border-gray-400 px-4 md:px-8 py-4 md:py-6 rounded-xl md:rounded-2xl shadow-lg md:shadow-xl text-center hover:shadow-2xl transition-shadow duration-300">
                     <div class="w-16 h-16 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-3 md:mb-4 overflow-hidden border-2 md:border-4 border-gray-500 shadow-md">
-                        <img src="assets/img/perangkat/bendahara.jpeg" alt="Bendahara" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=EKA+NOVIYANTI&size=200&background=6b7280&color=fff&bold=true'">
+                        <img src="<?= htmlspecialchars($foto_bendahara) ?>?v=<?php echo time(); ?>" alt="Bendahara" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?= $nama_url_ben ?>&size=200&background=6b7280&color=fff&bold=true'">
                     </div>
-                    <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1">ERA NOVIYANTI</h4>
-                    <p class="text-gray-600 text-xs md:text-sm font-bold uppercase tracking-wide">Bendahara Barang</p>
+                    <h4 class="font-bold text-base md:text-lg text-gray-800 mb-1"><?= htmlspecialchars($nama_bendahara) ?></h4>
+                    <p class="text-gray-600 text-xs md:text-sm font-bold uppercase tracking-wide">Bendahara</p>
                 </div>
             </div>
             
@@ -578,7 +652,7 @@ if ($result_perangkat) {
                     <div class="bg-teal-50 border-2 border-teal-300 p-2 rounded-lg mb-2">
                         <div class="w-16 h-16 bg-white rounded-full overflow-hidden border-2 border-teal-500 mx-auto mb-1">
                             <?php if (!empty($data_lpmd[0]['foto'])): ?>
-                                <img src="assets/img/perangkat/<?php echo $data_lpmd[0]['foto']; ?>" alt="<?php echo $data_lpmd[0]['nama']; ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?php echo urlencode($data_lpmd[0]['nama']); ?>&size=200&background=14b8a6&color=fff&bold=true'">
+                                <img src="assets/img/perangkat/<?php echo $data_lpmd[0]['foto']; ?>?v=<?php echo time(); ?>" alt="<?php echo $data_lpmd[0]['nama']; ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?php echo urlencode($data_lpmd[0]['nama']); ?>&size=200&background=14b8a6&color=fff&bold=true'">
                             <?php else: ?>
                                 <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($data_lpmd[0]['nama']); ?>&size=200&background=14b8a6&color=fff&bold=true" alt="<?php echo $data_lpmd[0]['nama']; ?>" class="w-full h-full object-cover">
                             <?php endif; ?>
@@ -591,7 +665,7 @@ if ($result_perangkat) {
                     <div class="bg-teal-50 border-2 border-teal-300 p-2 rounded-lg mb-2">
                         <div class="w-16 h-16 bg-white rounded-full overflow-hidden border-2 border-teal-500 mx-auto mb-1">
                             <?php if (!empty($wakil_lpmd['foto'])): ?>
-                                <img src="assets/img/perangkat/<?php echo $wakil_lpmd['foto']; ?>" alt="<?php echo $wakil_lpmd['nama']; ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?php echo urlencode($wakil_lpmd['nama']); ?>&size=200&background=14b8a6&color=fff&bold=true'">
+                                <img src="assets/img/perangkat/<?php echo $wakil_lpmd['foto']; ?>?v=<?php echo time(); ?>" alt="<?php echo $wakil_lpmd['nama']; ?>" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=<?php echo urlencode($wakil_lpmd['nama']); ?>&size=200&background=14b8a6&color=fff&bold=true'">
                             <?php else: ?>
                                 <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($wakil_lpmd['nama']); ?>&size=200&background=14b8a6&color=fff&bold=true" alt="<?php echo $wakil_lpmd['nama']; ?>" class="w-full h-full object-cover">
                             <?php endif; ?>
@@ -640,9 +714,9 @@ if ($result_perangkat) {
                             $foto_kadus = $kadus && $kadus['foto'] ? 'assets/img/perangkat/'.$kadus['foto'] : 'assets/img/perangkat/kadus-'.($idx+1).'.jpeg';
                             $nama_avatar = urlencode($nama_kadus);
                         ?>
-                        <div class="clickable-card bg-gradient-to-br from-emerald-50 to-emerald-100 border-4 border-emerald-500 p-6 rounded-2xl shadow-2xl hover:shadow-emerald-300/60 transition-all duration-300 transform hover:-translate-y-2" onclick="toggleDetails('rt-kadus-<?php echo $idx+1; ?>', '<?php echo $dusun; ?>', this, 'emerald')">
+                        <div class="clickable-card bg-gradient-to-br from-emerald-50 to-emerald-100 border-4 border-emerald-500 p-6 rounded-2xl shadow-2xl hover:shadow-emerald-300/60 transition-all duration-300 transform hover:-translate-y-2 text-center" onclick="toggleDetails('rt-kadus-<?php echo $idx+1; ?>', '<?php echo $dusun; ?>', this, 'emerald')">
                             <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-emerald-600 shadow-md">
-                                <img src="<?php echo $foto_kadus; ?>" alt="Kepala Dusun <?php echo $dusun; ?>" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=10b981&color=fff&bold=true';">
+                                <img src="<?php echo $foto_kadus; ?>?v=<?php echo time(); ?>" alt="Kepala Dusun <?php echo $dusun; ?>" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=10b981&color=fff&bold=true';">
                             </div>
                             <h4 class="font-bold text-lg text-emerald-900 mb-1"><?php echo strtoupper($nama_kadus); ?></h4>
                             <p class="text-emerald-700 font-bold text-sm mb-2">KEPALA DUSUN <?php echo $dusun; ?></p>
@@ -666,9 +740,9 @@ if ($result_perangkat) {
                             $foto_kadus = $kadus && $kadus['foto'] ? 'assets/img/perangkat/'.$kadus['foto'] : 'assets/img/perangkat/kadus-'.($idx+4).'.jpeg';
                             $nama_avatar = urlencode($nama_kadus);
                         ?>
-                        <div class="clickable-card bg-gradient-to-br from-blue-50 to-blue-100 border-4 border-blue-500 p-6 rounded-2xl shadow-2xl hover:shadow-blue-300/60 transition-all duration-300 transform hover:-translate-y-2" onclick="toggleDetails('rt-kadus-<?php echo $idx+4; ?>', '<?php echo $dusun; ?>', this, 'blue')">
+                        <div class="clickable-card bg-gradient-to-br from-blue-50 to-blue-100 border-4 border-blue-500 p-6 rounded-2xl shadow-2xl hover:shadow-blue-300/60 transition-all duration-300 transform hover:-translate-y-2 text-center" onclick="toggleDetails('rt-kadus-<?php echo $idx+4; ?>', '<?php echo $dusun; ?>', this, 'blue')">
                             <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-blue-600 shadow-md">
-                                <img src="<?php echo $foto_kadus; ?>" alt="Kepala Dusun <?php echo $dusun; ?>" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=3b82f6&color=fff&bold=true';">
+                                <img src="<?php echo $foto_kadus; ?>?v=<?php echo time(); ?>" alt="Kepala Dusun <?php echo $dusun; ?>" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=3b82f6&color=fff&bold=true';">
                             </div>
                             <h4 class="font-bold text-lg text-blue-900 mb-1"><?php echo strtoupper($nama_kadus); ?></h4>
                             <p class="text-blue-700 font-bold text-sm mb-2">KEPALA DUSUN <?php echo $dusun; ?></p>
@@ -692,9 +766,9 @@ if ($result_perangkat) {
                             $foto_kadus = $kadus && $kadus['foto'] ? 'assets/img/perangkat/'.$kadus['foto'] : 'assets/img/perangkat/kadus-'.($idx+7).'.jpeg';
                             $nama_avatar = urlencode($nama_kadus);
                         ?>
-                        <div class="clickable-card bg-gradient-to-br from-purple-50 to-purple-100 border-4 border-purple-500 p-6 rounded-2xl shadow-2xl hover:shadow-purple-300/60 transition-all duration-300 transform hover:-translate-y-2" onclick="toggleDetails('rt-kadus-<?php echo $idx+7; ?>', '<?php echo $dusun; ?>', this, 'purple')">
+                        <div class="clickable-card bg-gradient-to-br from-purple-50 to-purple-100 border-4 border-purple-500 p-6 rounded-2xl shadow-2xl hover:shadow-purple-300/60 transition-all duration-300 transform hover:-translate-y-2 text-center" onclick="toggleDetails('rt-kadus-<?php echo $idx+7; ?>', '<?php echo $dusun; ?>', this, 'purple')">
                             <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-purple-600 shadow-md">
-                                <img src="<?php echo $foto_kadus; ?>" alt="Kepala Dusun <?php echo $dusun; ?>" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=a855f7&color=fff&bold=true';">
+                                <img src="<?php echo $foto_kadus; ?>?v=<?php echo time(); ?>" alt="Kepala Dusun <?php echo $dusun; ?>" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=a855f7&color=fff&bold=true';">
                             </div>
                             <h4 class="font-bold text-lg text-purple-900 mb-1"><?php echo strtoupper($nama_kadus); ?></h4>
                             <p class="text-purple-700 font-bold text-sm mb-2">KEPALA DUSUN <?php echo $dusun; ?></p>
@@ -718,9 +792,9 @@ if ($result_perangkat) {
                             $foto_kadus = $kadus && $kadus['foto'] ? 'assets/img/perangkat/'.$kadus['foto'] : 'assets/img/perangkat/kadus-'.($idx+10).'.jpeg';
                             $nama_avatar = urlencode($nama_kadus);
                         ?>
-                        <div class="clickable-card bg-gradient-to-br from-orange-50 to-orange-100 border-4 border-orange-500 p-6 rounded-2xl shadow-2xl hover:shadow-orange-300/60 transition-all duration-300 transform hover:-translate-y-2" onclick="toggleDetails('rt-kadus-<?php echo $idx+10; ?>', '<?php echo $dusun; ?>', this, 'orange')">
+                        <div class="clickable-card bg-gradient-to-br from-orange-50 to-orange-100 border-4 border-orange-500 p-6 rounded-2xl shadow-2xl hover:shadow-orange-300/60 transition-all duration-300 transform hover:-translate-y-2 text-center" onclick="toggleDetails('rt-kadus-<?php echo $idx+10; ?>', '<?php echo $dusun; ?>', this, 'orange')">
                             <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 overflow-hidden border-4 border-orange-600 shadow-md">
-                                <img src="<?php echo $foto_kadus; ?>" alt="Kepala Dusun <?php echo $dusun; ?>" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=f97316&color=fff&bold=true';">
+                                <img src="<?php echo $foto_kadus; ?>?v=<?php echo time(); ?>" alt="Kepala Dusun <?php echo $dusun; ?>" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?php echo $nama_avatar; ?>&size=200&background=f97316&color=fff&bold=true';">
                             </div>
                             <h4 class="font-bold text-lg text-orange-900 mb-1"><?php echo strtoupper($nama_kadus); ?></h4>
                             <p class="text-orange-700 font-bold text-sm mb-2">KEPALA DUSUN <?php echo $dusun; ?></p>
@@ -827,6 +901,27 @@ window.addEventListener('load', () => {
 function toggleDetails(id, dusun, element, colorScheme) {
     const gridContainer = element.closest('.grid, .max-w-6xl');
     const detailList = document.getElementById(id);
+    
+    // Close all other detail lists first
+    const allDetailLists = document.querySelectorAll('.detail-list');
+    const allCards = document.querySelectorAll('.clickable-card');
+    
+    allDetailLists.forEach(list => {
+        if (list.id !== id) {
+            list.classList.remove('show');
+            setTimeout(() => {
+                if (list.parentNode && !list.classList.contains('show')) {
+                    list.remove();
+                }
+            }, 500);
+        }
+    });
+    
+    allCards.forEach(card => {
+        if (card !== element) {
+            card.classList.remove('active');
+        }
+    });
     
     // Toggle if already exists
     if (detailList) {

@@ -32,10 +32,33 @@ $kontak = mysqli_fetch_assoc($q_kontak);
         <!-- Alert Notifikasi -->
         <?php if(isset($_GET['status'])): ?>
             <?php if($_GET['status'] == 'success'): ?>
-                <div class="max-w-6xl mx-auto mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
-                    <div class="flex items-center">
-                        <i class="bi bi-check-circle-fill text-green-500 text-xl mr-3"></i>
-                        <p class="text-green-700 font-medium">Pengaduan Anda berhasil dikirim! Kami akan menindaklanjuti segera.</p>
+                <div class="max-w-6xl mx-auto mb-6 bg-green-50 border-l-4 border-green-500 p-6 rounded-lg shadow-md">
+                    <div class="flex items-start">
+                        <i class="bi bi-check-circle-fill text-green-500 text-3xl mr-4 mt-1"></i>
+                        <div class="flex-1">
+                            <h3 class="text-green-800 font-bold text-lg mb-2">Pengaduan Berhasil Dikirim!</h3>
+                            <p class="text-green-700 mb-3">Pengaduan Anda telah kami terima dan akan segera ditindaklanjuti oleh petugas desa.</p>
+                            <?php if(isset($_GET['id'])): ?>
+                                <div class="bg-white border-2 border-green-200 rounded-lg p-4 mb-3">
+                                    <div class="text-sm text-gray-600 mb-1">Nomor ID Pengaduan Anda:</div>
+                                    <div class="flex items-center gap-3">
+                                        <div class="text-3xl font-bold text-green-600">#<?= htmlspecialchars($_GET['id']) ?></div>
+                                        <button onclick="copyToClipboard('<?= htmlspecialchars($_GET['id']) ?>')" 
+                                                class="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors text-sm font-semibold">
+                                            <i class="bi bi-clipboard me-1"></i>Salin ID
+                                        </button>
+                                    </div>
+                                    <p class="text-xs text-gray-600 mt-2">
+                                        <i class="bi bi-info-circle me-1"></i>Simpan nomor ID ini untuk melacak status pengaduan Anda
+                                    </p>
+                                </div>
+                                <a href="cek-pengaduan.php?id=<?= htmlspecialchars($_GET['id']) ?>&cek=1" 
+                                   class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold">
+                                    <i class="bi bi-search"></i>
+                                    Cek Status Pengaduan
+                                </a>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
             <?php elseif($_GET['status'] == 'error'): ?>
@@ -171,5 +194,15 @@ $kontak = mysqli_fetch_assoc($q_kontak);
         </div>
     </div>
 </div>
+
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        alert('ID Pengaduan #' + text + ' berhasil disalin!');
+    }, function(err) {
+        console.error('Gagal menyalin:', err);
+    });
+}
+</script>
 
 <?php require 'includes/footer.php'; ?>

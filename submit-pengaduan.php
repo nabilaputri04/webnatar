@@ -13,7 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               VALUES ('$nama', '$email', '$telepon', '$judul', '$isi_pengaduan', '$kategori')";
     
     if (mysqli_query($conn, $query)) {
-        header("Location: kontak.php?status=success");
+        $pengaduan_id = mysqli_insert_id($conn);
+        header("Location: kontak.php?status=success&id=" . $pengaduan_id);
         exit;
     } else {
         header("Location: kontak.php?status=error");

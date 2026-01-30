@@ -124,6 +124,17 @@ if (!$result) {
             background: rgba(239, 68, 68, 0.1);
         }
         .main-content { margin-left: 280px; padding: 40px; }
+        
+        /* Fix modal z-index and backdrop */
+        .modal {
+            z-index: 1055 !important;
+        }
+        .modal-backdrop {
+            z-index: 1050 !important;
+        }
+        .modal-dialog {
+            z-index: 1060 !important;
+        }
     </style>
 </head>
 <body>
@@ -137,6 +148,7 @@ if (!$result) {
         <li><a href="manage-berita.php"><i class="bi bi-journal-text"></i> Kelola Berita</a></li>
         <li><a href="manage-apbdesa.php"><i class="bi bi-cash-stack"></i> APB Desa</a></li>
         <li><a href="manage-potensi.php"><i class="bi bi-map"></i> Potensi Desa</a></li>
+        <li><a href="manage-sarana.php"><i class="bi bi-building"></i> Sarana & Prasarana</a></li>
         <li><a href="manage-pengaduan.php" class="active"><i class="bi bi-megaphone-fill"></i> Pengaduan</a></li>
         <li><a href="manage-kontak.php"><i class="bi bi-telephone"></i> Kontak</a></li>
     </ul>
@@ -321,89 +333,6 @@ if (!$result) {
                                         </button>
                                     </td>
                                 </tr>
-
-                                <!-- Detail Modal -->
-                                <div class="modal fade" id="detailModal<?= $row['id'] ?>" tabindex="-1">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-primary text-white">
-                                                <h5 class="modal-title">
-                                                    <i class="bi bi-file-text me-2"></i>Detail Pengaduan #<?= $row['id'] ?>
-                                                </h5>
-                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                            </div>
-                                            <form method="POST">
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                                    
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-6">
-                                                            <strong>Nama:</strong><br>
-                                                            <?= htmlspecialchars($row['nama']) ?>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <strong>Tanggal:</strong><br>
-                                                            <?= date('d F Y, H:i', strtotime($row['tanggal_dibuat'])) ?>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-6">
-                                                            <strong>Email:</strong><br>
-                                                            <?= $row['email'] ?: '-' ?>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <strong>Telepon:</strong><br>
-                                                            <?= $row['telepon'] ?: '-' ?>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <strong>Kategori:</strong>
-                                                        <span class="badge bg-secondary ms-2"><?= $row['kategori'] ?></span>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <strong>Judul:</strong><br>
-                                                        <div class="alert alert-light mb-0 mt-2">
-                                                            <?= htmlspecialchars($row['judul']) ?>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <strong>Isi Pengaduan:</strong><br>
-                                                        <div class="alert alert-light mb-0 mt-2">
-                                                            <?= nl2br(htmlspecialchars($row['isi_pengaduan'])) ?>
-                                                        </div>
-                                                    </div>
-
-                                                    <hr>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-bold">Status Pengaduan</label>
-                                                        <select name="status" class="form-select" required>
-                                                            <option value="Baru" <?= $row['status'] == 'Baru' ? 'selected' : '' ?>>Baru</option>
-                                                            <option value="Diproses" <?= $row['status'] == 'Diproses' ? 'selected' : '' ?>>Diproses</option>
-                                                            <option value="Selesai" <?= $row['status'] == 'Selesai' ? 'selected' : '' ?>>Selesai</option>
-                                                            <option value="Ditolak" <?= $row['status'] == 'Ditolak' ? 'selected' : '' ?>>Ditolak</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-bold">Tanggapan/Keterangan</label>
-                                                        <textarea name="tanggapan" class="form-control" rows="4" placeholder="Berikan tanggapan atau keterangan terkait pengaduan ini..."><?= htmlspecialchars($row['tanggapan']) ?></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                                                    <button type="submit" name="update_status" class="btn btn-primary">
-                                                        <i class="bi bi-check-circle me-1"></i>Update Status
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
                             <?php endwhile; ?>
                         <?php else: ?>
                             <tr>
@@ -418,6 +347,99 @@ if (!$result) {
             </div>
         </div>
     </div>
+
+    <!-- Modal Details - Moved Outside Table -->
+    <?php 
+    if ($result && mysqli_num_rows($result) > 0) {
+        // Reset result pointer
+        mysqli_data_seek($result, 0);
+        while($row = mysqli_fetch_assoc($result)): 
+    ?>
+    <div class="modal fade" id="detailModal<?= $row['id'] ?>" tabindex="-1" aria-labelledby="detailModalLabel<?= $row['id'] ?>" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="detailModalLabel<?= $row['id'] ?>">
+                        <i class="bi bi-file-text me-2"></i>Detail Pengaduan #<?= $row['id'] ?>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="manage-pengaduan.php">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Nama:</strong><br>
+                                <?= htmlspecialchars($row['nama']) ?>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Tanggal:</strong><br>
+                                <?= date('d F Y, H:i', strtotime($row['tanggal_dibuat'])) ?>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Email:</strong><br>
+                                <?= $row['email'] ?: '-' ?>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Telepon:</strong><br>
+                                <?= $row['telepon'] ?: '-' ?>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <strong>Kategori:</strong>
+                            <span class="badge bg-secondary ms-2"><?= $row['kategori'] ?></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <strong>Judul:</strong><br>
+                            <div class="alert alert-light mb-0 mt-2">
+                                <?= htmlspecialchars($row['judul']) ?>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <strong>Isi Pengaduan:</strong><br>
+                            <div class="alert alert-light mb-0 mt-2">
+                                <?= nl2br(htmlspecialchars($row['isi_pengaduan'])) ?>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Status Pengaduan</label>
+                            <select name="status" class="form-select" required>
+                                <option value="Baru" <?= $row['status'] == 'Baru' ? 'selected' : '' ?>>Baru</option>
+                                <option value="Diproses" <?= $row['status'] == 'Diproses' ? 'selected' : '' ?>>Diproses</option>
+                                <option value="Selesai" <?= $row['status'] == 'Selesai' ? 'selected' : '' ?>>Selesai</option>
+                                <option value="Ditolak" <?= $row['status'] == 'Ditolak' ? 'selected' : '' ?>>Ditolak</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Tanggapan/Keterangan</label>
+                            <textarea name="tanggapan" class="form-control" rows="4" placeholder="Berikan tanggapan atau keterangan terkait pengaduan ini..."><?= htmlspecialchars($row['tanggapan']) ?></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" name="update_status" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-1"></i>Update Status
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php 
+        endwhile; 
+    } // End if result check
+    ?>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

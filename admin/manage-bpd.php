@@ -3,7 +3,18 @@ require 'auth_check.php';
 require '../config/db.php';
 
 $success = ""; $error = "";
+
+// Cek success dari redirect
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    $success = "✅ Data berhasil disimpan!";
+}
+
 $jabatan_opts = ['Ketua BPD','Wakil Ketua','Sekretaris','Anggota'];
+
+// Debug error
+if (isset($_GET['error'])) {
+    $error = "❌ " . urldecode($_GET['error']);
+}
 
 // delete
 if (isset($_GET['hapus'])) {
@@ -23,23 +34,50 @@ if (isset($_GET['edit'])) {
 // save
 if (isset($_POST['simpan'])) {
     $id_edit = (int)($_POST['id'] ?? 0);
-    $nama = mysqli_real_escape_string($conn, $_POST['nama']);
-    $jabatan = mysqli_real_escape_string($conn, $_POST['jabatan']);
-    $foto = mysqli_real_escape_string($conn, $_POST['foto']);
+    $nama = trim($_POST['nama'] ?? '');
+    $jabatan = trim($_POST['jabatan'] ?? '');
+    $foto = trim($_POST['foto'] ?? '');
     $urutan = (int)($_POST['urutan'] ?? 0);
 
-    if ($nama === '' || !in_array($jabatan, $jabatan_opts, true)) {
-        $error = "Nama dan jabatan wajib diisi.";
-    } else {
-        if ($id_edit > 0) {
-            $sql = "UPDATE bpd SET nama='{$nama}', jabatan='{$jabatan}', foto='{$foto}', urutan={$urutan} WHERE id={$id_edit}";
-            if (mysqli_query($conn, $sql)) $success = "Data BPD diperbarui."; else $error = mysqli_error($conn);
+    if (empty($nama)) {
+        header('Location: manage-bpd.php?error=' . urlencode('Nama wajib diisi') . '&edit=' . $id_edit);
+        exit;
+    } elseif (empty($jabatan)) {
+        header('Location: manage-bpd.php?error=' . urlencode('Jabatan wajib dipilih') . '&edit=' . $id_edit);
+        exit;
+    } elseif (!in_array($jabatan, $jabatan_opts, true)) {
+        header('Location: manage-bpd.php?error=' . urlencode('Jabatan tidak valid: ' . $jabatan) . '&edit=' . $id_edit);
+        exit;
+    }
+    
+    // Escape untuk SQL
+    $nama_esc = mysqli_real_escape_string($conn, $nama);
+    $jabatan_esc = mysqli_real_escape_string($conn, $jabatan);
+    $foto_esc = mysqli_real_escape_string($conn, $foto);
+    
+    if ($id_edit > 0) {
+        // UPDATE
+        $sql = "UPDATE bpd SET nama='$nama_esc', jabatan='$jabatan_esc', foto='$foto_esc', urutan=$urutan WHERE id=$id_edit";
+        
+        if (mysqli_query($conn, $sql)) {
+            header('Location: manage-bpd.php?success=1&t=' . time());
+            exit;
         } else {
-            $sql = "INSERT INTO bpd (nama, jabatan, foto, urutan) VALUES ('{$nama}','{$jabatan}','{$foto}',{$urutan})";
-            if (mysqli_query($conn, $sql)) $success = "Anggota BPD ditambahkan."; else $error = mysqli_error($conn);
+            header('Location: manage-bpd.php?error=' . urlencode('Error SQL: ' . mysqli_error($conn)) . '&edit=' . $id_edit);
+            exit;
+        }
+    } else {
+        // INSERT
+        $sql = "INSERT INTO bpd (nama, jabatan, foto, urutan) VALUES ('$nama_esc','$jabatan_esc','$foto_esc',$urutan)";
+        
+        if (mysqli_query($conn, $sql)) {
+            header('Location: manage-bpd.php?success=1&t=' . time());
+            exit;
+        } else {
+            header('Location: manage-bpd.php?error=' . urlencode('Error SQL: ' . mysqli_error($conn)));
+            exit;
         }
     }
-    header('Location: manage-bpd.php'); exit;
 }
 
 $list = mysqli_query($conn, "SELECT * FROM bpd ORDER BY urutan ASC, id ASC");
@@ -72,6 +110,8 @@ body { background:#f8fafc; }
         <a href="manage-berita.php"><i class="bi bi-journal-text me-2"></i>Kelola Berita</a>
         <a href="manage-apbdesa.php"><i class="bi bi-cash-stack me-2"></i>APB Desa</a>
         <a href="manage-potensi.php"><i class="bi bi-map me-2"></i>Potensi Desa</a>
+        <a href="manage-sarana.php"><i class="bi bi-building me-2"></i>Sarana & Prasarana</a>
+        <a href="manage-pengaduan.php"><i class="bi bi-megaphone-fill me-2"></i>Pengaduan</a>
         <a href="manage-kontak.php"><i class="bi bi-telephone me-2"></i>Kontak</a>
     </div>
     <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid #334155;">
@@ -88,8 +128,18 @@ body { background:#f8fafc; }
         <a class="btn btn-outline-secondary" href="../struktur-organisasi.php" target="_blank">Lihat Halaman Publik</a>
     </div>
 
-    <?php if ($success): ?><div class="alert alert-success"><?php echo $success; ?></div><?php endif; ?>
-    <?php if ($error): ?><div class="alert alert-danger"><?php echo $error; ?></div><?php endif; ?>
+    <?php if ($success): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i><?php echo $success; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php endif; ?>
+    <?php if ($error): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i><?php echo $error; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php endif; ?>
 
     <div class="row g-4">
         <div class="col-lg-5">
@@ -165,5 +215,6 @@ body { background:#f8fafc; }
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
