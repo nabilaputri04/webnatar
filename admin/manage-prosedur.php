@@ -232,13 +232,7 @@ $data_layanan = mysqli_query($conn, "SELECT * FROM layanan ORDER BY nama_layanan
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
-    if(toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-    }
+    // Script toggle sidebar universal sudah ada di admin-styles.php
 
     let editorSyarat, editorProsedur;
     ClassicEditor.create(document.querySelector('#editor_syarat'), { toolbar: [ 'bold', 'italic', 'bulletedList', 'numberedList', 'link', 'undo', 'redo' ] }).then(editor => { editorSyarat = editor; });

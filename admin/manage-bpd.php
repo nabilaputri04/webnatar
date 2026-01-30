@@ -90,36 +90,32 @@ $list = mysqli_query($conn, "SELECT * FROM bpd ORDER BY urutan ASC, id ASC");
 <title>Kelola BPD</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-<style>
-body { background:#f8fafc; }
-.sidebar { width:260px; background:#0f172a; min-height:100vh; position:fixed; color:#e2e8f0; padding:24px 18px; display: flex; flex-direction: column; }
-.sidebar a { color:#cbd5e1; text-decoration:none; display:block; padding:10px 12px; border-radius:10px; margin-bottom:6px; }
-.sidebar a.active, .sidebar a:hover { background:#0ea5e9; color:#fff; }
-.content { margin-left:280px; padding:28px; }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<?php include 'admin-styles.php'; ?>
 </head>
 <body>
 <div class="sidebar">
-    <h4 class="fw-bold mb-3 text-white">Admin Desa</h4>
-    <div style="flex: 1; overflow-y: auto;">
-        <a href="index.php"><i class="bi bi-house-door me-2"></i>Dashboard</a>
-        <a href="manage-struktur.php"><i class="bi bi-people me-2"></i>Perangkat Desa</a>
-        <a href="manage-bpd.php" class="active" style="padding-left: 30px; font-size: 0.9em;"><i class="bi bi-dot me-2"></i>BPD</a>
-        <a href="manage-lpmd.php" style="padding-left: 30px; font-size: 0.9em;"><i class="bi bi-dot me-2"></i>LPMD</a>
-        <a href="manage-rt.php" style="padding-left: 30px; font-size: 0.9em;"><i class="bi bi-dot me-2"></i>RT</a>
-        <a href="manage-berita.php"><i class="bi bi-journal-text me-2"></i>Kelola Berita</a>
-        <a href="manage-apbdesa.php"><i class="bi bi-cash-stack me-2"></i>APB Desa</a>
-        <a href="manage-potensi.php"><i class="bi bi-map me-2"></i>Potensi Desa</a>
-        <a href="manage-sarana.php"><i class="bi bi-building me-2"></i>Sarana & Prasarana</a>
-        <a href="manage-pengaduan.php"><i class="bi bi-megaphone-fill me-2"></i>Pengaduan</a>
-        <a href="manage-kontak.php"><i class="bi bi-telephone me-2"></i>Kontak</a>
-    </div>
-    <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid #334155;">
-        <a href="logout.php" class="text-danger"><i class="bi bi-box-arrow-right me-2"></i>Keluar</a>
+    <div class="sidebar-brand"><i class="bi bi-geo-alt-fill"></i> Desa Natar</div>
+    <ul class="sidebar-menu">
+        <li><a href="index.php"><i class="bi bi-house-door"></i> <span>Dashboard</span></a></li>
+        <li><a href="manage-profil.php"><i class="bi bi-house-door"></i> <span>Profil Desa</span></a></li>
+        <li><a href="manage-struktur.php"><i class="bi bi-people"></i> <span>Perangkat Desa</span></a></li>
+        <li><a href="manage-bpd.php" class="active"><i class="bi bi-people-fill"></i> <span>BPD</span></a></li>
+        <li><a href="manage-lpmd.php"><i class="bi bi-diagram-3"></i> <span>LPMD</span></a></li>
+        <li><a href="manage-rt.php"><i class="bi bi-house"></i> <span>RT</span></a></li>
+        <li><a href="manage-berita.php"><i class="bi bi-journal-text"></i> <span>Kelola Berita</span></a></li>
+        <li><a href="manage-apbdesa.php"><i class="bi bi-cash-stack"></i> <span>APB Desa</span></a></li>
+        <li><a href="manage-potensi.php"><i class="bi bi-map"></i> <span>Potensi Desa</span></a></li>
+        <li><a href="manage-sarana.php"><i class="bi bi-building"></i> <span>Sarana & Prasarana</span></a></li>
+        <li><a href="manage-pengaduan.php"><i class="bi bi-megaphone-fill"></i> <span>Pengaduan</span></a></li>
+        <li><a href="manage-kontak.php"><i class="bi bi-telephone"></i> <span>Kontak</span></a></li>
+    </ul>
+    <div class="logout-section">
+        <a href="logout.php"><i class="bi bi-box-arrow-right"></i> <span>Keluar</span></a>
     </div>
 </div>
 
-<div class="content">
+<main class="main-content">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h3 class="mb-1">Kelola BPD</h3>

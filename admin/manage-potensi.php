@@ -245,13 +245,7 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
-    if(toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-    }
+    // Script toggle sidebar universal sudah ada di admin-styles.php
 
     let editorInstance;
     ClassicEditor.create(document.querySelector('#editor'), {

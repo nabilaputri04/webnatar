@@ -300,13 +300,7 @@ $data_apb = mysqli_query($conn, "SELECT * FROM apb_desa ORDER BY tahun DESC, jen
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
-    if(toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-    }
+    // Script toggle sidebar universal sudah ada di admin-styles.php
 
     // Fungsi format angka dengan pemisah ribuan dan desimal
     function formatRupiah(angka, prefix = '') {

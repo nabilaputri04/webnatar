@@ -1,10 +1,9 @@
 <?php
 // Pengaturan Database
 $host = "localhost";
-$user = "root";      // Username default XAMPP
-$pass = "";          // Password default XAMPP (kosong)
-$db   = "db_natar2";
-$port = 3307;        // Port MySQL XAMPP (sesuai XAMPP Control Panel)
+$user = "u855675680_useruntuknatar";      // Username default XAMPP
+$pass = "Desanatarmaju123";          // Password default XAMPP (kosong)
+$db   = "u855675680_db_natar2";
 
 // Nonaktifkan error reporting untuk mysqli
 mysqli_report(MYSQLI_REPORT_OFF);

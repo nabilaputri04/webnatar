@@ -52,6 +52,8 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
             display: flex;
             flex-direction: column;
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .sidebar-brand { 
             color: var(--active-blue); 
@@ -104,6 +106,7 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.2) 100%);
             flex-shrink: 0;
+            z-index: 9999;
         }
         .logout-section a {
             display: flex;
@@ -127,6 +130,8 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
             padding: 40px;
             position: relative;
             min-height: 100vh;
+            z-index: 1;
+            width: calc(100% - 280px);
         }
         /* Animated Background Decorations */
         .main-content::before {
@@ -186,6 +191,153 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
         .bg-gradient-warning {
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
         }
+        
+        /* ========== RESPONSIVE DESIGN FOR MOBILE ========== */
+        /* Mobile Menu Toggle Button */
+        .mobile-menu-toggle {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 10000;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s;
+        }
+        .mobile-menu-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+        }
+        .mobile-menu-toggle i {
+            font-size: 1.5rem;
+        }
+        
+        /* Overlay untuk mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            -webkit-backdrop-filter: blur(2px);
+            backdrop-filter: blur(2px);
+        }
+        .sidebar-overlay.active {
+            opacity: 1;
+        }
+        
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        @media (max-width: 992px) {
+            /* Hide sidebar by default on mobile */
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+                box-shadow: 6px 0 30px rgba(0, 0, 0, 0.3);
+            }
+            
+            /* Show mobile menu toggle */
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            .sidebar-overlay.active {
+                display: block;
+            }
+            
+            /* Adjust main content */
+            .main-content {
+                margin-left: 0 !important;
+                padding: 85px 20px 20px 20px !important;
+                width: 100% !important;
+            }
+            
+            /* Adjust logout section */
+            .logout-section {
+                width: 280px;
+            }
+            
+            /* Hide "Lihat Website" button text on mobile */
+            .btn-outline-primary .d-none-mobile {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            /* Further adjustments for smaller phones */
+            .main-content {
+                padding: 75px 16px 16px 16px !important;
+            }
+            
+            h2.fw-bold, h1 {
+                font-size: 1.35rem !important;
+            }
+            
+            .display-4 {
+                font-size: 1.75rem !important;
+            }
+            
+            .btn {
+                min-height: 44px;
+                padding: 0.625rem 1rem !important;
+            }
+            
+            /* Stack action buttons */
+            .d-flex.justify-content-between {
+                flex-direction: column !important;
+                gap: 1rem;
+            }
+            
+            .btn-outline-primary {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            /* Extra small devices */
+            .mobile-menu-toggle {
+                width: 44px;
+                height: 44px;
+                top: 12px;
+                left: 12px;
+            }
+            
+            .main-content {
+                padding: 68px 12px 12px 12px !important;
+            }
+            
+            h2.fw-bold, h1 {
+                font-size: 1.25rem !important;
+            }
+            
+            .display-4 {
+                font-size: 1.5rem !important;
+            }
+            
+            .card-body {
+                padding: 1rem !important;
+            }
+            
+            .small {
+                font-size: 0.75rem !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -210,7 +362,7 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
 
 <main class="main-content">
     <div class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
             <div>
                 <div class="d-inline-block mb-3">
                     <span class="badge rounded-pill px-4 py-2" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); font-size: 0.85rem; font-weight: 600;">
@@ -346,5 +498,86 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Mobile Menu Toggle Script
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.sidebar');
+    
+    // Check if sidebar exists
+    if (!sidebar) return;
+    
+    // Create overlay element
+    const overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+    
+    // Create mobile menu toggle button
+    const toggleBtn = document.createElement('button');
+    toggleBtn.className = 'mobile-menu-toggle';
+    toggleBtn.innerHTML = '<i class="bi bi-list"></i>';
+    document.body.appendChild(toggleBtn);
+    
+    let isAnimating = false;
+    
+    // Toggle sidebar
+    function toggleSidebar(e) {
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        if (e) e.stopPropagation();
+        
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        
+        const icon = toggleBtn.querySelector('i');
+        if (sidebar.classList.contains('active')) {
+            icon.className = 'bi bi-x-lg';
+        } else {
+            icon.className = 'bi bi-list';
+        }
+        
+        setTimeout(() => {
+            isAnimating = false;
+        }, 300);
+    }
+    
+    // Event listeners
+    toggleBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleSidebar(e);
+    });
+    
+    overlay.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (sidebar.classList.contains('active')) {
+            toggleSidebar(e);
+        }
+    });
+    
+    // Prevent sidebar clicks from closing
+    sidebar.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+    
+    // Close sidebar when clicking a menu item on mobile
+    const menuLinks = document.querySelectorAll('.sidebar-menu a, .logout-section a');
+    menuLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (window.innerWidth <= 992 && sidebar.classList.contains('active')) {
+                setTimeout(() => toggleSidebar(), 150);
+            }
+        });
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 992) {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            toggleBtn.querySelector('i').className = 'bi bi-list';
+        }
+    });
+});
+</script>
 </body>
 </html>
