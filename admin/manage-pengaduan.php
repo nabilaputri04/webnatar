@@ -52,6 +52,9 @@ if (!$result) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Kelola Pengaduan - Desa Natar</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -127,13 +130,25 @@ if (!$result) {
         
         /* Fix modal z-index and backdrop */
         .modal {
-            z-index: 1055 !important;
+            z-index: 10001 !important;
+            pointer-events: none !important;
         }
         .modal-backdrop {
-            z-index: 1050 !important;
+            z-index: 10000 !important;
+            pointer-events: none !important;
         }
         .modal-dialog {
-            z-index: 1060 !important;
+            z-index: 10002 !important;
+            position: relative;
+            pointer-events: auto !important;
+        }
+        .modal-content {
+            z-index: 10003 !important;
+            pointer-events: auto !important;
+        }
+        .modal-body,
+        .modal-body * {
+            pointer-events: auto !important;
         }
     </style>
 </head>

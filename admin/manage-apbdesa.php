@@ -61,6 +61,9 @@ $data_apb = mysqli_query($conn, "SELECT * FROM apb_desa ORDER BY tahun DESC, jen
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Manajemen APB Desa - Desa Natar</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -172,7 +175,7 @@ $data_apb = mysqli_query($conn, "SELECT * FROM apb_desa ORDER BY tahun DESC, jen
     </nav>
 
         <main class="main-content w-100">
-        <div class="mb-5">
+        <div class="mb-4">
             <h2 class="fw-bold mb-2" style="font-size: 2rem;">Manajemen Transparansi APB Desa</h2>
             <p class="text-muted mb-0">Kelola dan publikasikan data anggaran desa untuk transparansi keuangan</p>
         </div>

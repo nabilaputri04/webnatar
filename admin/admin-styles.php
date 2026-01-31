@@ -1,3 +1,10 @@
+<?php
+// Prevent caching untuk memastikan style selalu update
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+header("Content-Type: text/css");
+?>
 <style>
     :root { 
         --sidebar-bg: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); 
