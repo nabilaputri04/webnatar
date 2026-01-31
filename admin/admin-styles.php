@@ -16,7 +16,14 @@
         background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%); 
         margin: 0; 
         overflow-x: hidden;
+        overflow-y: auto;
         position: relative;
+        min-height: 100vh;
+    }
+    
+    body.modal-open {
+        overflow-y: auto !important;
+        padding-right: 0 !important;
     }
     
     /* Animated Background Blobs */
@@ -196,6 +203,8 @@
         min-height: 100vh;
         z-index: 1;
         width: calc(100% - var(--sidebar-width));
+        overflow-y: auto;
+        max-height: 100vh;
     }
     
     /* Konsistensi heading utama di halaman admin */
@@ -310,9 +319,13 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         background: white;
         overflow-x: auto;
+        overflow-y: auto;
+        max-height: 70vh;
         -webkit-overflow-scrolling: touch;
+        position: relative;
     }
     .table-responsive::-webkit-scrollbar {
+        width: 8px;
         height: 8px;
     }
     .table-responsive::-webkit-scrollbar-track {
@@ -343,17 +356,25 @@
         border: none;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
         position: relative;
-        z-index: 10002;
+        z-index: 10003 !important;
+        pointer-events: auto !important;
     }
     .modal-backdrop {
         z-index: 10000 !important;
+        pointer-events: none !important;
     }
     .modal {
         z-index: 10001 !important;
+        pointer-events: none !important;
     }
     .modal-dialog {
-        z-index: 10002;
+        z-index: 10002 !important;
         position: relative;
+        pointer-events: auto !important;
+    }
+    .modal-body,
+    .modal-body * {
+        pointer-events: auto !important;
     }
     .modal-header {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);

@@ -171,10 +171,10 @@ $data_apb = mysqli_query($conn, "SELECT * FROM apb_desa ORDER BY tahun DESC, jen
         </div>
     </nav>
 
-    <main class="main-content w-100">
-        <div class="mb-4 page-header-lift">
-            <h3 class="fw-bold mb-1">Manajemen Transparansi APB Desa</h3>
-            <p class="text-muted">Kelola dan publikasikan data anggaran desa untuk transparansi keuangan</p>
+        <main class="main-content w-100">
+        <div class="mb-5">
+            <h2 class="fw-bold mb-2" style="font-size: 2rem;">Manajemen Transparansi APB Desa</h2>
+            <p class="text-muted mb-0">Kelola dan publikasikan data anggaran desa untuk transparansi keuangan</p>
         </div>
 
         <div class="d-flex justify-content-end mb-4">

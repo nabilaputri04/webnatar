@@ -114,10 +114,10 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
         </div>
     </nav>
 
-    <main class="main-content w-100">
-        <div class="mb-4 page-header-lift">
-            <h3 class="fw-bold mb-1">Potensi Desa</h3>
-            <p class="text-muted">Kelola informasi potensi wisata, ekonomi, dan budaya desa</p>
+            <main class="main-content w-100">
+        <div class="mb-5">
+            <h2 class="fw-bold mb-2" style="font-size: 2rem;">Potensi Desa</h2>
+            <p class="text-muted mb-0">Kelola informasi potensi wisata, ekonomi, dan budaya desa</p>
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-4">

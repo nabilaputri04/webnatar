@@ -12,6 +12,10 @@ $jml_rt = mysqli_num_rows(mysqli_query($conn, "SELECT id FROM rt"));
 $jml_perangkat = $jml_perangkat_desa + $jml_bpd + $jml_lpmd + $jml_rt;
 $jml_potensi = mysqli_num_rows(mysqli_query($conn, "SELECT id FROM potensi_desa"));
 
+// Hitung sarana & prasarana
+$q_sarana = mysqli_query($conn, "SELECT COUNT(*) as count FROM sarana_prasarana");
+$jml_sarana = $q_sarana ? mysqli_fetch_assoc($q_sarana)['count'] : 0;
+
 // Hitung statistik pengaduan
 $q_pengaduan = mysqli_query($conn, "SELECT COUNT(*) as count FROM pengaduan");
 $jml_pengaduan = $q_pengaduan ? mysqli_fetch_assoc($q_pengaduan)['count'] : 0;
@@ -380,7 +384,7 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
 
     <div class="row g-4 mb-4">
         <!-- Card 1 -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card border-0 shadow-lg h-100 rounded-4 overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
@@ -401,7 +405,7 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
             </div>
         </div>
         <!-- Card 2 -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card border-0 shadow-lg h-100 rounded-4 overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
@@ -422,7 +426,7 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
             </div>
         </div>
         <!-- Card 3 -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card border-0 shadow-lg h-100 rounded-4 overflow-hidden">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start">
@@ -438,6 +442,27 @@ $jml_pengaduan_baru = $q_pengaduan_baru ? mysqli_fetch_assoc($q_pengaduan_baru)[
                 <div class="px-4 pb-4">
                     <div class="progress" style="height: 6px; border-radius: 10px;">
                         <div class="progress-bar" role="progressbar" style="width: 100%; background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Card 4 - Sarana & Prasarana -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-lg h-100 rounded-4 overflow-hidden">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted small text-uppercase mb-2 fw-semibold" style="letter-spacing: 1px;">Sarana & Prasarana</p>
+                            <h1 class="fw-bold mb-0 display-4"><?= $jml_sarana; ?></h1>
+                        </div>
+                        <div class="p-4 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                            <i class="bi bi-building text-white" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-4 pb-4">
+                    <div class="progress" style="height: 6px; border-radius: 10px;">
+                        <div class="progress-bar" role="progressbar" style="width: 100%; background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>
