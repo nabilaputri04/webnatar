@@ -343,13 +343,17 @@
         border: none;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
         position: relative;
-        z-index: 1056;
+        z-index: 10002;
     }
     .modal-backdrop {
-        z-index: 1055;
+        z-index: 10000 !important;
     }
     .modal {
-        z-index: 1055;
+        z-index: 10001 !important;
+    }
+    .modal-dialog {
+        z-index: 10002;
+        position: relative;
     }
     .modal-header {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
