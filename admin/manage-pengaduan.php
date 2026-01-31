@@ -290,7 +290,9 @@ if (!$result) {
                                 <tr>
                                     <td><?= $no++ ?></td>
                                     <td>
-                                        <small><?= date('d/m/Y H:i', strtotime($row['tanggal_dibuat'])) ?></small>
+                                        <small class="realtime-date" data-timestamp="<?= strtotime($row['tanggal_dibuat']) ?>">
+                                            <?= date('d/m/Y H:i', strtotime($row['tanggal_dibuat'])) ?>
+                                        </small>
                                     </td>
                                     <td>
                                         <strong><?= htmlspecialchars($row['nama']) ?></strong>
@@ -375,7 +377,9 @@ if (!$result) {
                             </div>
                             <div class="col-md-6">
                                 <strong>Tanggal:</strong><br>
-                                <?= date('d F Y, H:i', strtotime($row['tanggal_dibuat'])) ?>
+                                <span class="realtime-date" data-timestamp="<?= strtotime($row['tanggal_dibuat']) ?>">
+                                    <?= date('d F Y, H:i', strtotime($row['tanggal_dibuat'])) ?>
+                                </span>
                             </div>
                         </div>
 
@@ -413,24 +417,45 @@ if (!$result) {
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Status Pengaduan</label>
-                            <select name="status" class="form-select" required>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge status-badge-display 
+                                    <?php
+                                    $badge_class = [
+                                        'Baru' => 'bg-warning text-dark',
+                                        'Diproses' => 'bg-info',
+                                        'Selesai' => 'bg-success',
+                                        'Ditolak' => 'bg-danger'
+                                    ];
+                                    echo $badge_class[$row['status']];
+                                    ?>" 
+                                    style="font-size: 1rem; padding: 0.5rem 1rem;">
+                                    <?= $row['status'] ?>
+                                </span>
+                            </div>
+                            
+                            <select name="status" class="form-select mt-3 status-select" data-current-status="<?= $row['status'] ?>" required>
                                 <option value="Baru" <?= $row['status'] == 'Baru' ? 'selected' : '' ?>>Baru</option>
                                 <option value="Diproses" <?= $row['status'] == 'Diproses' ? 'selected' : '' ?>>Diproses</option>
                                 <option value="Selesai" <?= $row['status'] == 'Selesai' ? 'selected' : '' ?>>Selesai</option>
                                 <option value="Ditolak" <?= $row['status'] == 'Ditolak' ? 'selected' : '' ?>>Ditolak</option>
                             </select>
+                            
+                            <button type="button" class="btn btn-primary mt-2 w-100 update-status-btn" data-id="<?= $row['id'] ?>">
+                                <i class="bi bi-check-circle me-1"></i>Update Status
+                            </button>
+                            
+                            <div class="alert alert-success mt-2 d-none status-update-success">
+                                <i class="bi bi-check-circle-fill me-1"></i>Status berhasil diperbarui!
+                            </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Tanggapan/Keterangan</label>
-                            <textarea name="tanggapan" class="form-control" rows="4" placeholder="Berikan tanggapan atau keterangan terkait pengaduan ini..."><?= htmlspecialchars($row['tanggapan']) ?></textarea>
+                            <textarea name="tanggapan" class="form-control tanggapan-textarea" rows="4" placeholder="Berikan tanggapan atau keterangan terkait pengaduan ini..."><?= htmlspecialchars($row['tanggapan']) ?></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <button type="submit" name="update_status" class="btn btn-primary">
-                            <i class="bi bi-check-circle me-1"></i>Update Status
-                        </button>
                     </div>
                 </form>
             </div>
@@ -443,5 +468,155 @@ if (!$result) {
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Realtime Date Update
+    function updateRealtimeDates() {
+        const dateElements = document.querySelectorAll('.realtime-date');
+        const now = new Date();
+        
+        dateElements.forEach(element => {
+            const timestamp = parseInt(element.getAttribute('data-timestamp')) * 1000;
+            const date = new Date(timestamp);
+            
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            let displayText = '';
+            const isTableCell = element.closest('td') !== null;
+            
+            if (diffMins < 1) {
+                displayText = 'Baru saja';
+            } else if (diffMins < 60) {
+                displayText = diffMins + (isTableCell ? ' mnt lalu' : ' menit yang lalu');
+            } else if (diffHours < 24) {
+                displayText = diffHours + (isTableCell ? ' jam lalu' : ' jam yang lalu');
+            } else if (diffDays < 7) {
+                displayText = diffDays + (isTableCell ? ' hari lalu' : ' hari yang lalu');
+            } else {
+                // Format normal untuk tanggal lebih dari 7 hari
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 
+                               'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'];
+                const monthsFull = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                               'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                const day = date.getDate();
+                const month = isTableCell ? months[date.getMonth()] : monthsFull[date.getMonth()];
+                const year = date.getFullYear();
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                
+                if (isTableCell) {
+                    displayText = `${day}/${month}/${year} ${hours}:${minutes}`;
+                } else {
+                    displayText = `${day} ${month} ${year}, ${hours}:${minutes}`;
+                }
+            }
+            
+            element.textContent = displayText;
+        });
+    }
+    
+    // Update setiap 30 detik
+    updateRealtimeDates();
+    setInterval(updateRealtimeDates, 30000);
+    
+    // Handle Status Update with AJAX
+    const updateButtons = document.querySelectorAll('.update-status-btn');
+    
+    updateButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const pengaduanId = this.getAttribute('data-id');
+            const modal = this.closest('.modal-content');
+            const statusSelect = modal.querySelector('.status-select');
+            const tanggapanTextarea = modal.querySelector('.tanggapan-textarea');
+            const statusBadge = modal.querySelector('.status-badge-display');
+            const successAlert = modal.querySelector('.status-update-success');
+            
+            const newStatus = statusSelect.value;
+            const tanggapan = tanggapanTextarea.value;
+            
+            // Disable button saat proses
+            this.disabled = true;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Memperbarui...';
+            
+            // Kirim AJAX request
+            const formData = new FormData();
+            formData.append('id', pengaduanId);
+            formData.append('status', newStatus);
+            formData.append('tanggapan', tanggapan);
+            
+            fetch('update-pengaduan-ajax.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update badge status
+                    const badgeClasses = {
+                        'Baru': 'bg-warning text-dark',
+                        'Diproses': 'bg-info',
+                        'Selesai': 'bg-success',
+                        'Ditolak': 'bg-danger'
+                    };
+                    
+                    statusBadge.className = 'badge status-badge-display ' + badgeClasses[newStatus];
+                    statusBadge.textContent = newStatus;
+                    
+                    // Tampilkan pesan sukses
+                    successAlert.classList.remove('d-none');
+                    setTimeout(() => {
+                        successAlert.classList.add('d-none');
+                    }, 3000);
+                    
+                    // Update status di tabel utama
+                    const tableRow = document.querySelector(`button[data-bs-target="#detailModal${pengaduanId}"]`).closest('tr');
+                    const statusCell = tableRow.querySelector('td:nth-child(6)');
+                    statusCell.innerHTML = `<span class="badge ${badgeClasses[newStatus]}">${newStatus}</span>`;
+                    
+                    // Update statistik
+                    updateStatistics();
+                    
+                } else {
+                    alert('Gagal memperbarui status: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat memperbarui status');
+            })
+            .finally(() => {
+                // Enable button kembali
+                this.disabled = false;
+                this.innerHTML = '<i class="bi bi-check-circle me-1"></i>Update Status';
+            });
+        });
+    });
+    
+    // Update statistics
+    function updateStatistics() {
+        // Hitung ulang statistik dari tabel
+        const rows = document.querySelectorAll('tbody tr');
+        let baru = 0, diproses = 0, selesai = 0;
+        
+        rows.forEach(row => {
+            const statusCell = row.querySelector('td:nth-child(6)');
+            if (statusCell) {
+                const statusText = statusCell.textContent.trim();
+                if (statusText === 'Baru') baru++;
+                else if (statusText === 'Diproses') diproses++;
+                else if (statusText === 'Selesai') selesai++;
+            }
+        });
+        
+        // Update cards
+        document.querySelector('.col-md-3:nth-child(2) h3').textContent = baru;
+        document.querySelector('.col-md-3:nth-child(3) h3').textContent = diproses;
+        document.querySelector('.col-md-3:nth-child(4) h3').textContent = selesai;
+    }
+});
+</script>
 </body>
 </html>
