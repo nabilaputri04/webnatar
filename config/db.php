@@ -16,7 +16,7 @@ if (!$conn) {
     $conn = null;
     error_log("WARNING: Database tidak terkoneksi - " . mysqli_connect_error());
 } else {
-    // Set charset ke utf8 agar karakter khusus tampil benar
-    mysqli_set_charset($conn, "utf8");
+    // Set charset ke utf8mb4 agar karakter khusus tampil benar dan mendukung emoji
+    mysqli_set_charset($conn, "utf8mb4");
 }
 ?>

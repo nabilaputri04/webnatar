@@ -75,7 +75,7 @@ if (isset($_POST['login'])) {
     </form>
 
     <div class="text-center mt-8 text-xs text-gray-400">
-        &copy; 2026 Desa Natar &bull; KKN Tematik Universitas Lampung
+        &copy; 2026 Desa Natar &bull; KKN Regular Universitas Lampung
     </div>
 </div>
 
