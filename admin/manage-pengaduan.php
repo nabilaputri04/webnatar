@@ -136,6 +136,7 @@ if (!$result) {
         .modal-backdrop {
             z-index: 10000 !important;
             pointer-events: none !important;
+            background-color: rgba(0, 0, 0, 0.5);
         }
         .modal-dialog {
             z-index: 10002 !important;
@@ -145,9 +146,21 @@ if (!$result) {
         .modal-content {
             z-index: 10003 !important;
             pointer-events: auto !important;
+            background: white;
         }
         .modal-body,
-        .modal-body * {
+        .modal-body *,
+        .modal-footer,
+        .modal-footer *,
+        .modal-header,
+        .modal-header * {
+            pointer-events: auto !important;
+        }
+        .form-control,
+        .form-select,
+        textarea,
+        button,
+        .btn {
             pointer-events: auto !important;
         }
     </style>

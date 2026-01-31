@@ -133,7 +133,7 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_berita ORDER BY nama_k
     <?php endif; ?>
 
     <div class="card border-0 shadow-sm">
-        <div class="table-responsive">
+        <div class="table-responsive" style="max-height: 70vh; overflow-y: auto;">
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                     <tr>

@@ -277,6 +277,7 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
         document.getElementById('modalTitle').innerText = "Tambah Potensi Desa";
         document.getElementById('btnSubmit').innerText = "Simpan Potensi Desa";
         document.getElementById('btnSubmit').name = "tambah_potensi";
+        document.getElementById('id_potensi').value = '';
         document.getElementById('formPotensi').reset();
         editorInstance.setData("");
         document.getElementById('foto_current').innerHTML = "";
