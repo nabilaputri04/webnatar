@@ -38,6 +38,10 @@ if (isset($_GET['cek']) && !empty($_GET['id'])) {
                 </div>
                 <h1 class="text-3xl font-bold text-gray-800 mb-2">Cek Status Pengaduan</h1>
                 <p class="text-gray-600">Masukkan nomor ID pengaduan untuk melihat status dan tanggapan</p>
+                <div class="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-gray-200">
+                    <i class="bi bi-clock text-emerald-600"></i>
+                    <span id="realtime-clock" class="font-semibold text-gray-700" style="font-family: 'Courier New', monospace;">--:--:-- WIB</span>
+                </div>
             </div>
 
             <!-- Form Pencarian -->
@@ -266,5 +270,24 @@ if (isset($_GET['cek']) && !empty($_GET['id'])) {
     </main>
 
     <?php include 'includes/footer.php'; ?>
+    
+    <script>
+    // Real-time Clock
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        
+        const clockElement = document.getElementById('realtime-clock');
+        if (clockElement) {
+            clockElement.textContent = `${hours}:${minutes}:${seconds} WIB`;
+        }
+    }
+    
+    // Update jam setiap detik
+    updateClock();
+    setInterval(updateClock, 1000);
+    </script>
 </body>
 </html>

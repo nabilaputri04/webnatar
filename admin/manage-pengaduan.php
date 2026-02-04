@@ -222,9 +222,18 @@ if (!$result) {
             <h2 class="mb-1 fw-bold"><i class="bi bi-megaphone-fill text-primary me-2"></i>Kelola Pengaduan</h2>
             <p class="text-muted mb-0">Pantau dan tanggapi pengaduan masyarakat</p>
         </div>
-        <a href="../kontak.php" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-            <i class="bi bi-box-arrow-up-right me-1"></i>Form Pengaduan
-        </a>
+        <div class="d-flex align-items-center gap-2">
+            <div class="text-end me-3">
+                <div class="text-muted small">Waktu Server</div>
+                <div id="realtime-clock" class="fw-bold fs-5" style="font-family: 'Courier New', monospace;">
+                    <i class="bi bi-clock me-1"></i>
+                    <span id="clock-time">--:--:--</span>
+                </div>
+            </div>
+            <a href="../kontak.php" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                <i class="bi bi-box-arrow-up-right me-1"></i>Form Pengaduan
+            </a>
+        </div>
     </div>
 
     <!-- Statistics Cards -->
@@ -497,57 +506,57 @@ if (!$result) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Realtime Date Update
+    // Real-time Clock
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        
+        const clockElement = document.getElementById('clock-time');
+        if (clockElement) {
+            clockElement.textContent = `${hours}:${minutes}:${seconds} WIB`;
+        }
+    }
+    
+    // Update jam setiap detik
+    updateClock();
+    setInterval(updateClock, 1000);
+    
+    // Realtime Date Update - Tampilkan format tanggal lengkap
     function updateRealtimeDates() {
         const dateElements = document.querySelectorAll('.realtime-date');
-        const now = new Date();
         
         dateElements.forEach(element => {
             const timestamp = parseInt(element.getAttribute('data-timestamp')) * 1000;
             const date = new Date(timestamp);
             
-            const diffMs = now - date;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-            
-            let displayText = '';
             const isTableCell = element.closest('td') !== null;
             
-            if (diffMins < 1) {
-                displayText = 'Baru saja';
-            } else if (diffMins < 60) {
-                displayText = diffMins + (isTableCell ? ' mnt lalu' : ' menit yang lalu');
-            } else if (diffHours < 24) {
-                displayText = diffHours + (isTableCell ? ' jam lalu' : ' jam yang lalu');
-            } else if (diffDays < 7) {
-                displayText = diffDays + (isTableCell ? ' hari lalu' : ' hari yang lalu');
+            // Format tanggal lengkap
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 
+                           'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'];
+            const monthsFull = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                           'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const day = date.getDate();
+            const month = isTableCell ? months[date.getMonth()] : monthsFull[date.getMonth()];
+            const year = date.getFullYear();
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            
+            let displayText;
+            if (isTableCell) {
+                displayText = `${day}/${month}/${year} ${hours}:${minutes}`;
             } else {
-                // Format normal untuk tanggal lebih dari 7 hari
-                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 
-                               'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'];
-                const monthsFull = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
-                               'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                const day = date.getDate();
-                const month = isTableCell ? months[date.getMonth()] : monthsFull[date.getMonth()];
-                const year = date.getFullYear();
-                const hours = String(date.getHours()).padStart(2, '0');
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-                
-                if (isTableCell) {
-                    displayText = `${day}/${month}/${year} ${hours}:${minutes}`;
-                } else {
-                    displayText = `${day} ${month} ${year}, ${hours}:${minutes}`;
-                }
+                displayText = `${day} ${month} ${year}, ${hours}:${minutes}`;
             }
             
             element.textContent = displayText;
         });
     }
     
-    // Update setiap 30 detik
+    // Jalankan sekali saat load
     updateRealtimeDates();
-    setInterval(updateRealtimeDates, 30000);
     
     // Handle Status Update with AJAX
     const updateButtons = document.querySelectorAll('.update-status-btn');
