@@ -384,7 +384,7 @@ if (!$result) {
         mysqli_data_seek($result, 0);
         while($row = mysqli_fetch_assoc($result)): 
     ?>
-    <div class="modal fade" id="detailModal<?= $row['id'] ?>" tabindex="-1" aria-labelledby="detailModalLabel<?= $row['id'] ?>" aria-hidden="true">
+    <div class="modal fade" id="detailModal<?= $row['id'] ?>" tabindex="-1" aria-labelledby="detailModalLabel<?= $row['id'] ?>" aria-hidden="true" data-bs-backdrop="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
@@ -478,7 +478,7 @@ if (!$result) {
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Tanggapan/Keterangan</label>
-                            <textarea name="tanggapan" class="form-control tanggapan-textarea" rows="4" placeholder="Berikan tanggapan atau keterangan terkait pengaduan ini..."><?= htmlspecialchars($row['tanggapan']) ?></textarea>
+                            <textarea name="tanggapan" class="form-control tanggapan-textarea" rows="4" placeholder="Berikan tanggapan atau keterangan terkait pengaduan ini..."><?= htmlspecialchars($row['tanggapan'] ?? '') ?></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -497,6 +497,53 @@ if (!$result) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Aggressive backdrop cleanup - remove any existing backdrops on page load
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+    document.body.classList.remove('modal-open');
+    document.body.style.removeProperty('overflow');
+    document.body.style.removeProperty('padding-right');
+    
+    // Fix modal backdrop issue - ensure proper cleanup on every modal event
+    document.querySelectorAll('.modal').forEach(modal => {
+        // Before modal shows
+        modal.addEventListener('show.bs.modal', function () {
+            // Clean up any existing backdrops first
+            document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+        });
+        
+        // After modal is shown
+        modal.addEventListener('shown.bs.modal', function () {
+            // Ensure only one backdrop exists
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            if (backdrops.length > 1) {
+                for (let i = 1; i < backdrops.length; i++) {
+                    backdrops[i].remove();
+                }
+            }
+        });
+        
+        // When modal is hidden
+        modal.addEventListener('hidden.bs.modal', function () {
+            // Remove all backdrops
+            document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+            // Clean up body classes and styles
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
+        });
+        
+        // On hide event (before hidden)
+        modal.addEventListener('hide.bs.modal', function () {
+            // Start cleanup process
+            setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style.removeProperty('overflow');
+                document.body.style.removeProperty('padding-right');
+            }, 100);
+        });
+    });
+
     // Realtime Date Update
     function updateRealtimeDates() {
         const dateElements = document.querySelectorAll('.realtime-date');
@@ -643,6 +690,18 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('.col-md-3:nth-child(3) h3').textContent = diproses;
         document.querySelector('.col-md-3:nth-child(4) h3').textContent = selesai;
     }
+    
+    // Additional global cleanup - run every 500ms to catch any stray backdrops
+    setInterval(() => {
+        const openModals = document.querySelectorAll('.modal.show');
+        if (openModals.length === 0) {
+            // No modals are open, remove all backdrops
+            document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
+        }
+    }, 500);
 });
 </script>
 </body>
