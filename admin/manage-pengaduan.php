@@ -52,13 +52,15 @@ if (!$result) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Kelola Pengaduan - Desa Natar</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <?php include 'admin-styles.php'; ?>
     <style>
-        }
         .sidebar-brand { 
             color: var(--active-blue); 
             font-weight: 700; 
@@ -127,13 +129,38 @@ if (!$result) {
         
         /* Fix modal z-index and backdrop */
         .modal {
-            z-index: 1055 !important;
+            z-index: 10001 !important;
+            pointer-events: none !important;
         }
         .modal-backdrop {
-            z-index: 1050 !important;
+            z-index: 10000 !important;
+            pointer-events: none !important;
+            background-color: rgba(0, 0, 0, 0.5);
         }
         .modal-dialog {
-            z-index: 1060 !important;
+            z-index: 10002 !important;
+            position: relative;
+            pointer-events: auto !important;
+        }
+        .modal-content {
+            z-index: 10003 !important;
+            pointer-events: auto !important;
+            background: white;
+        }
+        .modal-body,
+        .modal-body *,
+        .modal-footer,
+        .modal-footer *,
+        .modal-header,
+        .modal-header * {
+            pointer-events: auto !important;
+        }
+        .form-control,
+        .form-select,
+        textarea,
+        button,
+        .btn {
+            pointer-events: auto !important;
         }
     </style>
 </head>

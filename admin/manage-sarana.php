@@ -53,95 +53,17 @@ $list = mysqli_query($conn, "SELECT * FROM sarana_prasarana ORDER BY urutan ASC,
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Kelola Sarana & Prasarana - Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
+    <?php include 'admin-styles.php'; ?>
+    
     <style>
-        :root { --sidebar-bg: #1a1d20; --active-green: #10b981; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #d1fae5 0%, #e0f2fe 100%); min-height: 100vh; }
-        
-        .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            height: 100vh;
-            position: fixed;
-            padding: 25px 0;
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar-brand { 
-            color: var(--active-green); 
-            font-weight: 700; 
-            font-size: 1.25rem;
-            padding: 0 20px 25px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #2d3238;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .sidebar-menu { 
-            list-style: none; 
-            padding: 0 15px; 
-            padding-bottom: 80px;
-            margin: 0; 
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-        .sidebar-menu li { margin-bottom: 6px; }
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #94a3b8;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .sidebar-menu a i { font-size: 1.2rem; }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: var(--active-green);
-            color: white;
-        }
-        .logout-section {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 280px;
-            padding: 20px 15px;
-            border-top: 1px solid #2d3238;
-            background: var(--sidebar-bg);
-            flex-shrink: 0;
-        }
-        .logout-section a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #ef4444;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .logout-section a i { font-size: 1.2rem; }
-        .logout-section a:hover {
-            background: rgba(239, 68, 68, 0.1);
-        }
-        .main-content {
-            margin-left: 280px;
-            padding: 30px;
-        }
-        .card { border: none; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); background: white; }
-        .btn-primary { background: var(--active-green); border-color: var(--active-green); }
-        .btn-primary:hover { background: #059669; border-color: #059669; }
         .page-header h3 { font-weight: 700; color: #1e293b; font-size: 1.75rem; }
         .page-header p { color: #64748b; }
     </style>

@@ -1,10 +1,9 @@
 <?php
 // Pengaturan Database
 $host = "localhost";
-$user = "root";      // Username default XAMPP
-$pass = "";          // Password default XAMPP (kosong)
-$db   = "db_natar2";
-$port = 3307;        // Port MySQL XAMPP (sesuai XAMPP Control Panel)
+$user = "u855675680_useruntuknatar";      // Username default XAMPP
+$pass = "Desanatarmaju123";          // Password default XAMPP (kosong)
+$db   = "u855675680_db_natar2";
 
 // Nonaktifkan error reporting untuk mysqli
 mysqli_report(MYSQLI_REPORT_OFF);
@@ -17,7 +16,7 @@ if (!$conn) {
     $conn = null;
     error_log("WARNING: Database tidak terkoneksi - " . mysqli_connect_error());
 } else {
-    // Set charset ke utf8 agar karakter khusus tampil benar
-    mysqli_set_charset($conn, "utf8");
+    // Set charset ke utf8mb4 agar karakter khusus tampil benar dan mendukung emoji
+    mysqli_set_charset($conn, "utf8mb4");
 }
 ?>

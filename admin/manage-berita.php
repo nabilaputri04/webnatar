@@ -19,10 +19,10 @@ if (isset($_GET['hapus_kategori'])) {
 
 // --- LOGIKA BERITA (Tambah & Edit) ---
 if (isset($_POST['tambah_berita']) || isset($_POST['edit_berita'])) {
-    $judul = mysqli_real_escape_string($conn, $_POST['judul']);
+    $judul = $_POST['judul'];
     $id_kategori = (int)$_POST['id_kategori'];
-    $isi = mysqli_real_escape_string($conn, $_POST['isi_berita']);
-    $tgl_posting = mysqli_real_escape_string($conn, $_POST['tgl_posting']);
+    $isi = $_POST['isi_berita']; // Ambil data lengkap tanpa escape manual
+    $tgl_posting = $_POST['tgl_posting'];
     
     $foto = "";
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
@@ -33,12 +33,25 @@ if (isset($_POST['tambah_berita']) || isset($_POST['edit_berita'])) {
     }
 
     if (isset($_POST['tambah_berita'])) {
-        mysqli_query($conn, "INSERT INTO berita (judul, id_kategori, gambar, isi_berita, tgl_posting) VALUES ('$judul', $id_kategori, '$foto', '$isi', '$tgl_posting')");
+        // Gunakan prepared statement untuk mencegah data terpotong
+        $stmt = $conn->prepare("INSERT INTO berita (judul, id_kategori, gambar, isi_berita, tgl_posting) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sisss", $judul, $id_kategori, $foto, $isi, $tgl_posting);
+        $stmt->execute();
+        $stmt->close();
         $sukses = "Berita berhasil terbit!";
     } else {
         $id = (int)$_POST['id_berita'];
-        if ($foto != "") mysqli_query($conn, "UPDATE berita SET gambar = '$foto' WHERE id = $id");
-        mysqli_query($conn, "UPDATE berita SET judul='$judul', id_kategori=$id_kategori, isi_berita='$isi', tgl_posting='$tgl_posting' WHERE id=$id");
+        if ($foto != "") {
+            $stmt = $conn->prepare("UPDATE berita SET gambar = ? WHERE id = ?");
+            $stmt->bind_param("si", $foto, $id);
+            $stmt->execute();
+            $stmt->close();
+        }
+        // Update dengan prepared statement
+        $stmt = $conn->prepare("UPDATE berita SET judul=?, id_kategori=?, isi_berita=?, tgl_posting=? WHERE id=?");
+        $stmt->bind_param("sissi", $judul, $id_kategori, $isi, $tgl_posting, $id);
+        $stmt->execute();
+        $stmt->close();
         $sukses = "Berita diperbarui!";
     }
 }
@@ -59,6 +72,9 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_berita ORDER BY nama_k
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Kelola Berita - Desa Natar</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -117,7 +133,7 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_berita ORDER BY nama_k
     <?php endif; ?>
 
     <div class="card border-0 shadow-sm">
-        <div class="table-responsive">
+        <div class="table-responsive" style="max-height: 70vh; overflow-y: auto;">
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                     <tr>

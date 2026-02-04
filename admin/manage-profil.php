@@ -188,11 +188,7 @@ if (isset($_POST['update'])) {
     </main>
 </div>
 
-<script>
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
-    toggleBtn.addEventListener('click', () => { sidebar.classList.toggle('active'); });
-</script>
+<!-- Script universal sudah ada di admin-styles.php -->
 
 </body>
 </html>

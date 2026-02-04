@@ -63,6 +63,9 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Kelola Potensi - Desa Natar</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -88,6 +91,10 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
             .mobile-nav { display: block; }
         }
     </style>
+    <script>
+        // Cache busting - reload CSS saat ada perubahan
+        document.write('<style>@import url("admin-styles.php?v=' + Date.now() + '");</style>');
+    </script>
 </head>
 <body>
 
@@ -114,10 +121,10 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
         </div>
     </nav>
 
-    <main class="main-content w-100">
-        <div class="mb-4 page-header-lift">
-            <h3 class="fw-bold mb-1">Potensi Desa</h3>
-            <p class="text-muted">Kelola informasi potensi wisata, ekonomi, dan budaya desa</p>
+            <main class="main-content w-100">
+        <div class="mb-4">
+            <h2 class="fw-bold mb-2" style="font-size: 2rem;">Potensi Desa</h2>
+            <p class="text-muted mb-0">Kelola informasi potensi wisata, ekonomi, dan budaya desa</p>
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -245,13 +252,7 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
-    if(toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-    }
+    // Script toggle sidebar universal sudah ada di admin-styles.php
 
     let editorInstance;
     ClassicEditor.create(document.querySelector('#editor'), {
@@ -276,6 +277,7 @@ $categories = mysqli_query($conn, "SELECT * FROM kategori_potensi ORDER BY nama_
         document.getElementById('modalTitle').innerText = "Tambah Potensi Desa";
         document.getElementById('btnSubmit').innerText = "Simpan Potensi Desa";
         document.getElementById('btnSubmit').name = "tambah_potensi";
+        document.getElementById('id_potensi').value = '';
         document.getElementById('formPotensi').reset();
         editorInstance.setData("");
         document.getElementById('foto_current').innerHTML = "";

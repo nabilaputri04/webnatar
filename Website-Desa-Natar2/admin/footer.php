@@ -55,7 +55,7 @@ $contact = mysqli_fetch_assoc($q_contact);
             </div>
             
             <div class="border-t border-gray-800 mt-12 pt-8 text-center text-sm text-gray-500">
-                &copy; <?= date('Y'); ?> Pemerintah Desa Natar 2. KKN Tematik Universitas Lampung.
+                &copy; <?= date('Y'); ?> Pemerintah Desa Natar 2. KKN Regular Universitas Lampung.
             </div>
         </div>
     </footer>
