@@ -21,6 +21,9 @@ if (!$conn) {
 } else {
     // Set charset ke utf8mb4 agar karakter khusus tampil benar dan mendukung emoji
     mysqli_set_charset($conn, "utf8mb4");
+    
+    // Set timezone MySQL ke WIB (UTC+7)
+    mysqli_query($conn, "SET time_zone = '+07:00'");
 }
 
 // Fungsi untuk menambahkan cache busting pada gambar
