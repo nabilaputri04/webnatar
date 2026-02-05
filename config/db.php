@@ -28,10 +28,12 @@ if (!$conn) {
 
 // Fungsi untuk menambahkan cache busting pada gambar
 // Menambahkan timestamp agar browser tidak cache gambar lama
-function img_cache_buster($img_path) {
-    if (file_exists($img_path)) {
-        return $img_path . '?v=' . filemtime($img_path);
+if (!function_exists('img_cache_buster')) {
+    function img_cache_buster($img_path) {
+        if (file_exists($img_path)) {
+            return $img_path . '?v=' . filemtime($img_path);
+        }
+        return $img_path . '?v=' . time();
     }
-    return $img_path . '?v=' . time();
 }
 ?>

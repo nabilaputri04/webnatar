@@ -6,7 +6,7 @@ header("Expires: 0");
 
 $page_title = "Struktur Organisasi";
 require 'includes/header.php';
-require 'config/db.php';
+// db.php sudah di-include di header.php
 
 // Ambil data BPD
 $query_bpd = "SELECT * FROM bpd ORDER BY urutan ASC";
