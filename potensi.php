@@ -33,7 +33,11 @@ $q_potensi = mysqli_query($conn, "SELECT p.*, k.nama_kategori FROM potensi_desa 
             <?php while($row = mysqli_fetch_assoc($q_potensi)): ?>
             <div class="bg-white rounded-3xl shadow-xl border-2 border-emerald-100 overflow-hidden hover:shadow-2xl hover:shadow-emerald-200/50 transition-all duration-500 group transform hover:-translate-y-2">
                 <div class="relative h-64 overflow-hidden">
-                    <img src="assets/img/potensi/<?= $row['gambar']; ?>" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
+                    <?php
+                    $img_path = 'assets/img/potensi/' . $row['gambar'];
+                    $img_src = img_cache_buster($img_path);
+                    ?>
+                    <img src="<?= $img_src ?>" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-80"></div>
                     <div class="absolute bottom-4 left-4 text-white">
                         <span class="bg-emerald-600 text-xs font-bold px-2 py-1 rounded mb-2 inline-block"><?= $row['nama_kategori']; ?></span>

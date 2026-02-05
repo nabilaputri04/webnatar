@@ -1,4 +1,7 @@
 <?php
+// Set timezone ke WIB (Asia/Jakarta)
+date_default_timezone_set('Asia/Jakarta');
+
 // Pengaturan Database
 $host = "localhost";
 $user = "u855675680_useruntuknatar";      // Username default XAMPP
@@ -18,5 +21,14 @@ if (!$conn) {
 } else {
     // Set charset ke utf8mb4 agar karakter khusus tampil benar dan mendukung emoji
     mysqli_set_charset($conn, "utf8mb4");
+}
+
+// Fungsi untuk menambahkan cache busting pada gambar
+// Menambahkan timestamp agar browser tidak cache gambar lama
+function img_cache_buster($img_path) {
+    if (file_exists($img_path)) {
+        return $img_path . '?v=' . filemtime($img_path);
+    }
+    return $img_path . '?v=' . time();
 }
 ?>

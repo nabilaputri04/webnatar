@@ -1,6 +1,9 @@
 <?php
 require 'config/db.php';
 
+// Set timezone ke WIB (Indonesia)
+date_default_timezone_set('Asia/Jakarta');
+
 $pengaduan = null;
 $error = "";
 

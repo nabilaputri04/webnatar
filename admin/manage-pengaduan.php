@@ -1,6 +1,7 @@
 <?php
 require 'auth_check.php';
 require '../config/db.php';
+// Timezone sudah diset di config/db.php
 
 // Handle status update
 if (isset($_POST['update_status'])) {

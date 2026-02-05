@@ -7,7 +7,11 @@
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition text-center group h-full">
     <div class="aspect-square overflow-hidden bg-gray-100 relative">
         <?php if(!empty($row['foto'])): ?>
-            <img src="assets/img/perangkat/<?= $row['foto']; ?>" 
+            <?php
+            $foto_path = 'assets/img/perangkat/' . $row['foto'];
+            $foto_src = img_cache_buster($foto_path);
+            ?>
+            <img src="<?= $foto_src ?>" 
                  alt="<?= htmlspecialchars($row['nama']); ?>"
                  class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500">
         <?php else: ?>

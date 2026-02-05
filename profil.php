@@ -98,7 +98,11 @@ $profil = mysqli_fetch_assoc($q_profil);
                 <!-- Peta Desa -->
                 <div class="mt-6">
                     <div class="bg-white p-4 rounded-2xl shadow-xl border-2 border-emerald-100 overflow-hidden hover:shadow-emerald-200/50 transition-all duration-500">
-                        <img src="assets/img/peta.jpeg" alt="Peta Desa Natar" class="w-full h-auto rounded-xl shadow-lg" onerror="this.onerror=null; this.src='https://via.placeholder.com/800x600/10b981/ffffff?text=Peta+Desa+Natar';">
+                        <?php
+                        $peta_path = 'assets/img/peta.jpeg';
+                        $peta_src = img_cache_buster($peta_path);
+                        ?>
+                        <img src="<?= $peta_src ?>" alt="Peta Desa Natar" class="w-full h-auto rounded-xl shadow-lg" onerror="this.onerror=null; this.src='https://via.placeholder.com/800x600/10b981/ffffff?text=Peta+Desa+Natar';">
                         <p class="text-center text-gray-600 font-semibold mt-4 text-sm">Peta Wilayah Desa Natar</p>
                     </div>
                 </div>

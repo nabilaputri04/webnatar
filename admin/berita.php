@@ -14,7 +14,11 @@ if (isset($_GET['id'])) {
         <div class="bg-gray-50 py-12">
             <div class="container mx-auto px-4 max-w-4xl">
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                    <img src="assets/img/berita/<?= $berita['gambar']; ?>" class="w-full h-64 md:h-96 object-cover">
+                    <?php
+                    $img_path = 'assets/img/berita/' . $berita['gambar'];
+                    $img_src = img_cache_buster($img_path);
+                    ?>
+                    <img src="<?= $img_src ?>" class="w-full h-64 md:h-96 object-cover">
                     <div class="p-8 md:p-12">
                         <div class="flex items-center gap-4 text-sm text-gray-500 mb-6">
                             <span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg font-bold text-xs uppercase tracking-wide"><?= $berita['nama_kategori']; ?></span>
@@ -54,7 +58,11 @@ if (isset($_GET['id'])) {
                 <?php while($row = mysqli_fetch_assoc($q_berita)): ?>
                 <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition duration-300 flex flex-col h-full group">
                     <div class="relative h-56 overflow-hidden">
-                        <img src="assets/img/berita/<?= $row['gambar']; ?>" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
+                        <?php
+                        $img_path = 'assets/img/berita/' . $row['gambar'];
+                        $img_src = img_cache_buster($img_path);
+                        ?>
+                        <img src="<?= $img_src ?>" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg text-xs font-bold text-blue-600 shadow-sm">
                             <?= $row['nama_kategori'] ?? 'Umum'; ?>
                         </div>

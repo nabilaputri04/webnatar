@@ -6,7 +6,12 @@
 ?>
 <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition duration-300 flex flex-col h-full group">
     <div class="relative h-56 overflow-hidden">
-        <img src="assets/img/berita/<?= !empty($row['gambar']) ? $row['gambar'] : 'default.jpg'; ?>" 
+        <?php
+        $img_file = !empty($row['gambar']) ? $row['gambar'] : 'default.jpg';
+        $img_path = 'assets/img/berita/' . $img_file;
+        $img_src = img_cache_buster($img_path);
+        ?>
+        <img src="<?= $img_src ?>" 
              alt="<?= htmlspecialchars($row['judul']); ?>" 
              class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg text-xs font-bold text-emerald-600 shadow-sm">

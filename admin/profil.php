@@ -62,7 +62,11 @@ $q_perangkat = mysqli_query($conn, "SELECT * FROM perangkat_desa ORDER BY urutan
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition text-center group">
                     <div class="aspect-square overflow-hidden bg-gray-100">
                         <?php if($p['foto']): ?>
-                            <img src="assets/img/perangkat/<?= $p['foto']; ?>" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500">
+                            <?php
+                            $foto_path = 'assets/img/perangkat/' . $p['foto'];
+                            $foto_src = img_cache_buster($foto_path);
+                            ?>
+                            <img src="<?= $foto_src ?>" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500">
                         <?php else: ?>
                             <div class="w-full h-full flex items-center justify-center text-gray-300">
                                 <i class="bi bi-person-fill text-6xl"></i>
